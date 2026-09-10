@@ -57,8 +57,6 @@ export function Chrome({
         </button>
       )}
 
-      {view.kind === "index" && <p className="chrome__lede">{t.landingLede}</p>}
-
       {(view.kind === "index" || onAbout) && (
         <p className={`chrome__brand${onAbout ? " is-about" : ""}`}>
           <BrandWord
