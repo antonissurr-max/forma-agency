@@ -39,13 +39,21 @@ export function Chrome({
         </button>
       </div>
 
-      {!onAbout && (
+      {onAbout ? (
+        <button
+          className="chrome__about"
+          type="button"
+          onClick={() => onGo({ kind: "index" })}
+        >
+          {t.close}
+        </button>
+      ) : (
         <button
           className="chrome__about"
           type="button"
           onClick={() => onGo({ kind: "about" })}
         >
-          {t.about}
+          {view.kind === "index" ? t.contactUs : t.about}
         </button>
       )}
 

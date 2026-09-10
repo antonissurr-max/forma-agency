@@ -30,7 +30,9 @@ export function WorkShow({
           ? t.contentWork
           : id === "performance"
             ? t.performanceWork
-            : [];
+            : id === "web"
+              ? t.webWork
+              : [];
   const isFolder = Boolean(copy.proof?.client);
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
@@ -116,8 +118,8 @@ export function WorkShow({
             )}
           </div>
           {copy.proof && (
-            <p className={`work__proof${copy.proof.client ? " work__proof--folder" : ""}`}>
-              <span>{copy.proof.label}</span>
+            <div className={`work__proof${copy.proof.client ? " work__proof--folder" : ""}`}>
+              <span className="work__proof-label">{copy.proof.label}</span>
               {copy.proof.client ? (
                 <>
                   <button
@@ -129,22 +131,40 @@ export function WorkShow({
                     {copy.proof.client}
                   </button>
                   {folderOpen && (
-                    <span className="work__proof-lines">
-                      {copy.proof.value ? <span>{copy.proof.value}</span> : null}
+                    <div className="work__proof-lines">
+                      {copy.proof.value ? (
+                        <div className="work__proof-line">{copy.proof.value}</div>
+                      ) : null}
                       {copy.proof.notes?.map((note) => (
-                        <span key={note}>{note}</span>
+                        <div key={note} className="work__proof-line">
+                          {note}
+                        </div>
                       ))}
-                    </span>
+                    </div>
                   )}
                 </>
+              ) : copy.proof.links && copy.proof.links.length > 0 ? (
+                <div className="work__proof-lines">
+                  {copy.proof.links.map((link) => (
+                    <a
+                      key={link.href}
+                      className="work__proof-line"
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
               ) : copy.proof.href ? (
-                <a href={copy.proof.href} target="_blank" rel="noreferrer">
+                <a className="work__proof-line" href={copy.proof.href} target="_blank" rel="noreferrer">
                   {copy.proof.value}
                 </a>
               ) : (
-                <strong>{copy.proof.value}</strong>
+                <strong className="work__proof-line">{copy.proof.value}</strong>
               )}
-            </p>
+            </div>
           )}
 
           {isFolder && folderOpen && gallery.length > 0 && (

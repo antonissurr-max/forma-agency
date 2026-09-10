@@ -44,11 +44,10 @@ export type Copy = {
   revealFull: string;
   aboutSub: string;
   aboutBody: string;
-  aboutSelected: string;
   landingLede: string;
   startBrief: string;
+  contactUs: string;
   aboutVerse: VerseRow[];
-  contactLede: string;
   contactThanks: string;
   contactInterest: string;
   contactName: string;
@@ -64,7 +63,14 @@ export type Copy = {
     {
       title: string;
       meta: { label: string; value: string }[];
-      proof?: { label: string; client?: string; value: string; notes?: string[]; href?: string };
+      proof?: {
+        label: string;
+        client?: string;
+        value: string;
+        notes?: string[];
+        href?: string;
+        links?: { label: string; href: string }[];
+      };
       points: ServicePoint[];
     }
   >;
@@ -83,7 +89,7 @@ const aboutVerseEn: VerseRow[] = [
     words: [
       { kind: "go", open: "We are\u00A0" },
       { kind: "stay", open: "a\u00A0", close: "A\u00A0" },
-      { kind: "stay", open: "studio" },
+      { kind: "stay", open: "360°\u00A0agency" },
     ],
   },
   {
@@ -92,7 +98,7 @@ const aboutVerseEn: VerseRow[] = [
     closeRow: 1,
     words: [
       { kind: "stay", open: "that builds\u00A0" },
-      { kind: "go", open: "campaigns" },
+      { kind: "go", open: "growth" },
       { kind: "come", close: "brands" },
     ],
   },
@@ -101,21 +107,21 @@ const aboutVerseEn: VerseRow[] = [
     openRow: 2,
     closeRow: 1,
     openOnly: true,
-    words: [{ kind: "stay", open: "with clarity" }],
+    words: [{ kind: "stay", open: "with clean design" }],
   },
   {
     id: "across",
     openRow: 3,
     closeRow: 1,
     openOnly: true,
-    words: [{ kind: "stay", open: "across channels" }],
+    words: [{ kind: "stay", open: "across every channel" }],
   },
   {
     id: "outcomes",
     openRow: 4,
     closeRow: 1,
     openOnly: true,
-    words: [{ kind: "stay", open: "and real outcomes" }],
+    words: [{ kind: "stay", open: "and measurable ROI" }],
   },
 ];
 
@@ -127,7 +133,7 @@ const aboutVerseEl: VerseRow[] = [
     words: [
       { kind: "go", open: "Είμαστε\u00A0" },
       { kind: "stay", open: "ένα\u00A0", close: "Ένα\u00A0" },
-      { kind: "stay", open: "στούντιο" },
+      { kind: "stay", open: "360°\u00A0agency" },
     ],
   },
   {
@@ -136,7 +142,7 @@ const aboutVerseEl: VerseRow[] = [
     closeRow: 1,
     words: [
       { kind: "stay", open: "που χτίζει\u00A0" },
-      { kind: "go", open: "καμπάνιες" },
+      { kind: "go", open: "ανάπτυξη" },
       { kind: "come", close: "brands" },
     ],
   },
@@ -145,7 +151,7 @@ const aboutVerseEl: VerseRow[] = [
     openRow: 2,
     closeRow: 1,
     openOnly: true,
-    words: [{ kind: "stay", open: "με καθαρότητα" }],
+    words: [{ kind: "stay", open: "με καθαρό design" }],
   },
   {
     id: "across",
@@ -159,7 +165,7 @@ const aboutVerseEl: VerseRow[] = [
     openRow: 4,
     closeRow: 1,
     openOnly: true,
-    words: [{ kind: "stay", open: "και πραγματικά αποτελέσματα" }],
+    words: [{ kind: "stay", open: "και μετρήσιμο ROI" }],
   },
 ];
 
@@ -187,16 +193,15 @@ export const copy: Record<Locale, Copy> = {
     revealShort: "Reveal shorter message",
     revealFull: "Show full message",
     aboutSub:
-      "Social, content, performance and web — one system for brands that want to move.",
+      "Web, SEO, social and performance — one partner for brands that want to grow.",
     aboutBody:
-      "omnidot. is a studio in Athens. We run social, content, paid and sites as one system — for brands that want movement, not reports.",
-    aboutSelected: "Selected — Europatch · Pyrgiotis OE",
-    landingLede: "Athens · social, content, performance, web",
+      "For founders and local brands that want a clear next step — not another report. From a premium, fast website and SEO to social strategy and performance campaigns. We don't believe in noise. We believe in data, clean design, and strategies that turn visitors into loyal customers.",
+    landingLede: "Athens · pick a service or start a brief",
     startBrief: "Start a brief",
+    contactUs: "Contact us",
     aboutVerse: aboutVerseEn,
-    contactLede: "Tell us what you need. We reply with a clear plan — no fluff.",
     contactThanks: "Thanks — we'll get back with next steps.",
-    contactInterest: "Interest",
+    contactInterest: "I'm interested in:",
     contactName: "Name",
     contactEmail: "Email",
     contactCompany: "Company",
@@ -209,10 +214,10 @@ export const copy: Record<Locale, Copy> = {
       social: {
         title: "Social Media Management",
         meta: [
-          { label: "Focus", value: "Brand presence" },
-          { label: "Channels", value: "IG · TikTok · LI" },
-          { label: "Output", value: "Systems" },
-          { label: "Cadence", value: "Ongoing" },
+          { label: "Goal", value: "Steady presence" },
+          { label: "Channels", value: "IG · TikTok · LinkedIn" },
+          { label: "You get", value: "Plan + posts" },
+          { label: "Work with us", value: "Monthly" },
         ],
         proof: {
           label: "Selected",
@@ -251,9 +256,9 @@ export const copy: Record<Locale, Copy> = {
         title: "Content Creation",
         meta: [
           { label: "Formats", value: "Photo · Video · Still" },
-          { label: "Style", value: "Editorial" },
-          { label: "Use", value: "Organic + paid" },
-          { label: "Delivery", value: "Ready-to-run" },
+          { label: "Look", value: "Clean & editorial" },
+          { label: "Used for", value: "Social + ads" },
+          { label: "Delivery", value: "Ready to post" },
         ],
         proof: {
           label: "Selected",
@@ -287,10 +292,10 @@ export const copy: Record<Locale, Copy> = {
       performance: {
         title: "Performance Marketing",
         meta: [
-          { label: "Goal", value: "Efficient growth" },
+          { label: "Goal", value: "More customers" },
           { label: "Channels", value: "Meta · Google" },
-          { label: "Method", value: "Test · scale" },
-          { label: "Proof", value: "Numbers" },
+          { label: "How", value: "Test, then scale" },
+          { label: "You see", value: "Clear numbers" },
         ],
         proof: {
           label: "Selected",
@@ -328,14 +333,14 @@ export const copy: Record<Locale, Copy> = {
         title: "Web Development",
         meta: [
           { label: "Build", value: "Sites & landings" },
-          { label: "SEO", value: "Technical + content" },
-          { label: "Speed", value: "Core web vitals" },
-          { label: "Owner", value: "You keep it" },
+          { label: "SEO", value: "Findable on Google" },
+          { label: "Speed", value: "Loads fast" },
+          { label: "Ownership", value: "Stays yours" },
         ],
         proof: {
           label: "Live",
-          value: "Pyrgiotis OE — pyrgiotisoe.com",
-          href: "https://pyrgiotisoe.com/",
+          value: "",
+          links: [{ label: "Pyrgiotis OE — pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
         },
         points: [
           {
@@ -388,28 +393,7 @@ export const copy: Record<Locale, Copy> = {
         body: "A short weekly read: keep, kill, or scale. No 40-page decks.",
       },
     ],
-    webWork: [
-      {
-        src: "/images/work-omnidot.jpg",
-        title: "omnidot.",
-        detail: "This site",
-      },
-      {
-        src: "/images/work-pyrgiotis-home.jpg",
-        title: "Pyrgiotis OE",
-        detail: "Home — pyrgiotisoe.com",
-      },
-      {
-        src: "/images/work-pyrgiotis-office.jpg",
-        title: "Pyrgiotis OE",
-        detail: "The office",
-      },
-      {
-        src: "/images/work-pyrgiotis-check.jpg",
-        title: "Pyrgiotis OE",
-        detail: "When you need a check",
-      },
-    ],
+    webWork: [],
     socialWork: [],
     contentWork: [],
     performanceWork: [],
@@ -437,16 +421,15 @@ export const copy: Record<Locale, Copy> = {
     revealShort: "Σύντομο μήνυμα",
     revealFull: "Πλήρες μήνυμα",
     aboutSub:
-      "Social, περιεχόμενο, performance και web — ένα σύστημα για brands που θέλουν να κινηθούν.",
+      "Web, SEO, social και performance — ένας συνεργάτης για brands που θέλουν να μεγαλώσουν.",
     aboutBody:
-      "Το omnidot. είναι στούντιο στην Αθήνα. Δουλεύουμε social, περιεχόμενο, paid και sites ως ένα σύστημα — για brands που θέλουν κίνηση, όχι αναφορές.",
-    aboutSelected: "Επιλεγμένα — Europatch · Pyrgiotis OE",
-    landingLede: "Αθήνα · social, content, performance, web",
+      "Για founders και τοπικά brands που θέλουν καθαρό επόμενο βήμα — όχι άλλη αναφορά. Από premium, γρήγορη ιστοσελίδα και SEO μέχρι social strategy και performance campaigns. Δεν πιστεύουμε στον θόρυβο. Πιστεύουμε στα δεδομένα, στο καθαρό design και στις στρατηγικές που μετατρέπουν τους επισκέπτες σε πιστούς πελάτες.",
+    landingLede: "Αθήνα · διάλεξε υπηρεσία ή ξεκίνα brief",
     startBrief: "Ξεκίνα ένα brief",
+    contactUs: "Επικοινωνία",
     aboutVerse: aboutVerseEl,
-    contactLede: "Πες μας τι χρειάζεσαι. Απαντάμε με καθαρό πλάνο — χωρίς φλυαρία.",
     contactThanks: "Ευχαριστούμε — θα επιστρέψουμε με τα επόμενα βήματα.",
-    contactInterest: "Ενδιαφέρον",
+    contactInterest: "Ενδιαφέρομαι για:",
     contactName: "Όνομα",
     contactEmail: "Email",
     contactCompany: "Εταιρεία",
@@ -459,10 +442,10 @@ export const copy: Record<Locale, Copy> = {
       social: {
         title: "Διαχείριση Social Media",
         meta: [
-          { label: "Εστίαση", value: "Παρουσία brand" },
-          { label: "Κανάλια", value: "IG · TikTok · LI" },
-          { label: "Αποτέλεσμα", value: "Συστήματα" },
-          { label: "Ρυθμός", value: "Συνεχής" },
+          { label: "Στόχος", value: "Σταθερή παρουσία" },
+          { label: "Κανάλια", value: "IG · TikTok · LinkedIn" },
+          { label: "Παίρνεις", value: "Πλάνο + posts" },
+          { label: "Συνεργασία", value: "Μηνιαία" },
         ],
         proof: {
           label: "Επιλεγμένο",
@@ -500,10 +483,10 @@ export const copy: Record<Locale, Copy> = {
       content: {
         title: "Δημιουργία Περιεχομένου",
         meta: [
-          { label: "Φόρμες", value: "Φωτο · Video · Still" },
-          { label: "Ύφος", value: "Editorial" },
-          { label: "Χρήση", value: "Organic + paid" },
-          { label: "Παράδοση", value: "Έτοιμο προς χρήση" },
+          { label: "Μορφές", value: "Φωτο · Video · Still" },
+          { label: "Ύφος", value: "Καθαρό & editorial" },
+          { label: "Χρήση", value: "Social + διαφημίσεις" },
+          { label: "Παράδοση", value: "Έτοιμο για ανάρτηση" },
         ],
         proof: {
           label: "Επιλεγμένο",
@@ -537,10 +520,10 @@ export const copy: Record<Locale, Copy> = {
       performance: {
         title: "Performance Marketing",
         meta: [
-          { label: "Στόχος", value: "Αποδοτική ανάπτυξη" },
+          { label: "Στόχος", value: "Περισσότεροι πελάτες" },
           { label: "Κανάλια", value: "Meta · Google" },
-          { label: "Μέθοδος", value: "Test · scale" },
-          { label: "Απόδειξη", value: "Αριθμοί" },
+          { label: "Τρόπος", value: "Δοκιμή, μετά scale" },
+          { label: "Βλέπεις", value: "Καθαρούς αριθμούς" },
         ],
         proof: {
           label: "Επιλεγμένο",
@@ -578,14 +561,14 @@ export const copy: Record<Locale, Copy> = {
         title: "Ανάπτυξη Ιστοσελίδων",
         meta: [
           { label: "Κατασκευή", value: "Sites & landings" },
-          { label: "SEO", value: "Τεχνικό + περιεχόμενο" },
-          { label: "Ταχύτητα", value: "Core web vitals" },
+          { label: "SEO", value: "Εμφανίσιμο στο Google" },
+          { label: "Ταχύτητα", value: "Γρήγορο φόρτωμα" },
           { label: "Ιδιοκτησία", value: "Μένει δικό σου" },
         ],
         proof: {
           label: "Live",
-          value: "Πυργιώτης ΟΕ — pyrgiotisoe.com",
-          href: "https://pyrgiotisoe.com/",
+          value: "",
+          links: [{ label: "Πυργιώτης ΟΕ — pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
         },
         points: [
           {
@@ -638,28 +621,7 @@ export const copy: Record<Locale, Copy> = {
         body: "Σύντομη εβδομαδιαία ανάγνωση: κρατάμε, κόβουμε ή μεγαλώνουμε. Όχι decks 40 σελίδων.",
       },
     ],
-    webWork: [
-      {
-        src: "/images/work-omnidot.jpg",
-        title: "omnidot.",
-        detail: "Αυτή η σελίδα",
-      },
-      {
-        src: "/images/work-pyrgiotis-home.jpg",
-        title: "Πυργιώτης ΟΕ",
-        detail: "Αρχική — pyrgiotisoe.com",
-      },
-      {
-        src: "/images/work-pyrgiotis-office.jpg",
-        title: "Πυργιώτης ΟΕ",
-        detail: "Το γραφείο μας",
-      },
-      {
-        src: "/images/work-pyrgiotis-check.jpg",
-        title: "Πυργιώτης ΟΕ",
-        detail: "Πότε χρειάζεται έλεγχος",
-      },
-    ],
+    webWork: [],
     socialWork: [],
     contentWork: [],
     performanceWork: [],

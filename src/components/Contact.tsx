@@ -42,8 +42,8 @@ export function Contact({
 
     const labels =
       locale === "el"
-        ? ["Brief έργου — omnidot.", "Όνομα", "Email", "Εταιρεία", "Ενδιαφέρον", "Σημειώσεις"]
-        : ["Project brief — omnidot.", "Name", "Email", "Company", "Interest", "Notes"];
+        ? ["Brief έργου — omnidot.", "Όνομα", "Email", "Εταιρεία", "Ενδιαφέρομαι για", "Σημειώσεις"]
+        : ["Project brief — omnidot.", "Name", "Email", "Company", "Interested in", "Notes"];
 
     const message = [
       labels[0],
@@ -84,8 +84,6 @@ export function Contact({
 
   return (
     <div className={`booking${onPaper ? " booking--on-paper" : ""}`}>
-      <p className={`lede${onPaper ? "" : " lede--on-dark"}`}>{t.contactLede}</p>
-
       <form
         className={`form${onPaper ? " form--on-paper" : " form--on-dark"}`}
         onSubmit={onSubmit}
