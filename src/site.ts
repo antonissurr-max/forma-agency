@@ -3,7 +3,7 @@ export const site = {
   brand: "omnidot",
   tagline: "Marketing that shapes brands",
   email: "antonissur@yahoo.gr",
-  phone: "",
+  phone: "6970862839",
   whatsapp: "",
   location: "Athens · Remote",
 };

@@ -57,6 +57,7 @@ export type Copy = {
   contactOptional: string;
   contactPlaceholder: string;
   contactSend: string;
+  contactCall: string;
   contactFull: string;
   pages: Record<
     PageId,
@@ -66,6 +67,8 @@ export type Copy = {
       proof?: {
         label: string;
         client?: string;
+        /** Short case narrative — who, what, outcome */
+        story?: string;
         value: string;
         notes?: string[];
         href?: string;
@@ -89,7 +92,7 @@ const aboutVerseEn: VerseRow[] = [
     words: [
       { kind: "go", open: "We are\u00A0" },
       { kind: "stay", open: "a\u00A0", close: "A\u00A0" },
-      { kind: "stay", open: "360°\u00A0agency" },
+      { kind: "stay", open: "focused\u00A0partner" },
     ],
   },
   {
@@ -114,7 +117,7 @@ const aboutVerseEn: VerseRow[] = [
     openRow: 3,
     closeRow: 1,
     openOnly: true,
-    words: [{ kind: "stay", open: "across every channel" }],
+    words: [{ kind: "stay", open: "across web, social & performance" }],
   },
   {
     id: "outcomes",
@@ -133,7 +136,7 @@ const aboutVerseEl: VerseRow[] = [
     words: [
       { kind: "go", open: "Είμαστε\u00A0" },
       { kind: "stay", open: "ένα\u00A0", close: "Ένα\u00A0" },
-      { kind: "stay", open: "360°\u00A0agency" },
+      { kind: "stay", open: "στούντιο" },
     ],
   },
   {
@@ -158,7 +161,7 @@ const aboutVerseEl: VerseRow[] = [
     openRow: 3,
     closeRow: 1,
     openOnly: true,
-    words: [{ kind: "stay", open: "σε όλα τα κανάλια" }],
+    words: [{ kind: "stay", open: "σε web, social και performance" }],
   },
   {
     id: "outcomes",
@@ -209,6 +212,7 @@ export const copy: Record<Locale, Copy> = {
     contactOptional: "optional",
     contactPlaceholder: "Goals, timeline, links…",
     contactSend: "Send brief",
+    contactCall: "Or call",
     contactFull: "Full partnership",
     pages: {
       social: {
@@ -222,6 +226,8 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Selected",
           client: "Europatch",
+          story:
+            "Europatch sells cold asphalt to B2B buyers — a category that rarely goes viral. We built a steady organic presence around real product use and how-to content. In one year: 4.5M Facebook and 2.5M Instagram views, 100% organic.",
           value: "4.5M Facebook · 2.5M Instagram · 100% organic · 1 year",
           notes: [
             "1.2M unique viewers · 0 from ads",
@@ -263,6 +269,8 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Selected",
           client: "Europatch",
+          story:
+            "Same Europatch partnership from the content side: how-to reels on the road, product in use, cuts built for feed and Reels. That library powered the organic reach — including one reel to 397.9K.",
           value: "The content behind 4.5M Facebook · 2.5M Instagram",
           notes: ["How-to reels on the road · product in use · one reel to 397.9K"],
         },
@@ -300,7 +308,9 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Selected",
           client: "Pyrgiotis OE",
-          value: "",
+          story:
+            "Pyrgiotis OE needed paid acquisition a founder could read without a deck. We ran Meta and Google with tight creative tests and a clean landing path. In 30 days on Meta: 1,791 landing-page views at €0.08 each on €148 spend — plus Google search at 3.23% CTR.",
+          value: "Meta €0.08 CPLV · Google 3.23% CTR · 30 days",
           notes: [
             "Meta Ads — 1,791 landing page views · €0.08 · €148 · 30 days",
             "Google Ads — 298 clicks · 9.24K impressions · 3.23% CTR",
@@ -339,8 +349,11 @@ export const copy: Record<Locale, Copy> = {
         ],
         proof: {
           label: "Live",
+          client: "Pyrgiotis OE",
+          story:
+            "We built pyrgiotisoe.com for a Greek industrial brand: fast, clear, and ready to convert traffic from ads and organic search — a site that works, not a brochure that decorates.",
           value: "",
-          links: [{ label: "Pyrgiotis OE — pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
+          links: [{ label: "pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
         },
         points: [
           {
@@ -437,6 +450,7 @@ export const copy: Record<Locale, Copy> = {
     contactOptional: "προαιρετικό",
     contactPlaceholder: "Στόχοι, χρονοδιάγραμμα, links…",
     contactSend: "Αποστολή",
+    contactCall: "Ή κάλεσε",
     contactFull: "Πλήρης συνεργασία",
     pages: {
       social: {
@@ -450,6 +464,8 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Επιλεγμένο",
           client: "Europatch",
+          story:
+            "Η Europatch πουλάει ψυχρή άσφαλτο σε B2B πελάτες — κατηγορία που σπάνια «παίρνει φωτιά» online. Χτίσαμε σταθερή οργανική παρουσία γύρω από πραγματική χρήση προϊόντος και how-to περιεχόμενο. Σε έναν χρόνο: 4.5 εκ. views στο Facebook και 2.5 εκ. στο Instagram, 100% organic.",
           value: "4.5 εκ. Facebook · 2.5 εκ. Instagram · 100% organic · 1 χρόνος",
           notes: [
             "1.2 εκ. unique viewers · 0 από ads",
@@ -491,6 +507,8 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Επιλεγμένο",
           client: "Europatch",
+          story:
+            "Η ίδια συνεργασία Europatch από την πλευρά του content: how-to reels στον δρόμο, προϊόν σε χρήση, cuts για feed και Reels. Αυτή η βιβλιοθήκη στήριξε την οργανική εμβέλεια — με ένα reel στα 397.9K.",
           value: "Το περιεχόμενο πίσω από 4.5 εκ. Facebook · 2.5 εκ. Instagram",
           notes: ["How-to reels στον δρόμο · προϊόν σε χρήση · ένα reel στα 397.9K"],
         },
@@ -528,7 +546,9 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Επιλεγμένο",
           client: "Πυργιώτης ΟΕ",
-          value: "",
+          story:
+            "Ο Πυργιώτης ΟΕ ήθελε paid acquisition που να διαβάζει ένας founder χωρίς 40σέλιδο deck. Τρέξαμε Meta και Google με σφιχτά creative tests και καθαρό landing path. Σε 30 ημέρες στο Meta: 1.791 landing-page views στα €0,08 το καθένα με €148 spend — και Google search με 3,23% CTR.",
+          value: "Meta €0,08 CPLV · Google 3,23% CTR · 30 ημέρες",
           notes: [
             "Meta Ads — 1.791 landing page views · €0,08 · €148 · 30 ημέρες",
             "Google Ads — 298 κλικ · 9.24 χιλ. εμφανίσεις · 3,23% CTR",
@@ -567,8 +587,11 @@ export const copy: Record<Locale, Copy> = {
         ],
         proof: {
           label: "Live",
+          client: "Πυργιώτης ΟΕ",
+          story:
+            "Φτιάξαμε το pyrgiotisoe.com για ελληνικό βιομηχανικό brand: γρήγορο, καθαρό και έτοιμο να μετατρέψει traffic από ads και organic search — site που δουλεύει, όχι brochure που στολίζει.",
           value: "",
-          links: [{ label: "Πυργιώτης ΟΕ — pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
+          links: [{ label: "pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
         },
         points: [
           {

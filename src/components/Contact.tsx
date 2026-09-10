@@ -1,5 +1,5 @@
-import { FormEvent, useState } from "react";
-import { site } from "../site";
+import { FormEvent, useEffect, useState } from "react";
+import { formatPhoneDisplay, phoneHref, site } from "../site";
 import { useLocale } from "../locale";
 import type { PageId } from "../types";
 
@@ -12,6 +12,69 @@ const interestIds: (PageId | "full")[] = [
   "web",
   "full",
 ];
+
+function CallPopup({ onPaper }: { onPaper: boolean }) {
+  const { t } = useLocale();
+  const [open, setOpen] = useState(false);
+  const callHref = site.phone ? `tel:${phoneHref(site.phone)}` : "";
+  const callLabel = site.phone ? formatPhoneDisplay(site.phone) : "";
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  if (!callHref) return null;
+
+  return (
+    <div className={`booking__call${onPaper ? " booking__call--paper" : ""}`}>
+      <button
+        className="booking__call-trigger"
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        onClick={() => setOpen(true)}
+      >
+        {t.contactCall}
+      </button>
+      {open && (
+        <div
+          className="booking__call-overlay"
+          role="presentation"
+          onClick={() => setOpen(false)}
+        >
+          <div
+            className="booking__call-modal"
+            role="dialog"
+            aria-label={t.contactCall}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="booking__call-kicker">{t.contactCall}</p>
+            <a className="booking__call-number" href={callHref}>
+              {callLabel}
+            </a>
+            <button
+              className="booking__call-close"
+              type="button"
+              onClick={() => setOpen(false)}
+            >
+              {t.close}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Contact({
   tone = "dark",
@@ -58,7 +121,7 @@ export function Contact({
       .join("\n");
 
     const subject = `omnidot. — ${data.interest}`;
-    const wa = (site.whatsapp || site.phone).replace(/\D/g, "");
+    const wa = site.whatsapp.replace(/\D/g, "");
 
     if (wa) {
       const intl = wa.startsWith("30") ? wa : `30${wa}`;
@@ -78,6 +141,7 @@ export function Contact({
     return (
       <div className={`booking${onPaper ? " booking--on-paper" : ""}`}>
         <p className={`lede${onPaper ? "" : " lede--on-dark"}`}>{t.contactThanks}</p>
+        <CallPopup onPaper={onPaper} />
       </div>
     );
   }
@@ -124,11 +188,8 @@ export function Contact({
         <button className={`btn${onPaper ? " btn--ink" : " btn--light"}`} type="submit">
           {t.contactSend}
         </button>
-        {site.email && (
-          <a className="booking__mail" href={`mailto:${site.email}`}>
-            {site.email}
-          </a>
-        )}
+
+        <CallPopup onPaper={onPaper} />
       </form>
     </div>
   );

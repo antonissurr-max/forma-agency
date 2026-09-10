@@ -132,6 +132,9 @@ export function WorkShow({
                   </button>
                   {folderOpen && (
                     <div className="work__proof-lines">
+                      {copy.proof.story ? (
+                        <p className="work__proof-story">{copy.proof.story}</p>
+                      ) : null}
                       {copy.proof.value ? (
                         <div className="work__proof-line">{copy.proof.value}</div>
                       ) : null}
@@ -139,6 +142,17 @@ export function WorkShow({
                         <div key={note} className="work__proof-line">
                           {note}
                         </div>
+                      ))}
+                      {copy.proof.links?.map((link) => (
+                        <a
+                          key={link.href}
+                          className="work__proof-line"
+                          href={link.href}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {link.label}
+                        </a>
                       ))}
                     </div>
                   )}

@@ -593,6 +593,18 @@ a.work__proof-line:hover {
   opacity: 1;
 }
 
+.work__proof-story {
+  margin: 0 0 4px;
+  max-width: 36rem;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  text-transform: none;
+  color: var(--paper);
+  opacity: 0.88;
+}
+
 .work__proof + .work__grid {
   margin-top: 16px;
   margin-bottom: 8px;
@@ -1707,6 +1719,93 @@ a.work__proof-line:hover {
   opacity: 1;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.booking__call {
+  display: inline-block;
+  margin-top: 14px;
+  width: fit-content;
+}
+
+.booking__call-trigger {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  border-bottom: 1px solid currentColor;
+}
+
+.booking__call-trigger:hover,
+.booking__call-trigger[aria-expanded="true"] {
+  opacity: 1;
+}
+
+.booking__call-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--night) 28%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.booking__call-modal {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  min-width: min(280px, 86vw);
+  padding: 28px 32px 22px;
+  background: var(--paper);
+  color: var(--navy);
+  text-align: center;
+}
+
+.booking__call-kicker {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.booking__call-number {
+  display: block;
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  white-space: nowrap;
+}
+
+.booking__call-number:hover {
+  opacity: 0.72;
+}
+
+.booking__call-close {
+  margin-top: 4px;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+
+.booking__call-close:hover {
+  opacity: 1;
 }
 
 .booking__contact-alt {
