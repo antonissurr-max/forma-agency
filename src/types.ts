@@ -1,6 +1,6 @@
-export type PageId = "social" | "video" | "performance" | "web";
+export type PageId = "social" | "content" | "performance" | "web";
 
 export type View =
   | { kind: "index" }
-  | { kind: "about" }
+  | { kind: "about"; interest?: PageId }
   | { kind: "page"; id: PageId };

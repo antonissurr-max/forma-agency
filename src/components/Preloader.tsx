@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { socialWork } from "../site";
+import { pages } from "../site";
 import { Logo } from "./Logo";
 
 export function Preloader({ onDone }: { onDone: () => void }) {
@@ -14,9 +14,9 @@ export function Preloader({ onDone }: { onDone: () => void }) {
       return;
     }
 
-    const images = socialWork.map((w) => {
+    const images = pages.map((page) => {
       const img = new Image();
-      img.src = w.src;
+      img.src = page.cover;
       return img;
     });
 

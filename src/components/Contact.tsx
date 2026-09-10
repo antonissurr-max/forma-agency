@@ -1,38 +1,63 @@
 import { FormEvent, useState } from "react";
 import { site } from "../site";
+import { useLocale } from "../locale";
+import type { PageId } from "../types";
 
 type Status = "idle" | "sent";
 
-function buildMessage(data: Record<string, string>) {
-  return [
-    "Project brief — FORMA",
-    "",
-    `Name: ${data.name}`,
-    `Email: ${data.email}`,
-    `Company: ${data.company || "—"}`,
-    `Interest: ${data.interest}`,
-    data.notes ? `Notes: ${data.notes}` : "",
-  ]
-    .filter(Boolean)
-    .join("\n");
-}
+const interestIds: (PageId | "full")[] = [
+  "social",
+  "content",
+  "performance",
+  "web",
+  "full",
+];
 
-export function Contact() {
+export function Contact({
+  tone = "dark",
+  interest,
+}: {
+  tone?: "dark" | "paper";
+  interest?: PageId;
+}) {
+  const { t, locale } = useLocale();
   const [status, setStatus] = useState<Status>("idle");
+  const onPaper = tone === "paper";
+
+  function interestLabel(id: PageId | "full") {
+    return id === "full" ? t.contactFull : t.pages[id].title;
+  }
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
+    const interestId = String(form.get("interest") ?? "") as PageId | "full";
     const data = {
       name: String(form.get("name") ?? ""),
       email: String(form.get("email") ?? ""),
       company: String(form.get("company") ?? ""),
-      interest: String(form.get("interest") ?? ""),
+      interest: interestLabel(interestId),
       notes: String(form.get("notes") ?? ""),
     };
 
-    const message = buildMessage(data);
-    const subject = `FORMA — ${data.interest}`;
+    const labels =
+      locale === "el"
+        ? ["Brief έργου — omnidot.", "Όνομα", "Email", "Εταιρεία", "Ενδιαφέρον", "Σημειώσεις"]
+        : ["Project brief — omnidot.", "Name", "Email", "Company", "Interest", "Notes"];
+
+    const message = [
+      labels[0],
+      "",
+      `${labels[1]}: ${data.name}`,
+      `${labels[2]}: ${data.email}`,
+      `${labels[3]}: ${data.company || "—"}`,
+      `${labels[4]}: ${data.interest}`,
+      data.notes ? `${labels[5]}: ${data.notes}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    const subject = `omnidot. — ${data.interest}`;
     const wa = (site.whatsapp || site.phone).replace(/\D/g, "");
 
     if (wa) {
@@ -51,56 +76,61 @@ export function Contact() {
 
   if (status === "sent") {
     return (
-      <div className="booking">
-        <p className="lede lede--on-dark">
-          Thanks — we&apos;ll get back with next steps.
-        </p>
+      <div className={`booking${onPaper ? " booking--on-paper" : ""}`}>
+        <p className={`lede${onPaper ? "" : " lede--on-dark"}`}>{t.contactThanks}</p>
       </div>
     );
   }
 
   return (
-    <div className="booking">
-      <p className="lede lede--on-dark">
-        Tell us what you need. We reply with a clear plan — no fluff.
-      </p>
+    <div className={`booking${onPaper ? " booking--on-paper" : ""}`}>
+      <p className={`lede${onPaper ? "" : " lede--on-dark"}`}>{t.contactLede}</p>
 
-      <form className="form form--on-dark" onSubmit={onSubmit}>
+      <form
+        className={`form${onPaper ? " form--on-paper" : " form--on-dark"}`}
+        onSubmit={onSubmit}
+        key={interest ?? "full"}
+      >
         <label>
-          Interest
-          <select name="interest" defaultValue="Web & SEO" required>
-            <option>Social</option>
-            <option>Video</option>
-            <option>Performance</option>
-            <option>Web & SEO</option>
-            <option>Full partnership</option>
+          {t.contactInterest}
+          <select name="interest" defaultValue={interest ?? "full"} required>
+            {interestIds.map((id) => (
+              <option key={id} value={id}>
+                {interestLabel(id)}
+              </option>
+            ))}
           </select>
         </label>
 
         <label>
-          Name
+          {t.contactName}
           <input name="name" type="text" autoComplete="name" required />
         </label>
 
         <div className="form__row">
           <label>
-            Email
+            {t.contactEmail}
             <input name="email" type="email" autoComplete="email" required />
           </label>
           <label>
-            Company <span className="optional">optional</span>
+            {t.contactCompany} <span className="optional">{t.contactOptional}</span>
             <input name="company" type="text" autoComplete="organization" />
           </label>
         </div>
 
         <label>
-          Brief <span className="optional">optional</span>
-          <textarea name="notes" rows={3} placeholder="Goals, timeline, links…" />
+          {t.contactBrief} <span className="optional">{t.contactOptional}</span>
+          <textarea name="notes" rows={onPaper ? 2 : 3} placeholder={t.contactPlaceholder} />
         </label>
 
-        <button className="btn btn--light" type="submit">
-          Send brief
+        <button className={`btn${onPaper ? " btn--ink" : " btn--light"}`} type="submit">
+          {t.contactSend}
         </button>
+        {site.email && (
+          <a className="booking__mail" href={`mailto:${site.email}`}>
+            {site.email}
+          </a>
+        )}
       </form>
     </div>
   );

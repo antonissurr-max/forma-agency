@@ -1,22 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
 import { About } from "./components/About";
 import { Chrome } from "./components/Chrome";
-import { Contact } from "./components/Contact";
 import { Cursor } from "./components/Cursor";
 import { Footer } from "./components/Footer";
 import { Preloader } from "./components/Preloader";
-import { PerformancePanel, ServiceList } from "./components/ServicePanel";
+import { ServiceList } from "./components/ServicePanel";
 import { WorkShow } from "./components/WorkShow";
 import { Works } from "./components/Works";
-import { socialWork, videoWork } from "./site";
 import type { PageId, View } from "./types";
 
 export default function App() {
   const [ready, setReady] = useState(false);
   const [view, setView] = useState<View>({ kind: "index" });
+  const [aboutRevealed, setAboutRevealed] = useState(false);
 
   const goIndex = useCallback(() => setView({ kind: "index" }), []);
   const goPage = useCallback((id: PageId) => setView({ kind: "page", id }), []);
+  const goAbout = useCallback(
+    (interest?: PageId) => setView({ kind: "about", interest }),
+    [],
+  );
+  const toggleAbout = useCallback(() => setAboutRevealed((on) => !on), []);
 
   useEffect(() => {
     document.body.style.overflow = view.kind === "index" ? "" : "hidden";
@@ -26,7 +30,10 @@ export default function App() {
   }, [view.kind]);
 
   useEffect(() => {
-    if (view.kind !== "about") return;
+    if (view.kind !== "about") {
+      setAboutRevealed(false);
+      return;
+    }
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") goIndex();
     };
@@ -45,34 +52,64 @@ export default function App() {
     <div className={`stage ${stage} ${ready ? "is-ready" : ""}`}>
       {!ready && <Preloader onDone={() => setReady(true)} />}
       <Cursor />
-      <Chrome view={view} onGo={setView} />
+      <Chrome
+        view={view}
+        onGo={setView}
+        aboutRevealed={aboutRevealed}
+        onToggleAbout={toggleAbout}
+      />
       <Works dimmed={view.kind !== "index"} onOpen={goPage} />
 
-      {view.kind === "about" && <About onClose={goIndex} onGo={goPage} />}
+      {view.kind === "about" && (
+        <About
+          revealed={aboutRevealed}
+          onClose={goIndex}
+          onGo={goPage}
+          interest={view.interest}
+        />
+      )}
 
       {view.kind === "page" && view.id === "social" && (
-        <WorkShow id="social" media={socialWork} onClose={goIndex} onNavigate={goPage}>
+        <WorkShow
+          id="social"
+          onClose={goIndex}
+          onNavigate={goPage}
+          onBrief={() => goAbout("social")}
+        >
           <ServiceList id="social" />
         </WorkShow>
       )}
 
-      {view.kind === "page" && view.id === "video" && (
-        <WorkShow id="video" media={videoWork} onClose={goIndex} onNavigate={goPage}>
-          <ServiceList id="video" />
+      {view.kind === "page" && view.id === "content" && (
+        <WorkShow
+          id="content"
+          onClose={goIndex}
+          onNavigate={goPage}
+          onBrief={() => goAbout("content")}
+        >
+          <ServiceList id="content" />
         </WorkShow>
       )}
 
       {view.kind === "page" && view.id === "performance" && (
-        <WorkShow id="performance" onClose={goIndex} onNavigate={goPage}>
+        <WorkShow
+          id="performance"
+          onClose={goIndex}
+          onNavigate={goPage}
+          onBrief={() => goAbout("performance")}
+        >
           <ServiceList id="performance" />
-          <PerformancePanel />
         </WorkShow>
       )}
 
       {view.kind === "page" && view.id === "web" && (
-        <WorkShow id="web" onClose={goIndex} onNavigate={goPage}>
+        <WorkShow
+          id="web"
+          onClose={goIndex}
+          onNavigate={goPage}
+          onBrief={() => goAbout("web")}
+        >
           <ServiceList id="web" />
-          <Contact />
         </WorkShow>
       )}
 

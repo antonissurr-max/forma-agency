@@ -1,65 +1,9 @@
-import { useState } from "react";
-import { site } from "../site";
+import { Contact } from "./Contact";
+import { useLocale } from "../locale";
 import type { PageId } from "../types";
+import type { VerseWord } from "../i18n";
 
-type StayWord = { kind: "stay"; open: string; close?: string };
-type GoWord = { kind: "go"; open: string };
-type ComeWord = { kind: "come"; close: string };
-type Word = StayWord | GoWord | ComeWord;
-
-type VerseRow = {
-  id: string;
-  openRow: number;
-  closeRow: number;
-  openOnly?: boolean;
-  words: Word[];
-};
-
-const verseRows: VerseRow[] = [
-  {
-    id: "we",
-    openRow: 0,
-    closeRow: 0,
-    words: [
-      { kind: "go", open: "We are\u00A0" },
-      { kind: "stay", open: "a\u00A0", close: "A\u00A0" },
-      { kind: "stay", open: "studio" },
-    ],
-  },
-  {
-    id: "builds",
-    openRow: 1,
-    closeRow: 1,
-    words: [
-      { kind: "stay", open: "that builds\u00A0" },
-      { kind: "go", open: "campaigns" },
-      { kind: "come", close: "brands" },
-    ],
-  },
-  {
-    id: "with",
-    openRow: 2,
-    closeRow: 1,
-    openOnly: true,
-    words: [{ kind: "stay", open: "with clarity" }],
-  },
-  {
-    id: "across",
-    openRow: 3,
-    closeRow: 1,
-    openOnly: true,
-    words: [{ kind: "stay", open: "across channels" }],
-  },
-  {
-    id: "outcomes",
-    openRow: 4,
-    closeRow: 1,
-    openOnly: true,
-    words: [{ kind: "stay", open: "and real outcomes" }],
-  },
-];
-
-function VerseWord({ word, revealed }: { word: Word; revealed: boolean }) {
+function VerseWordView({ word, revealed }: { word: VerseWord; revealed: boolean }) {
   if (word.kind === "stay") {
     const same = !word.close || word.close === word.open;
     if (same) {
@@ -85,76 +29,62 @@ function VerseWord({ word, revealed }: { word: Word; revealed: boolean }) {
 }
 
 export function About({
+  revealed,
   onClose,
   onGo,
+  interest,
 }: {
+  revealed: boolean;
   onClose: () => void;
   onGo: (id: PageId) => void;
+  interest?: PageId;
 }) {
-  const [revealed, setRevealed] = useState(false);
+  const { t } = useLocale();
+  const pageIds = ["social", "content", "performance", "web"] as const;
 
   return (
-    <div className="about-layer" role="dialog" aria-modal="true" aria-label="About">
+    <div className="about-layer" role="dialog" aria-modal="true" aria-label={t.about}>
       <button className="about-layer__close" type="button" onClick={onClose}>
-        Close
+        {t.close}
       </button>
 
       <div className={`about-layer__center ${revealed ? "is-revealed" : ""}`}>
-        <h2 className="about-layer__title">
-          <span className="about-verse" aria-live="polite">
-            {verseRows.map((row) => (
-              <span
-                key={row.id}
-                className={`about-verse__row${row.openOnly ? " about-verse__row--open-only" : ""}`}
-                style={{
-                  ["--row-open" as string]: String(row.openRow),
-                  ["--row-close" as string]: String(row.closeRow),
-                }}
-              >
-                {row.words.map((word, i) => (
-                  <VerseWord key={`${row.id}-${i}`} word={word} revealed={revealed} />
-                ))}
-              </span>
+        <div className="about-layer__intro">
+          <h2 className="about-layer__title">
+            <span className="about-verse" aria-live="polite">
+              {t.aboutVerse.map((row) => (
+                <span
+                  key={row.id}
+                  className={`about-verse__row${row.openOnly ? " about-verse__row--open-only" : ""}`}
+                  style={{
+                    ["--row-open" as string]: String(row.openRow),
+                    ["--row-close" as string]: String(row.closeRow),
+                  }}
+                >
+                  {row.words.map((word, i) => (
+                    <VerseWordView key={`${row.id}-${i}`} word={word} revealed={revealed} />
+                  ))}
+                </span>
+              ))}
+            </span>
+          </h2>
+
+          <p className="about-layer__body">{t.aboutBody}</p>
+          <p className="about-layer__picked">{t.aboutSelected}</p>
+          <p className="about-layer__place">{t.location}</p>
+
+          <ul className="about-layer__links">
+            {pageIds.map((id) => (
+              <li key={id}>
+                <button type="button" onClick={() => onGo(id)}>
+                  {t.pages[id].title} ↗
+                </button>
+              </li>
             ))}
-          </span>
-        </h2>
+          </ul>
+        </div>
 
-        <p className="about-layer__sub">
-          Social, video, performance, websites and SEO — one system for brands that want to move.
-          <br />
-          {site.location}
-        </p>
-
-        <ul className="about-layer__links">
-          <li>
-            <button type="button" onClick={() => onGo("social")}>
-              Social ↗
-            </button>
-          </li>
-          <li>
-            <button type="button" onClick={() => onGo("video")}>
-              Video ↗
-            </button>
-          </li>
-          <li>
-            <button type="button" onClick={() => onGo("performance")}>
-              Performance ↗
-            </button>
-          </li>
-          <li>
-            <button type="button" onClick={() => onGo("web")}>
-              Web &amp; SEO ↗
-            </button>
-          </li>
-        </ul>
-
-        <button
-          type="button"
-          className="about-layer__dot"
-          onClick={() => setRevealed((on) => !on)}
-          aria-label={revealed ? "Show full message" : "Reveal shorter message"}
-          aria-pressed={revealed}
-        />
+        <Contact tone="paper" interest={interest} />
       </div>
     </div>
   );

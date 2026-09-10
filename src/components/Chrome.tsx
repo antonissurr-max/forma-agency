@@ -1,26 +1,43 @@
+import { BrandWord } from "./BrandWord";
 import { Logo } from "./Logo";
-import { site } from "../site";
+import { useLocale } from "../locale";
 import type { View } from "../types";
 
 export function Chrome({
   view,
   onGo,
+  aboutRevealed,
+  onToggleAbout,
 }: {
   view: View;
   onGo: (next: View) => void;
+  aboutRevealed: boolean;
+  onToggleAbout: () => void;
 }) {
+  const { locale, setLocale, t } = useLocale();
   const onAbout = view.kind === "about";
 
   return (
     <header className="chrome">
-      <button
-        className="chrome__logo"
-        type="button"
-        onClick={() => onGo({ kind: "index" })}
-        aria-label={`${site.brand} — αρχική`}
-      >
-        <Logo />
-      </button>
+      <div className="chrome__start">
+        <button
+          className="chrome__logo"
+          type="button"
+          onClick={() => onGo({ kind: "index" })}
+          aria-label={t.homeAria}
+        >
+          <Logo />
+        </button>
+
+        <button
+          className="chrome__lang"
+          type="button"
+          onClick={() => setLocale(locale === "en" ? "el" : "en")}
+          aria-label={t.langLabel}
+        >
+          {locale === "en" ? "EN" : "EL"}
+        </button>
+      </div>
 
       {!onAbout && (
         <button
@@ -28,13 +45,19 @@ export function Chrome({
           type="button"
           onClick={() => onGo({ kind: "about" })}
         >
-          About
+          {t.about}
         </button>
       )}
 
-      {view.kind === "index" && (
-        <p className="chrome__brand" aria-hidden="true">
-          {site.brand}
+      {view.kind === "index" && <p className="chrome__lede">{t.landingLede}</p>}
+
+      {(view.kind === "index" || onAbout) && (
+        <p className={`chrome__brand${onAbout ? " is-about" : ""}`}>
+          <BrandWord
+            live={onAbout}
+            revealed={aboutRevealed}
+            onToggle={onToggleAbout}
+          />
         </p>
       )}
     </header>

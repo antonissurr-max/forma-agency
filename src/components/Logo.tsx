@@ -1,3 +1,4 @@
+/** Two nodes, one link — a connection. */
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -6,12 +7,13 @@ export function Logo({ className = "" }: { className?: string }) {
       fill="none"
       aria-hidden="true"
     >
+      <circle cx="7.5" cy="12" r="2.35" fill="currentColor" />
+      <circle cx="16.5" cy="12" r="2.35" fill="currentColor" />
       <path
-        d="M4 18.5h16M12 5.5 4.5 13.5h15L12 5.5zM9.5 13.5v5M14.5 13.5v5"
+        d="M9.85 12h4.3"
         stroke="currentColor"
-        strokeWidth="1.15"
-        strokeLinecap="square"
-        strokeLinejoin="miter"
+        strokeWidth="1.2"
+        strokeLinecap="round"
       />
     </svg>
   );
