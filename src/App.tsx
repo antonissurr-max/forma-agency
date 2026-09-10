@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { About } from "./components/About";
 import { Chrome } from "./components/Chrome";
 import { Cursor } from "./components/Cursor";
@@ -7,20 +8,39 @@ import { Preloader } from "./components/Preloader";
 import { ServiceList } from "./components/ServicePanel";
 import { WorkShow } from "./components/WorkShow";
 import { Works } from "./components/Works";
+import { useLocale } from "./locale";
+import { pathFromView, viewFromLocation } from "./routing";
+import { applyDocumentSeo } from "./seo";
 import type { PageId, View } from "./types";
 
 export default function App() {
   const [ready, setReady] = useState(false);
-  const [view, setView] = useState<View>({ kind: "index" });
   const [aboutRevealed, setAboutRevealed] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { locale } = useLocale();
 
-  const goIndex = useCallback(() => setView({ kind: "index" }), []);
-  const goPage = useCallback((id: PageId) => setView({ kind: "page", id }), []);
+  const view = viewFromLocation(location.pathname, location.search);
+
+  const goView = useCallback(
+    (next: View) => {
+      navigate(pathFromView(next));
+    },
+    [navigate],
+  );
+  const goIndex = useCallback(() => navigate("/"), [navigate]);
+  const goPage = useCallback((id: PageId) => navigate(`/${id}`), [navigate]);
   const goAbout = useCallback(
-    (interest?: PageId) => setView({ kind: "about", interest }),
-    [],
+    (interest?: PageId) => {
+      navigate(interest ? `/about?interest=${interest}` : "/about");
+    },
+    [navigate],
   );
   const toggleAbout = useCallback(() => setAboutRevealed((on) => !on), []);
+
+  useEffect(() => {
+    applyDocumentSeo(locale, viewFromLocation(location.pathname, location.search));
+  }, [locale, location.pathname, location.search]);
 
   useEffect(() => {
     document.body.style.overflow = view.kind === "index" ? "" : "hidden";
@@ -54,7 +74,7 @@ export default function App() {
       <Cursor />
       <Chrome
         view={view}
-        onGo={setView}
+        onGo={goView}
         aboutRevealed={aboutRevealed}
         onToggleAbout={toggleAbout}
       />
@@ -69,47 +89,14 @@ export default function App() {
         />
       )}
 
-      {view.kind === "page" && view.id === "social" && (
+      {view.kind === "page" && (
         <WorkShow
-          id="social"
+          id={view.id}
           onClose={goIndex}
           onNavigate={goPage}
-          onBrief={() => goAbout("social")}
+          onBrief={() => goAbout(view.id)}
         >
-          <ServiceList id="social" />
-        </WorkShow>
-      )}
-
-      {view.kind === "page" && view.id === "content" && (
-        <WorkShow
-          id="content"
-          onClose={goIndex}
-          onNavigate={goPage}
-          onBrief={() => goAbout("content")}
-        >
-          <ServiceList id="content" />
-        </WorkShow>
-      )}
-
-      {view.kind === "page" && view.id === "performance" && (
-        <WorkShow
-          id="performance"
-          onClose={goIndex}
-          onNavigate={goPage}
-          onBrief={() => goAbout("performance")}
-        >
-          <ServiceList id="performance" />
-        </WorkShow>
-      )}
-
-      {view.kind === "page" && view.id === "web" && (
-        <WorkShow
-          id="web"
-          onClose={goIndex}
-          onNavigate={goPage}
-          onBrief={() => goAbout("web")}
-        >
-          <ServiceList id="web" />
+          <ServiceList id={view.id} />
         </WorkShow>
       )}
 

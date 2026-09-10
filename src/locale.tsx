@@ -33,9 +33,6 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale === "el" ? "el" : "en";
-    document.title = copy[locale].metaTitle;
-    const description = document.querySelector('meta[name="description"]');
-    description?.setAttribute("content", copy[locale].metaDescription);
     try {
       localStorage.setItem(STORAGE_KEY, locale);
     } catch {
