@@ -1,4 +1,5 @@
 import { copy, type Locale } from "./i18n";
+import { pages } from "./site";
 import { SITE_ORIGIN, pathFromView } from "./routing";
 import type { PageId, View } from "./types";
 
@@ -7,8 +8,16 @@ export type RouteSeo = {
   description: string;
   path: string;
   canonical: string;
+  image: string;
   jsonLd: Record<string, unknown>;
 };
+
+const DEFAULT_OG = `${SITE_ORIGIN}/images/work-omnidot.jpg`;
+
+function coverFor(id: PageId): string {
+  const page = pages.find((p) => p.id === id);
+  return page ? `${SITE_ORIGIN}${page.cover}` : DEFAULT_OG;
+}
 
 function serviceDescription(locale: Locale, id: PageId): string {
   const page = copy[locale].pages[id];
@@ -27,6 +36,7 @@ export function getRouteSeo(locale: Locale, view: View): RouteSeo {
       description: t.aboutBody.slice(0, 160),
       path,
       canonical,
+      image: DEFAULT_OG,
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "AboutPage",
@@ -41,11 +51,13 @@ export function getRouteSeo(locale: Locale, view: View): RouteSeo {
   if (view.kind === "page") {
     const page = t.pages[view.id];
     const description = serviceDescription(locale, view.id);
+    const image = coverFor(view.id);
     return {
       title: `${page.title} — omnidot.`,
       description: description.slice(0, 170),
       path,
       canonical,
+      image,
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "Service",
@@ -58,6 +70,7 @@ export function getRouteSeo(locale: Locale, view: View): RouteSeo {
         },
         areaServed: "GR",
         url: canonical,
+        image,
       },
     };
   }
@@ -67,6 +80,7 @@ export function getRouteSeo(locale: Locale, view: View): RouteSeo {
     description: t.metaDescription,
     path: "/",
     canonical: `${SITE_ORIGIN}/`,
+    image: DEFAULT_OG,
     jsonLd: {
       "@context": "https://schema.org",
       "@type": "Organization",
@@ -74,6 +88,7 @@ export function getRouteSeo(locale: Locale, view: View): RouteSeo {
       url: SITE_ORIGIN,
       description: t.metaDescription,
       email: "antonissur@yahoo.gr",
+      image: DEFAULT_OG,
     },
   };
 }
@@ -120,7 +135,12 @@ export function applyDocumentSeo(locale: Locale, view: View) {
   upsertMeta("property", "og:description", seo.description);
   upsertMeta("property", "og:type", "website");
   upsertMeta("property", "og:url", seo.canonical);
+  upsertMeta("property", "og:image", seo.image);
   upsertMeta("property", "og:locale", locale === "el" ? "el_GR" : "en_US");
+  upsertMeta("name", "twitter:card", "summary_large_image");
+  upsertMeta("name", "twitter:title", seo.title);
+  upsertMeta("name", "twitter:description", seo.description);
+  upsertMeta("name", "twitter:image", seo.image);
   upsertLink("canonical", seo.canonical);
   upsertJsonLd(seo.jsonLd);
 }

@@ -5,6 +5,8 @@ import App from "./App";
 import { LocaleProvider } from "./locale";
 import "./styles.css";
 
+document.getElementById("prerender")?.remove();
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>

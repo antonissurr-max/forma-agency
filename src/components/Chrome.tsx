@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { BrandWord } from "./BrandWord";
 import { Logo } from "./Logo";
 import { useLocale } from "../locale";
@@ -16,18 +17,15 @@ export function Chrome({
 }) {
   const { locale, setLocale, t } = useLocale();
   const onAbout = view.kind === "about";
+  const onIndex = view.kind === "index";
+  const BrandTag = onIndex ? "h1" : "p";
 
   return (
     <header className="chrome">
       <div className="chrome__start">
-        <button
-          className="chrome__logo"
-          type="button"
-          onClick={() => onGo({ kind: "index" })}
-          aria-label={t.homeAria}
-        >
+        <Link className="chrome__logo" to="/" aria-label={t.homeAria}>
           <Logo />
-        </button>
+        </Link>
 
         <button
           className="chrome__lang"
@@ -48,23 +46,19 @@ export function Chrome({
           {t.close}
         </button>
       ) : (
-        <button
-          className="chrome__about"
-          type="button"
-          onClick={() => onGo({ kind: "about" })}
-        >
-          {view.kind === "index" ? t.contactUs : t.about}
-        </button>
+        <Link className="chrome__about" to="/about">
+          {onIndex ? t.contactUs : t.about}
+        </Link>
       )}
 
-      {(view.kind === "index" || onAbout) && (
-        <p className={`chrome__brand${onAbout ? " is-about" : ""}`}>
+      {(onIndex || onAbout) && (
+        <BrandTag className={`chrome__brand${onAbout ? " is-about" : ""}`}>
           <BrandWord
             live={onAbout}
             revealed={aboutRevealed}
             onToggle={onToggleAbout}
           />
-        </p>
+        </BrandTag>
       )}
     </header>
   );

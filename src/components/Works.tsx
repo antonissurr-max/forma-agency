@@ -1,15 +1,9 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { pages } from "../site";
 import { useLocale } from "../locale";
-import type { PageId } from "../types";
 
-export function Works({
-  dimmed,
-  onOpen,
-}: {
-  dimmed: boolean;
-  onOpen: (id: PageId) => void;
-}) {
+export function Works({ dimmed }: { dimmed: boolean }) {
   const { t } = useLocale();
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -58,17 +52,19 @@ export function Works({
       className={`works ${dimmed ? "is-dim" : ""}`}
       aria-label={t.sections}
     >
+      <div className="works__intro">
+        <p className="works__pitch">{t.aboutSub}</p>
+      </div>
       {pages.map((page, i) => {
         const title = t.pages[page.id].title;
         return (
-          <button
+          <Link
             key={page.id}
             className="tile"
-            type="button"
+            to={`/${page.id}`}
             style={{
               ["--i" as string]: String(i),
             }}
-            onClick={() => onOpen(page.id)}
             aria-label={`${page.kicker} ${title}`}
           >
             <span className="tile__kicker">{page.kicker}_</span>
@@ -76,7 +72,7 @@ export function Works({
               <img src={page.cover} alt="" />
             </span>
             <span className="tile__title">{title}</span>
-          </button>
+          </Link>
         );
       })}
     </section>

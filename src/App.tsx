@@ -78,7 +78,7 @@ export default function App() {
         aboutRevealed={aboutRevealed}
         onToggleAbout={toggleAbout}
       />
-      <Works dimmed={view.kind !== "index"} onOpen={goPage} />
+      <Works dimmed={view.kind !== "index"} />
 
       {view.kind === "about" && (
         <About

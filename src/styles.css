@@ -30,6 +30,19 @@ body,
   min-height: 100%;
 }
 
+/* Crawlable build shells — removed as soon as the app boots */
+#prerender {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 body {
   margin: 0;
   background: var(--paper);
@@ -168,6 +181,12 @@ h2 {
   pointer-events: auto;
 }
 
+a.chrome__logo,
+a.chrome__about {
+  color: inherit;
+  text-decoration: none;
+}
+
 .chrome__start {
   display: flex;
   align-items: center;
@@ -234,8 +253,14 @@ h2 {
   font-size: clamp(18px, 3vw, 28px);
   font-weight: 600;
   letter-spacing: -0.03em;
+  line-height: 1.1;
   pointer-events: none;
   z-index: 56;
+}
+
+h1.chrome__brand {
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 600;
 }
 
 .brand-word {
@@ -304,6 +329,22 @@ h2 {
   pointer-events: none;
 }
 
+.works__intro {
+  width: min(34rem, 100%);
+  margin: 0 0 4px;
+  text-align: center;
+}
+
+.works__pitch {
+  margin: 0 auto;
+  max-width: 28rem;
+  font-size: clamp(13px, 1.15vw, 15px);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--navy);
+  opacity: 0.72;
+}
+
 .tile {
   display: grid;
   gap: 6px;
@@ -313,7 +354,9 @@ h2 {
   padding: 0;
   border: 0;
   background: none;
+  color: inherit;
   text-align: left;
+  text-decoration: none;
   animation: tile-in 0.95s var(--ease) both;
   animation-delay: calc(var(--i) * 90ms);
 }
@@ -824,6 +867,17 @@ a.work__proof-line:hover {
     align-items: stretch;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .works__intro {
+    width: 100%;
+    margin: 0 0 8px;
+    text-align: left;
+  }
+
+  .works__pitch {
+    margin: 0;
+    max-width: 22rem;
   }
 
   .tile {
