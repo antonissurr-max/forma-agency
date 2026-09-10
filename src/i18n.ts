@@ -59,6 +59,9 @@ export type Copy = {
   contactSend: string;
   contactCall: string;
   contactFull: string;
+  notFoundTitle: string;
+  notFoundBody: string;
+  notFoundHome: string;
   pages: Record<
     PageId,
     {
@@ -214,6 +217,9 @@ export const copy: Record<Locale, Copy> = {
     contactSend: "Send brief",
     contactCall: "Or call",
     contactFull: "Full partnership",
+    notFoundTitle: "Page not found",
+    notFoundBody: "This URL isn’t a page on omnidot. Head home or pick a service.",
+    notFoundHome: "Back home",
     pages: {
       social: {
         title: "Social Media Management",
@@ -434,7 +440,7 @@ export const copy: Record<Locale, Copy> = {
     revealShort: "Σύντομο μήνυμα",
     revealFull: "Πλήρες μήνυμα",
     aboutSub:
-      "Web, SEO, social και performance — ένας συνεργάτης για brands που θέλουν να μεγαλώσουν.",
+      "Web, SEO, social και performance — ένα στούντιο για brands που θέλουν να μεγαλώσουν.",
     aboutBody:
       "Για founders και τοπικά brands που θέλουν καθαρό επόμενο βήμα — όχι άλλη αναφορά. Από premium, γρήγορη ιστοσελίδα και SEO μέχρι social strategy και performance campaigns. Δεν πιστεύουμε στον θόρυβο. Πιστεύουμε στα δεδομένα, στο καθαρό design και στις στρατηγικές που μετατρέπουν τους επισκέπτες σε πιστούς πελάτες.",
     landingLede: "Αθήνα · διάλεξε υπηρεσία ή ξεκίνα brief",
@@ -452,6 +458,9 @@ export const copy: Record<Locale, Copy> = {
     contactSend: "Αποστολή",
     contactCall: "Ή κάλεσε",
     contactFull: "Πλήρης συνεργασία",
+    notFoundTitle: "Η σελίδα δεν βρέθηκε",
+    notFoundBody: "Αυτό το URL δεν αντιστοιχεί σε σελίδα του omnidot. Γύρνα στην αρχική ή διάλεξε υπηρεσία.",
+    notFoundHome: "Αρχική",
     pages: {
       social: {
         title: "Διαχείριση Social Media",

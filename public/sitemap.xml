@@ -1,32 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://omnidot.pages.dev/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/" />
+    <changefreq>weekly</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://omnidot.pages.dev/el</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/" />
     <changefreq>weekly</changefreq>
     <priority>1</priority>
   </url>
   <url>
     <loc>https://omnidot.pages.dev/social</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/social" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/social" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/social" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://omnidot.pages.dev/el/social</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/social" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/social" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/social" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://omnidot.pages.dev/content</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/content" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/content" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/content" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://omnidot.pages.dev/el/content</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/content" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/content" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/content" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://omnidot.pages.dev/performance</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/performance" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/performance" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/performance" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://omnidot.pages.dev/el/performance</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/performance" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/performance" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/performance" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://omnidot.pages.dev/web</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/web" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/web" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/web" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://omnidot.pages.dev/el/web</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/web" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/web" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/web" />
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://omnidot.pages.dev/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/about" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/about" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://omnidot.pages.dev/el/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://omnidot.pages.dev/about" />
+    <xhtml:link rel="alternate" hreflang="el" href="https://omnidot.pages.dev/el/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://omnidot.pages.dev/about" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

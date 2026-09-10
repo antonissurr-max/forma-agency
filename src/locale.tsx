@@ -3,47 +3,30 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
   type ReactNode,
 } from "react";
+import { useLocation } from "react-router-dom";
 import { copy, type Copy, type Locale } from "./i18n";
-
-const STORAGE_KEY = "omnidot-locale";
+import { localeFromPathname } from "./routing";
 
 type LocaleContextValue = {
   locale: Locale;
-  setLocale: (next: Locale) => void;
   t: Copy;
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-function readStoredLocale(): Locale {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "en" || stored === "el") return stored;
-  } catch {
-    /* ignore */
-  }
-  return "en";
-}
-
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(readStoredLocale);
+  const { pathname } = useLocation();
+  const locale = localeFromPathname(pathname);
 
   useEffect(() => {
     document.documentElement.lang = locale === "el" ? "el" : "en";
-    try {
-      localStorage.setItem(STORAGE_KEY, locale);
-    } catch {
-      /* ignore */
-    }
   }, [locale]);
 
   const value = useMemo(
     () => ({
       locale,
-      setLocale: setLocaleState,
       t: copy[locale],
     }),
     [locale],

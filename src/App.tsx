@@ -4,6 +4,7 @@ import { About } from "./components/About";
 import { Chrome } from "./components/Chrome";
 import { Cursor } from "./components/Cursor";
 import { Footer } from "./components/Footer";
+import { NotFound } from "./components/NotFound";
 import { Preloader } from "./components/Preloader";
 import { ServiceList } from "./components/ServicePanel";
 import { WorkShow } from "./components/WorkShow";
@@ -24,17 +25,23 @@ export default function App() {
 
   const goView = useCallback(
     (next: View) => {
-      navigate(pathFromView(next));
+      navigate(pathFromView(next, locale));
     },
-    [navigate],
+    [navigate, locale],
   );
-  const goIndex = useCallback(() => navigate("/"), [navigate]);
-  const goPage = useCallback((id: PageId) => navigate(`/${id}`), [navigate]);
+  const goIndex = useCallback(
+    () => navigate(pathFromView({ kind: "index" }, locale)),
+    [navigate, locale],
+  );
+  const goPage = useCallback(
+    (id: PageId) => navigate(pathFromView({ kind: "page", id }, locale)),
+    [navigate, locale],
+  );
   const goAbout = useCallback(
     (interest?: PageId) => {
-      navigate(interest ? `/about?interest=${interest}` : "/about");
+      navigate(pathFromView({ kind: "about", interest }, locale));
     },
-    [navigate],
+    [navigate, locale],
   );
   const toggleAbout = useCallback(() => setAboutRevealed((on) => !on), []);
 
@@ -43,7 +50,8 @@ export default function App() {
   }, [locale, location.pathname, location.search]);
 
   useEffect(() => {
-    document.body.style.overflow = view.kind === "index" ? "" : "hidden";
+    document.body.style.overflow =
+      view.kind === "index" || view.kind === "notfound" ? "" : "hidden";
     return () => {
       document.body.style.overflow = "";
     };
@@ -66,7 +74,9 @@ export default function App() {
       ? "is-index"
       : view.kind === "about"
         ? "is-about"
-        : "is-work";
+        : view.kind === "notfound"
+          ? "is-notfound"
+          : "is-work";
 
   return (
     <div className={`stage ${stage} ${ready ? "is-ready" : ""}`}>
@@ -99,6 +109,8 @@ export default function App() {
           <ServiceList id={view.id} />
         </WorkShow>
       )}
+
+      {view.kind === "notfound" && <NotFound />}
 
       <Footer />
     </div>

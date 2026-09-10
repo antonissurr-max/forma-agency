@@ -2,9 +2,10 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { pages } from "../site";
 import { useLocale } from "../locale";
+import { pathFromView } from "../routing";
 
 export function Works({ dimmed }: { dimmed: boolean }) {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export function Works({ dimmed }: { dimmed: boolean }) {
           <Link
             key={page.id}
             className="tile"
-            to={`/${page.id}`}
+            to={pathFromView({ kind: "page", id: page.id }, locale)}
             style={{
               ["--i" as string]: String(i),
             }}
