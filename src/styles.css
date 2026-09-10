@@ -361,12 +361,12 @@ h1.chrome__brand {
   animation-delay: calc(var(--i) * 90ms);
 }
 
-.tile:nth-child(odd) {
+.tile:nth-of-type(odd) {
   align-self: flex-start;
   margin-left: 8vw;
 }
 
-.tile:nth-child(even) {
+.tile:nth-of-type(even) {
   align-self: flex-end;
   margin-right: 8vw;
 }
@@ -891,8 +891,8 @@ a.work__proof-line:hover {
     justify-items: start;
   }
 
-  .tile:nth-child(odd),
-  .tile:nth-child(even) {
+  .tile:nth-of-type(odd),
+  .tile:nth-of-type(even) {
     margin-left: 0;
     margin-right: 0;
     align-self: stretch;
@@ -1803,6 +1803,17 @@ a.work__proof-line:hover {
     );
   }
 
+  .works__intro {
+    position: absolute;
+    left: 50%;
+    top: 2.2vw;
+    z-index: 2;
+    width: min(34rem, 70vw);
+    margin: 0;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
   .tile {
     position: absolute;
     width: var(--tile-size);
@@ -1814,17 +1825,17 @@ a.work__proof-line:hover {
    * Vertical order: 1 → 2 → 4 → 3
    * 1 & 2 shifted down · 3 & 4 shifted up · top of 3 = middle of 2
    */
-  .tile:nth-child(1) {
+  .tile:nth-of-type(1) {
     top: calc(var(--tile-origin-y) + var(--tile-mid) * 0.5);
     left: var(--tile-origin-x);
   }
 
-  .tile:nth-child(2) {
+  .tile:nth-of-type(2) {
     top: calc(var(--tile-origin-y) + var(--tile-mid) * 1.5);
     left: calc(var(--tile-origin-x) + var(--tile-size) + var(--tile-gap-sm));
   }
 
-  .tile:nth-child(3) {
+  .tile:nth-of-type(3) {
     top: calc(var(--tile-origin-y) + var(--tile-mid) * 2.5);
     left: calc(
       var(--tile-origin-x) + var(--tile-size) + var(--tile-gap-sm) +
@@ -1832,7 +1843,7 @@ a.work__proof-line:hover {
     );
   }
 
-  .tile:nth-child(4) {
+  .tile:nth-of-type(4) {
     top: calc(var(--tile-origin-y) + var(--tile-mid) * 2);
     left: calc(
       var(--tile-origin-x) + var(--tile-size) * 2 + var(--tile-gap-sm) * 2 +
@@ -1840,8 +1851,8 @@ a.work__proof-line:hover {
     );
   }
 
-  .tile:nth-child(odd),
-  .tile:nth-child(even) {
+  .tile:nth-of-type(odd),
+  .tile:nth-of-type(even) {
     margin-left: 0;
     margin-right: 0;
   }
