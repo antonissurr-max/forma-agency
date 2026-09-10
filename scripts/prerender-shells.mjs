@@ -73,7 +73,7 @@ const routeDefs = [
       h1: "Διαχείριση Social Media",
       body: "Στρατηγική, δημοσίευση, ανάπτυξη και μηνιαίο reporting από το omnidot.",
       story:
-        "Η Europatch πουλάει ψυχρή άσφαλτο σε B2B πελάτες — κατηγορία που σπάνια «παίρνει φωτιά» online. Χτίσαμε σταθερή οργανική παρουσία γύρω από πραγματική χρήση προϊόντος και how-to περιεχόμενο. Σε έναν χρόνο: 4.5 εκ. views στο Facebook και 2.5 εκ. στο Instagram, 100% organic.",
+        "Η Europatch πουλάει ψυχρή άσφαλτο σε B2B πελάτες — κατηγορία που σπάνια γίνεται viral online. Χτίσαμε σταθερή οργανική παρουσία γύρω από πραγματική χρήση προϊόντος και how-to περιεχόμενο. Σε έναν χρόνο: 4.5 εκ. views στο Facebook και 2.5 εκ. στο Instagram, 100% organic.",
     },
     type: "service",
     serviceName: { en: "Social Media Management", el: "Διαχείριση Social Media" },
