@@ -147,8 +147,7 @@ const routeDefs = [
         "Web Development - We build sites that load quickly, read clearly, and ask for the right action.",
       h1: "Web Development",
       body: "Fast, editorial sites built to convert.",
-      story:
-        "We built pyrgiotisoe.com for a Greek industrial brand: fast, clear, and ready to convert traffic from ads and organic search — a site that works, not a brochure that decorates.",
+      story: "",
     },
     el: {
       title: "Ανάπτυξη Ιστοσελίδων - omnidot.",
@@ -156,8 +155,7 @@ const routeDefs = [
         "Ανάπτυξη Ιστοσελίδων - Φτιάχνουμε sites που φορτώνουν γρήγορα, διαβάζονται καθαρά και ζητούν τη σωστή ενέργεια.",
       h1: "Ανάπτυξη Ιστοσελίδων",
       body: "Γρήγορα, editorial sites φτιαγμένα για conversion.",
-      story:
-        "Φτιάξαμε το pyrgiotisoe.com για ελληνικό βιομηχανικό brand: γρήγορο, καθαρό και έτοιμο να μετατρέψει traffic από ads και organic search — site που δουλεύει, όχι brochure που στολίζει.",
+      story: "",
     },
     type: "service",
     serviceName: { en: "Web Development", el: "Ανάπτυξη Ιστοσελίδων" },

@@ -370,8 +370,6 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Live",
           client: "Pyrgiotis OE",
-          story:
-            "We built pyrgiotisoe.com for a Greek industrial brand: fast, clear, and ready to convert traffic from ads and organic search — a site that works, not a brochure that decorates.",
           value: "",
           links: [{ label: "pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
         },
@@ -611,8 +609,6 @@ export const copy: Record<Locale, Copy> = {
         proof: {
           label: "Live",
           client: "Πυργιώτης ΟΕ",
-          story:
-            "Φτιάξαμε το pyrgiotisoe.com για ελληνικό βιομηχανικό brand: γρήγορο, καθαρό και έτοιμο να μετατρέψει traffic από ads και organic search — site που δουλεύει, όχι brochure που στολίζει.",
           value: "",
           links: [{ label: "pyrgiotisoe.com", href: "https://pyrgiotisoe.com/" }],
         },
