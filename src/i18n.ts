@@ -329,7 +329,7 @@ export const copy: Record<Locale, Copy> = {
           label: "Selected",
           client: "Pyrgiotis OE",
           story:
-            "Pyrgiotis OE needed paid acquisition a founder could read without a deck. We ran Meta and Google with tight creative tests and a clean landing path. In 30 days on Meta: 1,791 landing-page views at €0.08 each on €148 spend — plus Google search at 3.23% CTR.",
+            "Pyrgiotis OE wanted ads a business owner could follow without a long presentation. We ran Meta and Google, testing a few creatives and a clear path to the website. In 30 days on Meta: 1,791 page visits at €0.08 each on €148 total — and on Google search, 3.23% of people who saw the ad clicked.",
           value: "Meta €0.08 CPLV · Google 3.23% CTR · 30 days",
           notes: [
             "Meta Ads — 1,791 landing page views · €0.08 · €148 · 30 days",
@@ -570,7 +570,7 @@ export const copy: Record<Locale, Copy> = {
           label: "Επιλεγμένο",
           client: "Πυργιώτης ΟΕ",
           story:
-            "Ο Πυργιώτης ΟΕ ήθελε paid acquisition που να διαβάζει ένας founder χωρίς 40σέλιδο deck. Τρέξαμε Meta και Google με σφιχτά creative tests και καθαρό landing path. Σε 30 ημέρες στο Meta: 1.791 landing-page views στα €0,08 το καθένα με €148 spend — και Google search με 3,23% CTR.",
+            "Ο Πυργιώτης ΟΕ ήθελε διαφημίσεις που να καταλαβαίνει εύκολα ο ιδιοκτήτης — χωρίς μακροσκελή παρουσίαση. Τρέξαμε Meta και Google, δοκιμάζοντας λίγες εικόνες/κείμενα και καθαρή διαδρομή προς την ιστοσελίδα. Σε 30 ημέρες στο Meta: 1.791 επισκέψεις στη σελίδα με €0,08 η καθεμία και συνολικά €148 — και στο Google, το 3,23% όσων είδαν την αγγελία πάτησαν.",
           value: "Meta €0,08 CPLV · Google 3,23% CTR · 30 ημέρες",
           notes: [
             "Meta Ads — 1.791 landing page views · €0,08 · €148 · 30 ημέρες",
