@@ -10,10 +10,10 @@
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --label: 11px;
   --chrome: 20px;
-  --tile-size: clamp(168px, 18vmin, 320px);
-  --tile-gap-sm: clamp(8px, 1vw, 16px);
-  --tile-gap-lg: clamp(72px, 10vmin, 220px);
-  --tile-mid: calc(0.85em + var(--tile-size) * 0.45);
+  --tile-size: clamp(200px, min(18.5vw, 26vh), 360px);
+  --tile-gap-sm: clamp(10px, 1.1vw, 18px);
+  --tile-gap-lg: max(calc(var(--tile-size) * 0.95), 16vw);
+  --tile-mid: calc(var(--tile-size) * 0.48);
   --cursor: var(--sea);
 }
 
@@ -1931,7 +1931,7 @@ a.work__proof-line:hover {
   border-color: var(--cursor);
 }
 
-/* Desktop landing: variables live on .works (not nested :root) */
+/* Desktop landing: size from vw+vh so it fills the board; gap-lg ≥ tile so no overlap */
 @media (min-width: 900px) {
   .chrome {
     padding: 2.2vw 2.4vw 0;
@@ -1942,24 +1942,24 @@ a.work__proof-line:hover {
     inset: 0;
     display: block;
     padding: 0;
-    --tile-size: clamp(140px, 15vmin, 260px);
-    --tile-gap-sm: 8px;
-    --tile-gap-lg: clamp(40px, 7vmin, 140px);
-    --tile-mid: calc(0.45em + var(--tile-size) * 0.36);
+    --tile-size: clamp(200px, min(18.5vw, 26vh), 360px);
+    --tile-gap-sm: clamp(10px, 1.1vw, 18px);
+    --tile-gap-lg: max(calc(var(--tile-size) * 0.95), 16vw);
+    --tile-mid: calc(var(--tile-size) * 0.48);
     --tile-comp-w: calc(
       var(--tile-size) * 3 + var(--tile-gap-sm) * 2 + var(--tile-gap-lg)
     );
     --tile-comp-h: calc(var(--tile-mid) * 2 + var(--tile-size) + 2.4em);
     --tile-origin-x: calc((100vw - var(--tile-comp-w)) / 2);
     --tile-origin-y: calc(
-      (100vh - var(--tile-comp-h)) / 2 - var(--tile-mid) * 0.2
+      (100vh - var(--tile-comp-h)) / 2 - var(--tile-mid) * 0.35
     );
   }
 
   .works__intro {
     position: absolute;
     left: 50%;
-    top: max(14px, 1.2vw);
+    top: max(16px, 1.6vw);
     z-index: 2;
     width: min(34rem, 70vw);
     margin: 0;
@@ -1971,7 +1971,7 @@ a.work__proof-line:hover {
     position: absolute;
     width: var(--tile-size);
     margin: 0;
-    gap: 0.3vw;
+    gap: 0.35vw;
   }
 
   /*
@@ -2011,7 +2011,7 @@ a.work__proof-line:hover {
   }
 
   .tile__kicker {
-    font-size: clamp(12px, 1.05vw, 16px);
+    font-size: clamp(14px, 1.15vw, 18px);
   }
 
   .tile__media {
@@ -2021,33 +2021,20 @@ a.work__proof-line:hover {
   }
 
   .tile__title {
-    font-size: clamp(12px, 1.1vw, 16px);
+    font-size: clamp(14px, 1.2vw, 18px);
   }
 }
 
-/* Laptops / short viewports: tighter staircase */
-@media (min-width: 900px) and (max-width: 1500px),
-  (min-width: 900px) and (max-height: 900px) {
+/* Short laptops only: slightly smaller, keep gap proportional to tile */
+@media (min-width: 900px) and (max-height: 780px) {
   .works {
-    --tile-size: clamp(118px, 13vmin, 190px);
-    --tile-gap-sm: 6px;
-    --tile-gap-lg: clamp(28px, 5vmin, 88px);
-    --tile-mid: calc(0.35em + var(--tile-size) * 0.32);
-  }
-}
-
-/* Large monitors: open composition */
-@media (min-width: 1600px) and (min-height: 950px) {
-  .works {
-    --tile-size: clamp(220px, 17vmin, 340px);
-    --tile-gap-sm: 12px;
-    --tile-gap-lg: clamp(120px, 12vmin, 280px);
-    --tile-mid: calc(0.9em + var(--tile-size) * 0.48);
+    --tile-size: clamp(168px, min(16vw, 22vh), 230px);
+    --tile-gap-lg: max(calc(var(--tile-size) * 0.9), 12vw);
+    --tile-mid: calc(var(--tile-size) * 0.42);
   }
 }
 
 @media (min-width: 900px) {
-
   .work__scroll {
     padding: 8vw 14vw 6vw;
   }
