@@ -421,7 +421,7 @@ h1.chrome__brand {
 }
 
 .tile__kicker {
-  font-size: clamp(12px, 1.05vw, 15px);
+  font-size: clamp(11px, calc(var(--tile-size) * 0.05), 18px);
   letter-spacing: 0.08em;
   line-height: 1;
   opacity: 0.85;
@@ -451,7 +451,7 @@ h1.chrome__brand {
 }
 
 .tile__title {
-  font-size: clamp(12px, 1.05vw, 15px);
+  font-size: clamp(11px, calc(var(--tile-size) * 0.055), 20px);
   font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1.3;
@@ -1971,7 +1971,7 @@ a.work__proof-line:hover {
     position: absolute;
     width: var(--tile-size);
     margin: 0;
-    gap: 0.35vw;
+    gap: calc(var(--tile-size) * 0.022);
   }
 
   /*
@@ -2011,7 +2011,7 @@ a.work__proof-line:hover {
   }
 
   .tile__kicker {
-    font-size: clamp(14px, 1.15vw, 18px);
+    font-size: calc(var(--tile-size) * 0.05);
   }
 
   .tile__media {
@@ -2021,7 +2021,7 @@ a.work__proof-line:hover {
   }
 
   .tile__title {
-    font-size: clamp(14px, 1.2vw, 18px);
+    font-size: calc(var(--tile-size) * 0.055);
   }
 }
 
