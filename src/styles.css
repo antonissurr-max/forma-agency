@@ -509,22 +509,23 @@ h1.chrome__brand {
   opacity: 0.55;
 }
 
-/* Title sets the width; meta + explore share that exact περασιά */
+/* Title width drives meta περασιά — title stays one row, meta spreads under it */
 .work__lead {
-  container-type: inline-size;
-  container-name: work-lead;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: fit-content;
   max-width: 100%;
 }
 
 .boxed-title {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0;
   margin: 0 0 18px;
   width: max-content;
   max-width: 100%;
-  font-size: clamp(22px, 7vw, 48px);
+  font-size: clamp(18px, 5.2vw, 48px);
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.04em;
@@ -535,6 +536,7 @@ h1.chrome__brand {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 1 auto;
   padding: 0.18em 0.28em;
   margin: -1px 0 0 -1px;
   border: 1.5px solid currentColor;
@@ -552,16 +554,16 @@ h1.chrome__brand {
 }
 
 .work__meta {
-  /* Shrink-wrap to .work__lead / boxed-title width */
+  /* Match title width without expanding past it */
   box-sizing: border-box;
   width: 0;
   min-width: 100%;
   max-width: 100%;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(10px, 3.5cqi, 18px) clamp(10px, 3cqi, 16px);
+  gap: 14px 16px;
   margin: 0 0 28px;
-  font-size: clamp(9px, 2.6cqi, 11px);
+  font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -574,15 +576,15 @@ h1.chrome__brand {
   display: block;
   margin-bottom: 4px;
   opacity: 0.45;
-  font-size: clamp(8px, 2.2cqi, 10px);
+  font-size: 10px;
 }
 
 .work__meta strong {
   display: block;
   font-weight: 500;
-  font-size: clamp(10px, 3cqi, 13px);
-  line-height: 1.25;
-  overflow-wrap: anywhere;
+  font-size: 12px;
+  line-height: 1.3;
+  overflow-wrap: break-word;
 }
 
 .work__proof {
@@ -703,7 +705,7 @@ a.work__proof-line:hover {
   border-bottom: 1px solid currentColor;
   background: none;
   color: inherit;
-  font-size: clamp(9px, 2.6cqi, 11px);
+  font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
