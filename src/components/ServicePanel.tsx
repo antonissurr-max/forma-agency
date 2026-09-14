@@ -17,21 +17,24 @@ function FactRow({
 
   return (
     <li className={`facts__item${open ? " is-open" : ""}`}>
-      <span>{String(index).padStart(2, "0")}</span>
-      <div className="facts__main">
-        <button
-          className="facts__line"
-          type="button"
-          aria-expanded={open}
-          onClick={() => setOpen((on) => !on)}
-        >
-          <strong>{title}</strong>
-          <span> — {detail}</span>
-        </button>
-        <p className="facts__body">
-          <span>{body}</span>
-        </p>
-      </div>
+      <button
+        className="facts__hit"
+        type="button"
+        aria-expanded={open}
+        onClick={() => setOpen((on) => !on)}
+      >
+        <span className="facts__index">{String(index).padStart(2, "0")}</span>
+        <span className="facts__copy">
+          <span className="facts__line">
+            <strong>{title}</strong>
+            <span className="facts__detail"> — {detail}</span>
+          </span>
+          <span className="facts__body">
+            <span>{body}</span>
+          </span>
+        </span>
+        <span className="facts__chev" aria-hidden="true" />
+      </button>
     </li>
   );
 }
