@@ -509,11 +509,21 @@ h1.chrome__brand {
   opacity: 0.55;
 }
 
+/* Title sets the width; meta + explore share that exact περασιά */
+.work__lead {
+  container-type: inline-size;
+  container-name: work-lead;
+  width: fit-content;
+  max-width: 100%;
+}
+
 .boxed-title {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
   margin: 0 0 18px;
+  width: max-content;
+  max-width: 100%;
   font-size: clamp(22px, 7vw, 48px);
   font-weight: 700;
   line-height: 1;
@@ -542,25 +552,37 @@ h1.chrome__brand {
 }
 
 .work__meta {
+  /* Shrink-wrap to .work__lead / boxed-title width */
+  box-sizing: border-box;
+  width: 0;
+  min-width: 100%;
+  max-width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 18px;
-  max-width: 920px;
-  margin-bottom: 28px;
-  font-size: 11px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 3.5cqi, 18px) clamp(10px, 3cqi, 16px);
+  margin: 0 0 28px;
+  font-size: clamp(9px, 2.6cqi, 11px);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+.work__meta-item {
+  min-width: 0;
 }
 
 .work__meta span {
   display: block;
   margin-bottom: 4px;
   opacity: 0.45;
-  font-size: 10px;
+  font-size: clamp(8px, 2.2cqi, 10px);
 }
 
 .work__meta strong {
+  display: block;
   font-weight: 500;
+  font-size: clamp(10px, 3cqi, 13px);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .work__proof {
@@ -681,7 +703,7 @@ a.work__proof-line:hover {
   border-bottom: 1px solid currentColor;
   background: none;
   color: inherit;
-  font-size: var(--label);
+  font-size: clamp(9px, 2.6cqi, 11px);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
@@ -2100,15 +2122,14 @@ a.work__proof-line:hover {
   }
 
   .work__meta {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
-    align-items: end;
-    max-width: none;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
   }
 
   .work__explore {
-    grid-column: auto;
-    justify-self: end;
-    margin-bottom: 2px;
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 4px;
   }
 
   .work__stage {

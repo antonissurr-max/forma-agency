@@ -96,26 +96,28 @@ export function WorkShow({
       <div className="work__scroll">
         <header className="work__head">
           <p className="work__kicker">{page.kicker}_</p>
-          <BoxedTitle text={copy.title} />
+          <div className="work__lead">
+            <BoxedTitle text={copy.title} />
 
-          <div className="work__meta">
-            {copy.meta.map((item) => (
-              <div key={item.label}>
-                <span>{item.label}</span>
-                <strong>{item.value}</strong>
-              </div>
-            ))}
-            {mediaCount > 1 && !isFolder && (
-              <button
-                className="work__explore"
-                type="button"
-                onClick={() =>
-                  stackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-                }
-              >
-                {t.explore} ↗
-              </button>
-            )}
+            <div className="work__meta">
+              {copy.meta.map((item) => (
+                <div key={item.label} className="work__meta-item">
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+              {mediaCount > 1 && !isFolder && (
+                <button
+                  className="work__explore"
+                  type="button"
+                  onClick={() =>
+                    stackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }
+                >
+                  {t.explore} ↗
+                </button>
+              )}
+            </div>
           </div>
           {copy.proof && (
             <div className={`work__proof${copy.proof.client ? " work__proof--folder" : ""}`}>
