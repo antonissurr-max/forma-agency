@@ -303,7 +303,7 @@ export const copy: Record<Locale, Copy> = {
           {
             name: "Capture",
             detail: "Photo, video, on-site",
-            body: "On-location or studio photography and videography — product, people, space. We shoot for Instagram, TikTok, Facebook ads, Google campaigns and your site so one production day feeds every channel.",
+            body: "On-location photography and videography — product, people, space. We shoot for Instagram, TikTok, Facebook ads, Google campaigns and your site so one production day feeds every channel.",
           },
           {
             name: "Edit",
@@ -313,7 +313,7 @@ export const copy: Record<Locale, Copy> = {
           {
             name: "Assets",
             detail: "Stills, carousels, motion",
-            body: "A usable content library: stills, carousels, motion graphics, titles and thumbnails ready to post or run as ads — not an unsorted dump of leftover files.",
+            body: "A usable content library: stills, carousels, motion graphics, titles and thumbnails ready to post or run as ads — organized files you can actually use.",
           },
         ],
       },
@@ -340,7 +340,7 @@ export const copy: Record<Locale, Copy> = {
           {
             name: "Meta & Google",
             detail: "Acquisition that compounds",
-            body: "Performance marketing on Meta Ads (Facebook & Instagram) and Google Ads: campaigns for traffic, leads and sales. Account structure, audiences, keywords and budgets built so you can scale when a signal is real — paid social and search working together.",
+            body: "Performance marketing on Meta Ads (Facebook & Instagram) and Google Ads: campaigns for traffic, leads and sales. Account structure, audiences, keywords and budgets built so you can grow when something clearly works — paid social and search together.",
           },
           {
             name: "Creative testing",
@@ -541,7 +541,7 @@ export const copy: Record<Locale, Copy> = {
           {
             name: "Λήψη",
             detail: "Φωτογραφία, video, on-site",
-            body: "Φωτογράφιση και βιντεοσκόπηση on-location ή σε studio — προϊόν, άνθρωποι, χώρος. Γυρίζουμε για Instagram, TikTok, Facebook ads, Google καμπάνιες και το site σας, ώστε μία μέρα παραγωγής να τροφοδοτεί όλα τα κανάλια.",
+            body: "Φωτογράφιση και βιντεοσκόπηση on-location — προϊόν, άνθρωποι, χώρος. Γυρίζουμε για Instagram, TikTok, Facebook ads, Google καμπάνιες και το site σας, ώστε μία μέρα παραγωγής να τροφοδοτεί όλα τα κανάλια.",
           },
           {
             name: "Μοντάζ",
@@ -551,7 +551,7 @@ export const copy: Record<Locale, Copy> = {
           {
             name: "Assets",
             detail: "Stills, carousels, motion",
-            body: "Χρήσιμη βιβλιοθήκη περιεχομένου: stills, carousels, motion graphics, τίτλοι και thumbnails έτοιμα για ανάρτηση ή διαφήμιση — όχι ένας αταξινόμητος φάκελος με αποφάγια.",
+            body: "Χρήσιμη βιβλιοθήκη περιεχομένου: stills, carousels, motion graphics, τίτλοι και thumbnails έτοιμα για ανάρτηση ή διαφήμιση — τακτοποιημένα αρχεία που χρησιμοποιούνται πραγματικά.",
           },
         ],
       },
@@ -578,7 +578,7 @@ export const copy: Record<Locale, Copy> = {
           {
             name: "Meta & Google",
             detail: "Acquisition που συσσωρεύεται",
-            body: "Performance marketing σε Meta Ads (Facebook & Instagram) και Google Ads: καμπάνιες για traffic, leads και πωλήσεις. Δομή λογαριασμών, κοινά, λέξεις-κλειδιά και budgets ώστε να μεγαλώνετε όταν το σήμα είναι πραγματικό — paid social και search μαζί.",
+            body: "Performance marketing σε Meta Ads (Facebook & Instagram) και Google Ads: καμπάνιες για traffic, leads και πωλήσεις. Δομή λογαριασμών, κοινά, λέξεις-κλειδιά και budgets ώστε να μεγαλώνετε όταν κάτι δουλεύει ξεκάθαρα — paid social και search μαζί.",
           },
           {
             name: "Creative testing",
