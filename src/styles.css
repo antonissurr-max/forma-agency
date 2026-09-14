@@ -868,15 +868,16 @@ a.work__proof-line:hover {
   bottom: 18px;
   z-index: 45;
   display: grid;
-  gap: 4px;
+  gap: 6px;
   justify-items: center;
-  width: 52px;
-  padding: 8px 0;
-  border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent);
-  background: color-mix(in srgb, var(--ink) 75%, transparent);
+  min-width: 64px;
+  min-height: 64px;
+  padding: 12px 10px;
+  border: 1px solid color-mix(in srgb, var(--paper) 35%, transparent);
+  background: color-mix(in srgb, var(--ink) 80%, transparent);
   color: var(--paper);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -886,6 +887,11 @@ a.work__proof-line:hover {
 
 .work__edge.is-next {
   right: var(--chrome);
+}
+
+.work__edge span:first-child {
+  font-size: 18px;
+  line-height: 1;
 }
 
 .work__edge span:last-child {
@@ -2153,10 +2159,18 @@ a.work__proof-line:hover {
   .work__edge {
     top: 50%;
     bottom: auto;
-    width: auto;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
     border: 0;
     background: none;
+    font-size: 13px;
+    letter-spacing: 0.14em;
     transform: translateY(-50%);
+  }
+
+  .work__edge span:first-child {
+    font-size: 16px;
   }
 
   .work__edge.is-prev {
