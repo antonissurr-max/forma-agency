@@ -1112,9 +1112,9 @@ a.work__proof-line:hover {
 
 .about-layer__title {
   margin: 0 0 14px;
-  font-size: clamp(18px, 3.4vw, 32px);
+  font-size: clamp(16px, 2.8vw, 28px);
   font-weight: 700;
-  line-height: 1.18;
+  line-height: 1.28;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--ink);
@@ -1124,8 +1124,8 @@ a.work__proof-line:hover {
 .about-verse {
   position: relative;
   display: block;
-  height: calc(5 * var(--line-h));
-  --line-h: 1.18em;
+  height: calc(6 * var(--line-h));
+  --line-h: 1.28em;
   --verse-pink: var(--hydrangea);
   --verse-soft: cubic-bezier(0.22, 0.7, 0.25, 1);
   transition: height 0.7s var(--verse-soft);
@@ -1141,6 +1141,7 @@ a.work__proof-line:hover {
   right: 0;
   top: calc(var(--row-open) * var(--line-h));
   text-align: center;
+  white-space: nowrap;
   transition: top 0.7s var(--verse-soft);
   will-change: top, color;
 }
@@ -1165,6 +1166,10 @@ a.work__proof-line:hover {
 
 .is-revealed .about-verse__row--open-only:nth-child(5) {
   animation-delay: 50ms;
+}
+
+.is-revealed .about-verse__row--open-only:nth-child(6) {
+  animation-delay: 75ms;
 }
 
 .about-verse__word {
