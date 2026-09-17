@@ -7,6 +7,7 @@ export function WorkShow({
   id,
   media,
   children,
+  exiting = false,
   onClose,
   onNavigate,
   onBrief,
@@ -14,6 +15,7 @@ export function WorkShow({
   id: PageId;
   media?: MediaItem[];
   children?: ReactNode;
+  exiting?: boolean;
   onClose: () => void;
   onNavigate: (id: PageId) => void;
   onBrief: () => void;
@@ -88,12 +90,12 @@ export function WorkShow({
 
   return (
     <div
-      className={`work is-open${gallery.length === 0 ? " work--text" : ""}`}
+      className={`work is-open${gallery.length === 0 ? " work--text" : ""}${exiting ? " is-exit" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={copy.title}
     >
-      <div className="work__scroll">
+      <div className="work__scroll" key={id}>
         <header className="work__head">
           <p className="work__kicker">{page.kicker}_</p>
           <div className="work__lead">

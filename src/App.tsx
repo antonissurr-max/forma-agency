@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { About } from "./components/About";
 import { Chrome } from "./components/Chrome";
@@ -24,6 +24,8 @@ export default function App() {
     () => !shouldShowIntro(viewFromLocation(location.pathname, location.search).kind === "index"),
   );
   const [aboutRevealed, setAboutRevealed] = useState(false);
+  const [panelExit, setPanelExit] = useState(false);
+  const panelExitTimer = useRef<number | null>(null);
 
   const goView = useCallback(
     (next: View) => {
@@ -31,21 +33,56 @@ export default function App() {
     },
     [navigate, locale],
   );
-  const goIndex = useCallback(
-    () => navigate(pathFromView({ kind: "index" }, locale)),
-    [navigate, locale],
-  );
+  const goIndex = useCallback(() => {
+    const fromPanel = view.kind === "page" || view.kind === "about";
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!fromPanel || reduce) {
+      navigate(pathFromView({ kind: "index" }, locale));
+      return;
+    }
+
+    if (panelExitTimer.current != null) return;
+    setPanelExit(true);
+    panelExitTimer.current = window.setTimeout(() => {
+      panelExitTimer.current = null;
+      setPanelExit(false);
+      navigate(pathFromView({ kind: "index" }, locale));
+    }, 340);
+  }, [navigate, locale, view.kind]);
   const goPage = useCallback(
-    (id: PageId) => navigate(pathFromView({ kind: "page", id }, locale)),
+    (id: PageId) => {
+      setPanelExit(false);
+      if (panelExitTimer.current != null) {
+        window.clearTimeout(panelExitTimer.current);
+        panelExitTimer.current = null;
+      }
+      navigate(pathFromView({ kind: "page", id }, locale));
+    },
     [navigate, locale],
   );
   const goAbout = useCallback(
     (interest?: PageId) => {
+      setPanelExit(false);
+      if (panelExitTimer.current != null) {
+        window.clearTimeout(panelExitTimer.current);
+        panelExitTimer.current = null;
+      }
       navigate(pathFromView({ kind: "about", interest }, locale));
     },
     [navigate, locale],
   );
   const toggleAbout = useCallback(() => setAboutRevealed((on) => !on), []);
+
+  useEffect(() => {
+    return () => {
+      if (panelExitTimer.current != null) {
+        window.clearTimeout(panelExitTimer.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     applyDocumentSeo(locale, viewFromLocation(location.pathname, location.search));
@@ -95,6 +132,7 @@ export default function App() {
       {view.kind === "about" && (
         <About
           revealed={aboutRevealed}
+          exiting={panelExit}
           onClose={goIndex}
           onGo={goPage}
           interest={view.interest}
@@ -104,6 +142,7 @@ export default function App() {
       {view.kind === "page" && (
         <WorkShow
           id={view.id}
+          exiting={panelExit}
           onClose={goIndex}
           onNavigate={goPage}
           onBrief={() => goAbout(view.id)}

@@ -561,6 +561,12 @@ h1.chrome__brand {
   z-index: 40;
   color: var(--paper);
   background: var(--work-bg);
+  animation: panel-in 0.4s var(--ease) both;
+}
+
+.work.is-exit {
+  animation: panel-out 0.34s var(--ease) both;
+  pointer-events: none;
 }
 
 .work__scroll {
@@ -569,6 +575,7 @@ h1.chrome__brand {
   overscroll-behavior: contain;
   padding: 96px var(--chrome) 96px;
   scrollbar-width: none;
+  animation: panel-content-in 0.38s var(--ease) both;
 }
 
 .work__scroll::-webkit-scrollbar {
@@ -1001,6 +1008,39 @@ a.work__proof-line:hover {
   display: none;
 }
 
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes panel-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes panel-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* About overlay — centered light panel like crxtianhub */
 .about-layer {
   position: fixed;
@@ -1012,6 +1052,12 @@ a.work__proof-line:hover {
   background: var(--paper);
   color: var(--ink);
   text-align: center;
+  animation: panel-in 0.4s var(--ease) both;
+}
+
+.about-layer.is-exit {
+  animation: panel-out 0.34s var(--ease) both;
+  pointer-events: none;
 }
 
 .about-layer__scroll {
@@ -2360,6 +2406,14 @@ a.work__proof-line:hover {
   .preloader__brand {
     animation: none !important;
     transition: none;
+  }
+
+  .work,
+  .work.is-exit,
+  .work__scroll,
+  .about-layer,
+  .about-layer.is-exit {
+    animation: none !important;
   }
 
   .stage.is-ready .tile {

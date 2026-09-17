@@ -31,10 +31,12 @@ function VerseWordView({ word, revealed }: { word: VerseWord; revealed: boolean 
 
 export function About({
   revealed,
+  exiting = false,
   onGo,
   interest,
 }: {
   revealed: boolean;
+  exiting?: boolean;
   onClose: () => void;
   onGo: (id: PageId) => void;
   interest?: PageId;
@@ -78,7 +80,7 @@ export function About({
   return (
     <div
       ref={layerRef}
-      className="about-layer"
+      className={`about-layer${exiting ? " is-exit" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={t.about}
