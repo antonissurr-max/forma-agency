@@ -1,45 +1,89 @@
 import { useEffect, useRef, useState } from "react";
-import { pages } from "../site";
+import { pages, site } from "../site";
 import { Logo } from "./Logo";
 
+const STORAGE_KEY = "omnidot-intro-seen";
+
+export function shouldShowIntro(isHome: boolean): boolean {
+  if (typeof window === "undefined") return false;
+  if (!isHome) return false;
+  try {
+    if (window.localStorage.getItem(STORAGE_KEY) === "1") return false;
+  } catch {
+    return false;
+  }
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+  return true;
+}
+
+function markIntroSeen() {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, "1");
+  } catch {
+    /* ignore quota / private mode */
+  }
+}
+
+function preloadCovers() {
+  pages.forEach((page) => {
+    const img = new Image();
+    img.src = page.cover;
+  });
+}
+
 export function Preloader({ onDone }: { onDone: () => void }) {
-  const [pct, setPct] = useState(0);
-  const done = useRef(onDone);
-  done.current = onDone;
+  const [exiting, setExiting] = useState(false);
+  const finished = useRef(false);
+  const onDoneRef = useRef(onDone);
+  onDoneRef.current = onDone;
+
+  const finish = () => {
+    if (finished.current) return;
+    finished.current = true;
+    markIntroSeen();
+    onDoneRef.current();
+  };
 
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
-      done.current();
-      return;
-    }
+    preloadCovers();
 
-    const images = pages.map((page) => {
-      const img = new Image();
-      img.src = page.cover;
-      return img;
-    });
+    const exitAt = window.setTimeout(() => setExiting(true), 1280);
+    const doneAt = window.setTimeout(finish, 1780);
 
-    let current = 0;
-    const tick = window.setInterval(() => {
-      const loaded = images.filter((img) => img.complete).length;
-      const fromImages = Math.round((loaded / images.length) * 100);
-      current = Math.min(100, current + 4);
-      const next = Math.min(100, Math.max(current, fromImages));
-      setPct(next);
-      if (next >= 100) {
-        window.clearInterval(tick);
-        window.setTimeout(() => done.current(), 240);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setExiting(true);
+        window.setTimeout(finish, 320);
       }
-    }, 36);
+    };
 
-    return () => window.clearInterval(tick);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.clearTimeout(exitAt);
+      window.clearTimeout(doneAt);
+      window.removeEventListener("keydown", onKey);
+    };
   }, []);
 
   return (
-    <div className="preloader" role="status" aria-live="polite">
-      <Logo className="preloader__mark" />
-      <span className="preloader__pct">{pct}</span>
+    <div
+      className={`preloader${exiting ? " is-exit" : ""}`}
+      role="dialog"
+      aria-modal="true"
+      aria-label={site.brand}
+      onClick={() => {
+        setExiting(true);
+        window.setTimeout(finish, 320);
+      }}
+    >
+      <div className="preloader__stage">
+        <Logo className="preloader__mark" />
+        <p className="preloader__brand">
+          {site.brand}
+          <span className="preloader__dot">.</span>
+        </p>
+      </div>
     </div>
   );
 }

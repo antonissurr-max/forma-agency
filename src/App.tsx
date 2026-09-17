@@ -5,7 +5,7 @@ import { Chrome } from "./components/Chrome";
 import { Cursor } from "./components/Cursor";
 import { Footer } from "./components/Footer";
 import { NotFound } from "./components/NotFound";
-import { Preloader } from "./components/Preloader";
+import { Preloader, shouldShowIntro } from "./components/Preloader";
 import { ServiceList } from "./components/ServicePanel";
 import { WorkShow } from "./components/WorkShow";
 import { Works } from "./components/Works";
@@ -15,13 +15,15 @@ import { applyDocumentSeo } from "./seo";
 import type { PageId, View } from "./types";
 
 export default function App() {
-  const [ready, setReady] = useState(false);
-  const [aboutRevealed, setAboutRevealed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { locale } = useLocale();
 
   const view = viewFromLocation(location.pathname, location.search);
+  const [ready, setReady] = useState(
+    () => !shouldShowIntro(viewFromLocation(location.pathname, location.search).kind === "index"),
+  );
+  const [aboutRevealed, setAboutRevealed] = useState(false);
 
   const goView = useCallback(
     (next: View) => {
