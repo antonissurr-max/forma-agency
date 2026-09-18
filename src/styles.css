@@ -238,6 +238,17 @@ h2 {
   }
 }
 
+@media (max-width: 899px) {
+  .preloader__mark {
+    width: 72px;
+    height: 72px;
+  }
+
+  .preloader__brand {
+    font-size: 28px;
+  }
+}
+
 /* Chrome — logo left, About top-right */
 .chrome {
   position: fixed;
@@ -467,6 +478,14 @@ h1.chrome__brand {
   letter-spacing: 0.01em;
   color: var(--navy);
   opacity: 0.72;
+}
+
+/* Mobile home story — off on desktop staircase */
+.home-mobile,
+.home-mobile__section,
+.home-mobile__proof,
+.home-mobile__close {
+  display: none;
 }
 
 .tile {
@@ -1075,53 +1094,171 @@ a.work__proof-line:hover {
     display: none;
   }
 
+  .stage.is-index .chrome__brand {
+    display: none;
+  }
+
   .chrome__brand {
     bottom: 36px;
   }
 
   .works {
-    padding: 88px var(--chrome) 96px;
-    gap: 28px;
+    padding: 72px var(--chrome) 48px;
+    gap: 0;
     align-items: stretch;
     width: 100%;
     box-sizing: border-box;
   }
 
   .works__intro {
-    width: 100%;
-    margin: 0 0 8px;
-    text-align: left;
+    display: none;
   }
 
-  .works__pitch {
+  .home-mobile {
+    display: grid;
+    justify-items: start;
+    gap: 14px;
+    width: 100%;
+    margin: 0 0 36px;
+    padding: 8px 0 8px;
+    min-height: min(72vh, 560px);
+    align-content: center;
+  }
+
+  .home-mobile__mark {
+    width: 36px;
+    height: 36px;
+    color: var(--ink);
+  }
+
+  .home-mobile__brand {
     margin: 0;
-    max-width: 22rem;
+    font-size: clamp(28px, 9vw, 40px);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .home-mobile__dot {
+    color: var(--hydrangea);
+  }
+
+  .home-mobile__headline {
+    margin: 8px 0 0;
+    max-width: 16ch;
+    font-size: clamp(22px, 6.5vw, 30px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  .home-mobile__headline--sm {
+    max-width: 14ch;
+    font-size: clamp(20px, 6vw, 26px);
+  }
+
+  .home-mobile__lede {
+    margin: 0;
+    max-width: 28ch;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0.72;
+  }
+
+  .home-mobile__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 18px;
+    margin-top: 6px;
+  }
+
+  .home-mobile__btn {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .home-mobile__link {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .home-mobile__section {
+    display: block;
+    width: 100%;
+    margin: 8px 0 16px;
+    font-size: var(--label);
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.5;
   }
 
   .tile {
     width: 100%;
     max-width: none;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0 0 28px;
     align-self: stretch;
     display: grid;
     gap: 8px;
     justify-items: start;
   }
 
-  .tile:nth-of-type(odd),
-  .tile:nth-of-type(even) {
+  /* Light staircase rhythm on mobile */
+  .tile--0 {
+    width: 100%;
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .tile--1 {
+    width: 88%;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .tile--2 {
+    width: 88%;
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .tile--3 {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .tile:nth-of-type(odd),
+  .tile:nth-of-type(even) {
     align-self: stretch;
   }
 
   .tile__media {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 5;
     min-height: 0;
     height: auto;
+  }
+
+  .tile--0 .tile__media {
+    aspect-ratio: 5 / 6;
   }
 
   .tile__media img {
@@ -1148,8 +1285,62 @@ a.work__proof-line:hover {
     max-width: 100%;
     color: inherit;
     opacity: 0.92;
-    font-size: 13px;
+    font-size: 14px;
     letter-spacing: 0.1em;
+  }
+
+  .home-mobile__proof {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    margin: 12px 0 40px;
+    padding: 28px 0 0;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  .home-mobile__proof .home-mobile__section {
+    margin: 0 0 4px;
+  }
+
+  .home-mobile__proof-client {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .home-mobile__proof-value {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .home-mobile__proof-story {
+    margin: 4px 0 8px;
+    max-width: 36ch;
+    font-size: 14px;
+    line-height: 1.55;
+    opacity: 0.78;
+  }
+
+  .home-mobile__close {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+    width: 100%;
+    margin: 0 0 24px;
+    padding: 32px 0 12px;
+    border-top: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  .home-mobile__place {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.45;
   }
 
   .about-layer {

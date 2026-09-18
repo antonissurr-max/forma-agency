@@ -47,6 +47,10 @@ export type Copy = {
   landingLede: string;
   startBrief: string;
   contactUs: string;
+  homeMobileHeadline: string;
+  homeMobileProofKicker: string;
+  homeMobileProofStory: string;
+  homeMobileClose: string;
   aboutVerse: VerseRow[];
   contactThanks: string;
   contactInterest: string;
@@ -219,6 +223,11 @@ export const copy: Record<Locale, Copy> = {
     landingLede: "Athens · pick a service or start a brief",
     startBrief: "Start a brief",
     contactUs: "Contact us",
+    homeMobileHeadline: "We don't sell reports. We sell the next move.",
+    homeMobileProofKicker: "Selected work",
+    homeMobileProofStory:
+      "Europatch — cold asphalt for B2B. Steady organic content turned a quiet category into 4.5M Facebook and 2.5M Instagram views in a year, with zero ads.",
+    homeMobileClose: "Ready when you are.",
     aboutVerse: aboutVerseEn,
     contactThanks: "Thanks — we'll get back with next steps.",
     contactInterest: "I'm interested in:",
@@ -457,6 +466,11 @@ export const copy: Record<Locale, Copy> = {
     landingLede: "Αθήνα · διάλεξε υπηρεσία ή ξεκίνα brief",
     startBrief: "Ξεκίνα ένα brief",
     contactUs: "Επικοινωνία",
+    homeMobileHeadline: "Δεν πουλάμε reports. Πουλάμε την επόμενη κίνηση.",
+    homeMobileProofKicker: "Επιλεγμένη δουλειά",
+    homeMobileProofStory:
+      "Europatch — ψυχρή άσφαλτος για B2B. Σταθερό organic content έκανε μια ήσυχη κατηγορία να φτάσει 4.5 εκ. views στο Facebook και 2.5 εκ. στο Instagram σε έναν χρόνο, χωρίς διαφημίσεις.",
+    homeMobileClose: "Όποτε είσαι έτοιμος.",
     aboutVerse: aboutVerseEl,
     contactThanks: "Ευχαριστούμε — θα επιστρέψουμε με τα επόμενα βήματα.",
     contactInterest: "Ενδιαφέρομαι για:",
