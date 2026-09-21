@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { BoxedTitle } from "./BoxedTitle";
+import { ExhibitGallery } from "./ExhibitGallery";
 import { pageOrder, pages, type MediaItem, type PageId } from "../site";
 import { useLocale } from "../locale";
 
@@ -39,30 +40,20 @@ export function WorkShow({
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
   const [folderOpen, setFolderOpen] = useState(false);
-  const stackRef = useRef<HTMLDivElement>(null);
-  const thumbsRef = useRef<HTMLDivElement>(null);
+  const exhibitRef = useRef<HTMLDivElement>(null);
 
   const i = pageOrder.indexOf(id);
   const prev = pageOrder[(i - 1 + pageOrder.length) % pageOrder.length];
   const next = pageOrder[(i + 1) % pageOrder.length];
   const current = gallery[active];
   const mediaCount = gallery.length;
-
-  const stepPhoto = (dir: -1 | 1) => {
-    if (mediaCount < 2) return;
-    setActive((n) => (n + dir + mediaCount) % mediaCount);
-  };
+  const showExhibit = mediaCount > 0 && (!isFolder || folderOpen);
 
   useEffect(() => {
     setActive(0);
     setLightbox(false);
     setFolderOpen(false);
   }, [id]);
-
-  useEffect(() => {
-    const thumb = thumbsRef.current?.querySelector<HTMLElement>(".work__thumb.is-on");
-    thumb?.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
-  }, [active]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -75,18 +66,18 @@ export function WorkShow({
       if (lightbox) return;
       if (e.key === "ArrowLeft") onNavigate(prev);
       if (e.key === "ArrowRight") onNavigate(next);
-      if (mediaCount > 1 && e.key === "ArrowUp") {
+      if (showExhibit && mediaCount > 1 && e.key === "ArrowUp") {
         e.preventDefault();
         setActive((n) => (n - 1 + mediaCount) % mediaCount);
       }
-      if (mediaCount > 1 && e.key === "ArrowDown") {
+      if (showExhibit && mediaCount > 1 && e.key === "ArrowDown") {
         e.preventDefault();
         setActive((n) => (n + 1) % mediaCount);
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [lightbox, folderOpen, onClose, onNavigate, prev, next, mediaCount]);
+  }, [lightbox, folderOpen, onClose, onNavigate, prev, next, mediaCount, showExhibit]);
 
   return (
     <div
@@ -113,7 +104,7 @@ export function WorkShow({
                   className="work__explore"
                   type="button"
                   onClick={() =>
-                    stackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+                    exhibitRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
                   }
                 >
                   {t.explore} ↗
@@ -185,110 +176,29 @@ export function WorkShow({
             </div>
           )}
 
-          {isFolder && folderOpen && gallery.length > 0 && (
-            <div className="work__grid" aria-label={t.gallery}>
-              {gallery.map((item, idx) => (
-                <figure key={item.src} className="work__cell">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActive(idx);
-                      setLightbox(true);
-                    }}
-                    aria-label={`${t.zoom}: ${item.title}`}
-                  >
-                    <img src={item.src} alt={item.title} />
-                  </button>
-                  <figcaption>
-                    <span>{item.title}</span>
-                    <span>{item.detail}</span>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          )}
-
           <button className="work__brief" type="button" onClick={onBrief}>
             {t.startBrief} ↗
           </button>
         </header>
 
-        {current && !isFolder && (
-          <div className={`work__stage${mediaCount < 2 ? " work__stage--solo" : ""}`}>
-            <button
-              className="work__hero"
-              type="button"
-              onClick={() => setLightbox(true)}
-              aria-label={`${t.zoom}: ${current.title}`}
-            >
-              <img src={current.src} alt={current.title} />
-            </button>
-
-            {mediaCount > 1 && (
-              <div className="work__rail">
-                <button
-                  className="work__rail-nav is-up"
-                  type="button"
-                  onClick={() => stepPhoto(-1)}
-                  aria-label={t.prevPhoto}
-                >
-                  ↑
-                </button>
-
-                <div className="work__thumbs" ref={thumbsRef} aria-label={t.gallery}>
-                  {gallery.map((item, idx) => (
-                    <button
-                      key={item.src}
-                      className={`work__thumb ${idx === active ? "is-on" : ""}`}
-                      type="button"
-                      onClick={() => setActive(idx)}
-                      aria-label={item.title}
-                      aria-current={idx === active ? "true" : undefined}
-                    >
-                      <img src={item.src} alt="" />
-                    </button>
-                  ))}
-                </div>
-
-                <button
-                  className="work__rail-nav is-down"
-                  type="button"
-                  onClick={() => stepPhoto(1)}
-                  aria-label={t.nextPhoto}
-                >
-                  ↓
-                </button>
-              </div>
-            )}
+        {showExhibit && (
+          <div className="work__exhibit" ref={exhibitRef} aria-label={t.gallery}>
+            <ExhibitGallery
+              items={gallery}
+              active={active}
+              onSelect={setActive}
+              onZoom={(idx) => {
+                setActive(idx);
+                setLightbox(true);
+              }}
+              zoomLabel={t.zoom}
+              prevLabel={t.prevPhoto}
+              nextLabel={t.nextPhoto}
+            />
           </div>
         )}
 
         {children && <div className="work__body">{children}</div>}
-
-        {mediaCount > 1 && !isFolder && (
-          <div className="work__stack" ref={stackRef}>
-            {gallery.map((item, idx) => {
-              if (idx === active) return null;
-              return (
-                <figure key={item.src} className="work__shot">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActive(idx);
-                      setLightbox(true);
-                    }}
-                  >
-                    <img src={item.src} alt={item.title} loading="lazy" />
-                  </button>
-                  <figcaption>
-                    <span>{item.title}</span>
-                    <span>{item.detail}</span>
-                  </figcaption>
-                </figure>
-              );
-            })}
-          </div>
-        )}
       </div>
 
       <button

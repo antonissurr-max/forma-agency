@@ -439,10 +439,94 @@ export const copy: Record<Locale, Copy> = {
         body: "A short weekly read: keep, kill, or scale. No 40-page decks.",
       },
     ],
-    webWork: [],
-    socialWork: [],
-    contentWork: [],
-    performanceWork: [],
+    webWork: [
+      {
+        src: "/images/work-pyrgiotis-home.jpg",
+        title: "Pyrgiotis OE — home",
+        detail: "Industrial brand site",
+      },
+      {
+        src: "/images/work-pyrgiotis-office.jpg",
+        title: "Pyrgiotis OE — office",
+        detail: "Product & company pages",
+      },
+      {
+        src: "/images/work-pyrgiotis-check.jpg",
+        title: "Pyrgiotis OE — detail",
+        detail: "Clear path to contact",
+      },
+      {
+        src: "/images/work-omnidot.jpg",
+        title: "omnidot. — landing",
+        detail: "Agency site",
+      },
+    ],
+    socialWork: [
+      {
+        src: "/images/social.jpg",
+        title: "Feed presence",
+        detail: "Social system",
+      },
+      {
+        src: "/images/hero.jpg",
+        title: "Campaign still",
+        detail: "Organic reach",
+      },
+      {
+        src: "/images/exterior.jpg",
+        title: "On-site story",
+        detail: "Real context",
+      },
+      {
+        src: "/images/view.jpg",
+        title: "Wide frame",
+        detail: "Brand world",
+      },
+    ],
+    contentWork: [
+      {
+        src: "/images/content.jpg",
+        title: "Capture",
+        detail: "On location",
+      },
+      {
+        src: "/images/living.jpg",
+        title: "Still life",
+        detail: "Editorial frame",
+      },
+      {
+        src: "/images/bedroom.jpg",
+        title: "Interior set",
+        detail: "Mood & light",
+      },
+      {
+        src: "/images/attic.jpg",
+        title: "Space study",
+        detail: "Texture & form",
+      },
+      {
+        src: "/images/bathroom.jpg",
+        title: "Detail cut",
+        detail: "Ready for feed",
+      },
+    ],
+    performanceWork: [
+      {
+        src: "/images/performance.jpg",
+        title: "Paid clarity",
+        detail: "Meta & Google",
+      },
+      {
+        src: "/images/kitchen.jpg",
+        title: "Offer frame",
+        detail: "Creative test",
+      },
+      {
+        src: "/images/web.jpg",
+        title: "Landing path",
+        detail: "After the click",
+      },
+    ],
   },
   el: {
     metaTitle: "omnidot. — Διαφημιστική εταιρεία",
@@ -686,9 +770,93 @@ export const copy: Record<Locale, Copy> = {
         body: "Σύντομη εβδομαδιαία ανάγνωση: κρατάμε, κόβουμε ή μεγαλώνουμε. Όχι decks 40 σελίδων.",
       },
     ],
-    webWork: [],
-    socialWork: [],
-    contentWork: [],
-    performanceWork: [],
+    webWork: [
+      {
+        src: "/images/work-pyrgiotis-home.jpg",
+        title: "Pyrgiotis OE — home",
+        detail: "Industrial brand site",
+      },
+      {
+        src: "/images/work-pyrgiotis-office.jpg",
+        title: "Pyrgiotis OE — office",
+        detail: "Σελίδες προϊόντος & εταιρείας",
+      },
+      {
+        src: "/images/work-pyrgiotis-check.jpg",
+        title: "Pyrgiotis OE — detail",
+        detail: "Καθαρή διαδρομή επικοινωνίας",
+      },
+      {
+        src: "/images/work-omnidot.jpg",
+        title: "omnidot. — landing",
+        detail: "Site πρακτορείου",
+      },
+    ],
+    socialWork: [
+      {
+        src: "/images/social.jpg",
+        title: "Παρουσία στο feed",
+        detail: "Social σύστημα",
+      },
+      {
+        src: "/images/hero.jpg",
+        title: "Campaign still",
+        detail: "Organic reach",
+      },
+      {
+        src: "/images/exterior.jpg",
+        title: "On-site story",
+        detail: "Πραγματικό context",
+      },
+      {
+        src: "/images/view.jpg",
+        title: "Wide frame",
+        detail: "Κόσμος brand",
+      },
+    ],
+    contentWork: [
+      {
+        src: "/images/content.jpg",
+        title: "Capture",
+        detail: "On location",
+      },
+      {
+        src: "/images/living.jpg",
+        title: "Still life",
+        detail: "Editorial frame",
+      },
+      {
+        src: "/images/bedroom.jpg",
+        title: "Interior set",
+        detail: "Mood & light",
+      },
+      {
+        src: "/images/attic.jpg",
+        title: "Space study",
+        detail: "Texture & form",
+      },
+      {
+        src: "/images/bathroom.jpg",
+        title: "Detail cut",
+        detail: "Έτοιμο για feed",
+      },
+    ],
+    performanceWork: [
+      {
+        src: "/images/performance.jpg",
+        title: "Paid clarity",
+        detail: "Meta & Google",
+      },
+      {
+        src: "/images/kitchen.jpg",
+        title: "Offer frame",
+        detail: "Creative test",
+      },
+      {
+        src: "/images/web.jpg",
+        title: "Landing path",
+        detail: "Μετά το κλικ",
+      },
+    ],
   },
 };

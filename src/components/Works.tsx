@@ -11,9 +11,12 @@ export function Works({ dimmed }: { dimmed: boolean }) {
   const heroRef = useRef<HTMLElement>(null);
   const proof = t.pages.social.proof;
   const callHref = phoneHref(site.phone);
-  const coverSocial = pages.find((p) => p.id === "social")?.cover ?? "";
-  const coverContent = pages.find((p) => p.id === "content")?.cover ?? "";
-  const coverWeb = pages.find((p) => p.id === "web")?.cover ?? "";
+  // Unique images across mobile home (service covers only appear in tiles)
+  const aboutTall = "/images/living.jpg";
+  const aboutSquare = "/images/kitchen.jpg";
+  const proofFeature = "/images/exterior.jpg";
+  const proofSquare = "/images/hero.jpg";
+  const proofTall = "/images/attic.jpg";
 
   useEffect(() => {
     const root = sectionRef.current;
@@ -128,8 +131,8 @@ export function Works({ dimmed }: { dimmed: boolean }) {
           <span aria-hidden="true">→</span>
         </Link>
         <div className="home-mobile__duo" aria-hidden="true">
-          <img src={coverSocial} alt="" className="home-mobile__duo-tall" />
-          <img src={coverContent} alt="" className="home-mobile__duo-square" />
+          <img src={aboutTall} alt="" className="home-mobile__duo-tall" />
+          <img src={aboutSquare} alt="" className="home-mobile__duo-square" />
         </div>
       </section>
 
@@ -170,12 +173,12 @@ export function Works({ dimmed }: { dimmed: boolean }) {
           <h2 className="home-mobile__title">{proof.client ?? "Europatch"}</h2>
           <p className="home-mobile__proof-value">{proof.value}</p>
           <div className="home-mobile__feature">
-            <img src={coverSocial} alt="" />
+            <img src={proofFeature} alt="" />
           </div>
           <p className="home-mobile__body">{t.homeMobileProofStory}</p>
           <div className="home-mobile__duo home-mobile__duo--tight" aria-hidden="true">
-            <img src={coverWeb} alt="" className="home-mobile__duo-square" />
-            <img src={coverContent} alt="" className="home-mobile__duo-tall" />
+            <img src={proofSquare} alt="" className="home-mobile__duo-square" />
+            <img src={proofTall} alt="" className="home-mobile__duo-tall" />
           </div>
           <Link
             className="home-mobile__cta-line home-mobile__cta-line--ink"
