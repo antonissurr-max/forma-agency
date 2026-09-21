@@ -97,6 +97,30 @@ export default function App() {
   }, [view.kind]);
 
   useEffect(() => {
+    const stage = document.querySelector(".stage");
+    const foot = document.querySelector(".site-foot");
+    if (!stage || !foot || view.kind !== "index") {
+      stage?.classList.remove("is-foot-visible");
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        stage.classList.toggle(
+          "is-foot-visible",
+          Boolean(entry?.isIntersecting),
+        );
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -8% 0px" },
+    );
+    observer.observe(foot);
+    return () => {
+      observer.disconnect();
+      stage.classList.remove("is-foot-visible");
+    };
+  }, [view.kind]);
+
+  useEffect(() => {
     if (view.kind !== "about") {
       setAboutRevealed(false);
       return;

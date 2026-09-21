@@ -342,6 +342,12 @@ a.chrome__about {
   line-height: 1.1;
   pointer-events: none;
   z-index: 56;
+  transition: opacity 0.28s var(--ease);
+}
+
+.stage.is-index.is-foot-visible .chrome__brand {
+  opacity: 0;
+  visibility: hidden;
 }
 
 h1.chrome__brand {
