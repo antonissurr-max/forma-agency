@@ -1574,8 +1574,8 @@ a.work__proof-line:hover {
   }
 
   .home-mobile--close {
-    gap: 16px;
-    padding: 64px var(--chrome) 56px;
+    gap: 14px;
+    padding: 48px var(--chrome) 8px;
     background: var(--work-bg);
     color: var(--paper);
   }
@@ -2213,6 +2213,19 @@ a.work__proof-line:hover {
 }
 
 @media (max-width: 899px) {
+  .site-foot {
+    padding: 12px var(--chrome) calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .site-foot__inner {
+    gap: 28px;
+  }
+
+  .site-foot__copy {
+    margin-top: 28px;
+    padding-top: 18px;
+  }
+
   .stage.is-work .site-foot,
   .stage.is-about .site-foot {
     display: none;
