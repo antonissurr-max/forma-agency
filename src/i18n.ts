@@ -39,6 +39,11 @@ export type Copy = {
   sections: string;
   rights: string;
   location: string;
+  footerMenu: string;
+  footerServices: string;
+  footerContact: string;
+  footerHome: string;
+  footerStudio: string;
   whatWeDo: string;
   howWeRun: string;
   revealShort: string;
@@ -216,6 +221,11 @@ export const copy: Record<Locale, Copy> = {
     sections: "Sections",
     rights: "All rights reserved.",
     location: "Athens · Remote",
+    footerMenu: "Menu",
+    footerServices: "Services",
+    footerContact: "Contact",
+    footerHome: "Home",
+    footerStudio: "Marketing agency",
     whatWeDo: "What we do",
     howWeRun: "How we run it",
     revealShort: "Reveal shorter message",
@@ -526,6 +536,11 @@ export const copy: Record<Locale, Copy> = {
     sections: "Ενότητες",
     rights: "Με επιφύλαξη παντός δικαιώματος.",
     location: "Αθήνα · Remote",
+    footerMenu: "Μενού",
+    footerServices: "Υπηρεσίες",
+    footerContact: "Επικοινωνία",
+    footerHome: "Αρχική",
+    footerStudio: "Διαφημιστική εταιρεία",
     whatWeDo: "Τι κάνουμε",
     howWeRun: "Πώς το τρέχουμε",
     revealShort: "Σύντομο μήνυμα",

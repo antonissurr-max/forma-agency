@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { pages, phoneHref, site } from "../site";
+import { pages, site } from "../site";
 import { useLocale } from "../locale";
 import { pathFromView } from "../routing";
 import { Logo } from "./Logo";
@@ -10,7 +10,6 @@ export function Works({ dimmed }: { dimmed: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const proof = t.pages.social.proof;
-  const callHref = phoneHref(site.phone);
   const proofFeature = "/images/social.jpg";
 
   useEffect(() => {
@@ -187,12 +186,6 @@ export function Works({ dimmed }: { dimmed: boolean }) {
           <span>{t.startBrief}</span>
           <span aria-hidden="true">→</span>
         </Link>
-        {callHref ? (
-          <a className="home-mobile__ghost" href={`tel:${callHref}`}>
-            {t.contactCall}
-          </a>
-        ) : null}
-        <p className="home-mobile__place">{t.location}</p>
       </footer>
     </section>
   );
