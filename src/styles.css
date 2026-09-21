@@ -1601,6 +1601,11 @@ a.work__proof-line:hover {
     overflow: hidden;
   }
 
+  .work__kicker,
+  .work__edge {
+    display: none;
+  }
+
   .about-layer__scroll {
     padding: 88px var(--chrome) 96px;
     align-content: start;
