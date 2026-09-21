@@ -93,11 +93,13 @@ export function Works({ dimmed }: { dimmed: boolean }) {
       aria-label={t.sections}
     >
       <header ref={heroRef} className="home-mobile home-mobile--hero">
-        <Logo className="home-mobile__mark" />
-        <p className="home-mobile__brand">
-          {site.brand}
-          <span className="home-mobile__dot">.</span>
-        </p>
+        <div className="home-mobile__identity">
+          <Logo className="home-mobile__mark" />
+          <p className="home-mobile__brand">
+            {site.brand}
+            <span className="home-mobile__dot">.</span>
+          </p>
+        </div>
         <h2 className="home-mobile__display">{t.homeMobileHeadline}</h2>
         <p className="home-mobile__lede">{t.aboutSub}</p>
         <Link

@@ -1346,28 +1346,35 @@ a.work__proof-line:hover {
   .home-mobile--hero {
     gap: 16px;
     min-height: 100svh;
-    padding: 96px var(--chrome) 48px;
-    align-content: end;
+    padding: 72px var(--chrome) 40px;
+    align-content: start;
     background:
       linear-gradient(
-        to top,
-        color-mix(in srgb, var(--work-bg) 92%, #000) 0%,
-        color-mix(in srgb, var(--work-bg) 55%, transparent) 48%,
-        color-mix(in srgb, var(--work-bg) 20%, transparent) 100%
+        to bottom,
+        color-mix(in srgb, var(--work-bg) 96%, #000) 0%,
+        var(--work-bg) 42%,
+        color-mix(in srgb, var(--work-bg) 88%, #000) 100%
       ),
       var(--work-bg);
     color: var(--paper);
   }
 
+  .home-mobile__identity {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
   .home-mobile--hero .home-mobile__mark {
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 auto;
     color: var(--paper);
   }
 
   .home-mobile--hero .home-mobile__brand {
     margin: 0;
-    font-size: clamp(30px, 10vw, 42px);
+    font-size: clamp(28px, 9vw, 38px);
     font-weight: 600;
     letter-spacing: -0.04em;
     line-height: 1;
