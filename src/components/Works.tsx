@@ -10,7 +10,7 @@ export function Works({ dimmed }: { dimmed: boolean }) {
   const sectionRef = useRef<HTMLElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const proof = t.pages.social.proof;
-  const proofFeature = "/images/social.jpg";
+  const proofFeature = "/images/europatch-bags.webp";
 
   useEffect(() => {
     const root = sectionRef.current;
