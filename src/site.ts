@@ -28,6 +28,9 @@ export type MediaItem = {
   src: string;
   title: string;
   detail: string;
+  /** Defaults to image; use video for mp4/webm clips */
+  kind?: "image" | "video";
+  poster?: string;
 };
 
 export const pages: {

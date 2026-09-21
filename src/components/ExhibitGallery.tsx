@@ -1,5 +1,51 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { MediaItem } from "../site";
+
+function isVideo(item: MediaItem) {
+  if (item.kind === "video") return true;
+  if (item.kind === "image") return false;
+  return /\.(mp4|webm|ogg)(\?|$)/i.test(item.src);
+}
+
+function ExhibitMedia({
+  item,
+  active,
+}: {
+  item: MediaItem;
+  active: boolean;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    if (active) {
+      void el.play().catch(() => {
+        /* autoplay may be blocked */
+      });
+    } else {
+      el.pause();
+      el.currentTime = 0;
+    }
+  }, [active]);
+
+  if (isVideo(item)) {
+    return (
+      <video
+        ref={videoRef}
+        className="exhibit__media"
+        src={item.src}
+        poster={item.poster}
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      />
+    );
+  }
+
+  return <img className="exhibit__media" src={item.src} alt="" draggable={false} />;
+}
 
 export function ExhibitGallery({
   items,
@@ -65,9 +111,9 @@ export function ExhibitGallery({
 
           return (
             <button
-              key={item.src}
+              key={`${item.src}-${idx}`}
               type="button"
-              className={`exhibit__frame ${role}`}
+              className={`exhibit__frame ${role}${isVideo(item) ? " is-video" : ""}`}
               onClick={() => {
                 if (idx === active) onZoom(idx);
                 else onSelect(idx);
@@ -78,7 +124,7 @@ export function ExhibitGallery({
               aria-current={idx === active ? "true" : undefined}
               tabIndex={Math.abs(wrapped) <= 1 ? 0 : -1}
             >
-              <img src={item.src} alt="" draggable={false} />
+              <ExhibitMedia item={item} active={idx === active && Math.abs(wrapped) === 0} />
             </button>
           );
         })}
@@ -100,7 +146,8 @@ export function ExhibitGallery({
             ←
           </button>
           <span className="exhibit__count" aria-hidden="true">
-            {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+            {String(active + 1).padStart(2, "0")} /{" "}
+            {String(items.length).padStart(2, "0")}
           </span>
           <button
             type="button"
@@ -114,4 +161,8 @@ export function ExhibitGallery({
       ) : null}
     </div>
   );
+}
+
+export function mediaIsVideo(item: MediaItem) {
+  return isVideo(item);
 }

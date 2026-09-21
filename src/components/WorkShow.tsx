@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { BoxedTitle } from "./BoxedTitle";
-import { ExhibitGallery } from "./ExhibitGallery";
+import { ExhibitGallery, mediaIsVideo } from "./ExhibitGallery";
 import { pageOrder, pages, type MediaItem, type PageId } from "../site";
 import { useLocale } from "../locale";
 
@@ -48,6 +48,7 @@ export function WorkShow({
   const current = gallery[active];
   const mediaCount = gallery.length;
   const showExhibit = mediaCount > 0 && (!isFolder || folderOpen);
+  const splitDesktop = isFolder && folderOpen && showExhibit;
 
   useEffect(() => {
     setActive(0);
@@ -79,126 +80,140 @@ export function WorkShow({
     return () => window.removeEventListener("keydown", onKey);
   }, [lightbox, folderOpen, onClose, onNavigate, prev, next, mediaCount, showExhibit]);
 
+  const proofBlock = copy.proof ? (
+    <div className={`work__proof${copy.proof.client ? " work__proof--folder" : ""}`}>
+      <span className="work__proof-label">{copy.proof.label}</span>
+      {copy.proof.client ? (
+        <>
+          <button
+            className="work__proof-name"
+            type="button"
+            aria-expanded={folderOpen}
+            onClick={() => setFolderOpen((on) => !on)}
+          >
+            {copy.proof.client}
+          </button>
+          {folderOpen && (
+            <div className="work__proof-lines">
+              {copy.proof.story ? (
+                <p className="work__proof-story">{copy.proof.story}</p>
+              ) : null}
+              {copy.proof.value ? (
+                <div className="work__proof-line">{copy.proof.value}</div>
+              ) : null}
+              {copy.proof.notes?.map((note) => (
+                <div key={note} className="work__proof-line">
+                  {note}
+                </div>
+              ))}
+              {copy.proof.links?.map((link) => (
+                <a
+                  key={link.href}
+                  className="work__proof-line"
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </>
+      ) : copy.proof.links && copy.proof.links.length > 0 ? (
+        <div className="work__proof-lines">
+          {copy.proof.links.map((link) => (
+            <a
+              key={link.href}
+              className="work__proof-line"
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      ) : copy.proof.href ? (
+        <a className="work__proof-line" href={copy.proof.href} target="_blank" rel="noreferrer">
+          {copy.proof.value}
+        </a>
+      ) : (
+        <strong className="work__proof-line">{copy.proof.value}</strong>
+      )}
+    </div>
+  ) : null;
+
+  const exhibit = showExhibit ? (
+    <div className="work__exhibit" ref={exhibitRef} aria-label={t.gallery}>
+      <ExhibitGallery
+        items={gallery}
+        active={active}
+        onSelect={setActive}
+        onZoom={(idx) => {
+          setActive(idx);
+          setLightbox(true);
+        }}
+        zoomLabel={t.zoom}
+        prevLabel={t.prevPhoto}
+        nextLabel={t.nextPhoto}
+      />
+    </div>
+  ) : null;
+
   return (
     <div
-      className={`work is-open${gallery.length === 0 ? " work--text" : ""}${exiting ? " is-exit" : ""}`}
+      className={`work is-open${gallery.length === 0 ? " work--text" : ""}${
+        splitDesktop ? " work--split" : ""
+      }${exiting ? " is-exit" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={copy.title}
     >
-      <div className="work__scroll" key={id}>
-        <header className="work__head">
-          <p className="work__kicker">{page.kicker}_</p>
-          <div className="work__lead">
-            <BoxedTitle text={copy.title} />
+      <div
+        className={`work__scroll${splitDesktop ? " work__scroll--split" : ""}`}
+        key={id}
+      >
+        <div className="work__main">
+          <header className="work__head">
+            <p className="work__kicker">{page.kicker}_</p>
+            <div className="work__lead">
+              <BoxedTitle text={copy.title} />
 
-            <div className="work__meta">
-              {copy.meta.map((item) => (
-                <div key={item.label} className="work__meta-item">
-                  <span>{item.label}</span>
-                  <strong>{item.value}</strong>
-                </div>
-              ))}
-              {mediaCount > 1 && !isFolder && (
-                <button
-                  className="work__explore"
-                  type="button"
-                  onClick={() =>
-                    exhibitRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-                  }
-                >
-                  {t.explore} ↗
-                </button>
-              )}
-            </div>
-          </div>
-          {copy.proof && (
-            <div className={`work__proof${copy.proof.client ? " work__proof--folder" : ""}`}>
-              <span className="work__proof-label">{copy.proof.label}</span>
-              {copy.proof.client ? (
-                <>
+              <div className="work__meta">
+                {copy.meta.map((item) => (
+                  <div key={item.label} className="work__meta-item">
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
+                {mediaCount > 1 && !isFolder && (
                   <button
-                    className="work__proof-name"
+                    className="work__explore"
                     type="button"
-                    aria-expanded={folderOpen}
-                    onClick={() => setFolderOpen((on) => !on)}
+                    onClick={() =>
+                      exhibitRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      })
+                    }
                   >
-                    {copy.proof.client}
+                    {t.explore} ↗
                   </button>
-                  {folderOpen && (
-                    <div className="work__proof-lines">
-                      {copy.proof.story ? (
-                        <p className="work__proof-story">{copy.proof.story}</p>
-                      ) : null}
-                      {copy.proof.value ? (
-                        <div className="work__proof-line">{copy.proof.value}</div>
-                      ) : null}
-                      {copy.proof.notes?.map((note) => (
-                        <div key={note} className="work__proof-line">
-                          {note}
-                        </div>
-                      ))}
-                      {copy.proof.links?.map((link) => (
-                        <a
-                          key={link.href}
-                          className="work__proof-line"
-                          href={link.href}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {link.label}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </>
-              ) : copy.proof.links && copy.proof.links.length > 0 ? (
-                <div className="work__proof-lines">
-                  {copy.proof.links.map((link) => (
-                    <a
-                      key={link.href}
-                      className="work__proof-line"
-                      href={link.href}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {link.label}
-                    </a>
-                  ))}
-                </div>
-              ) : copy.proof.href ? (
-                <a className="work__proof-line" href={copy.proof.href} target="_blank" rel="noreferrer">
-                  {copy.proof.value}
-                </a>
-              ) : (
-                <strong className="work__proof-line">{copy.proof.value}</strong>
-              )}
+                )}
+              </div>
             </div>
-          )}
+            {proofBlock}
 
-          <button className="work__brief" type="button" onClick={onBrief}>
-            {t.startBrief} ↗
-          </button>
-        </header>
+            <button className="work__brief" type="button" onClick={onBrief}>
+              {t.startBrief} ↗
+            </button>
+          </header>
 
-        {showExhibit && (
-          <div className="work__exhibit" ref={exhibitRef} aria-label={t.gallery}>
-            <ExhibitGallery
-              items={gallery}
-              active={active}
-              onSelect={setActive}
-              onZoom={(idx) => {
-                setActive(idx);
-                setLightbox(true);
-              }}
-              zoomLabel={t.zoom}
-              prevLabel={t.prevPhoto}
-              nextLabel={t.nextPhoto}
-            />
-          </div>
-        )}
+          {children && <div className="work__body">{children}</div>}
+        </div>
 
-        {children && <div className="work__body">{children}</div>}
+        {exhibit}
       </div>
 
       <button
@@ -228,11 +243,24 @@ export function WorkShow({
           aria-label={current.title}
           onClick={() => setLightbox(false)}
         >
-          <img
-            src={current.src}
-            alt={current.title}
-            onClick={(e) => e.stopPropagation()}
-          />
+          {mediaIsVideo(current) ? (
+            <video
+              className="lightbox__media"
+              src={current.src}
+              poster={current.poster}
+              controls
+              autoPlay
+              playsInline
+              onClick={(e) => e.stopPropagation()}
+            />
+          ) : (
+            <img
+              className="lightbox__media"
+              src={current.src}
+              alt={current.title}
+              onClick={(e) => e.stopPropagation()}
+            />
+          )}
           <button
             className="lightbox__close"
             type="button"

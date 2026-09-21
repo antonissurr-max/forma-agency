@@ -1,3 +1,4 @@
+import type { MediaItem } from "./site";
 import type { PageId } from "./types";
 
 export type Locale = "en" | "el";
@@ -88,10 +89,10 @@ export type Copy = {
     }
   >;
   performanceFacts: { place: string; detail: string; body: string }[];
-  webWork: { src: string; title: string; detail: string }[];
-  socialWork: { src: string; title: string; detail: string }[];
-  contentWork: { src: string; title: string; detail: string }[];
-  performanceWork: { src: string; title: string; detail: string }[];
+  webWork: MediaItem[];
+  socialWork: MediaItem[];
+  contentWork: MediaItem[];
+  performanceWork: MediaItem[];
 };
 
 const aboutVerseEn: VerseRow[] = [
