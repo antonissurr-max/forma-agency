@@ -11,12 +11,10 @@ export function Works({ dimmed }: { dimmed: boolean }) {
   const heroRef = useRef<HTMLElement>(null);
   const proof = t.pages.social.proof;
   const callHref = phoneHref(site.phone);
-  // Unique images across mobile home (service covers only appear in tiles)
-  const aboutTall = "/images/living.jpg";
-  const aboutSquare = "/images/kitchen.jpg";
-  const proofFeature = "/images/exterior.jpg";
-  const proofSquare = "/images/hero.jpg";
-  const proofTall = "/images/attic.jpg";
+  // Related to digital / social work — not interiors
+  const aboutTall = "/images/work-omnidot.jpg";
+  const aboutSquare = "/images/work-pyrgiotis-home.jpg";
+  const proofFeature = "/images/social.jpg";
 
   useEffect(() => {
     const root = sectionRef.current;
@@ -176,10 +174,6 @@ export function Works({ dimmed }: { dimmed: boolean }) {
             <img src={proofFeature} alt="" />
           </div>
           <p className="home-mobile__body">{t.homeMobileProofStory}</p>
-          <div className="home-mobile__duo home-mobile__duo--tight" aria-hidden="true">
-            <img src={proofSquare} alt="" className="home-mobile__duo-square" />
-            <img src={proofTall} alt="" className="home-mobile__duo-tall" />
-          </div>
           <Link
             className="home-mobile__cta-line home-mobile__cta-line--ink"
             to={pathFromView({ kind: "page", id: "social" }, locale)}
