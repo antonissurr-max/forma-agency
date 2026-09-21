@@ -11,9 +11,6 @@ export function Works({ dimmed }: { dimmed: boolean }) {
   const heroRef = useRef<HTMLElement>(null);
   const proof = t.pages.social.proof;
   const callHref = phoneHref(site.phone);
-  // Related to digital / social work — not interiors
-  const aboutTall = "/images/work-omnidot.jpg";
-  const aboutSquare = "/images/work-pyrgiotis-home.jpg";
   const proofFeature = "/images/social.jpg";
 
   useEffect(() => {
@@ -118,7 +115,6 @@ export function Works({ dimmed }: { dimmed: boolean }) {
       </div>
 
       <section className="home-mobile home-mobile--about">
-        <p className="home-mobile__eyebrow">{t.about}</p>
         <h2 className="home-mobile__title">{t.homeMobileAboutTitle}</h2>
         <p className="home-mobile__body">{t.homeMobileAboutBody}</p>
         <Link
@@ -128,10 +124,6 @@ export function Works({ dimmed }: { dimmed: boolean }) {
           <span>{t.startBrief}</span>
           <span aria-hidden="true">→</span>
         </Link>
-        <div className="home-mobile__duo" aria-hidden="true">
-          <img src={aboutTall} alt="" className="home-mobile__duo-tall" />
-          <img src={aboutSquare} alt="" className="home-mobile__duo-square" />
-        </div>
       </section>
 
       <div className="home-mobile home-mobile--services-head">

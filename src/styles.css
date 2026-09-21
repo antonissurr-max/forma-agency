@@ -1450,42 +1450,6 @@ a.work__proof-line:hover {
     opacity: 0.78;
   }
 
-  .home-mobile__duo {
-    display: grid;
-    grid-template-columns: 1.35fr 0.9fr;
-    gap: 12px;
-    align-items: end;
-    width: 100%;
-    margin-top: 18px;
-  }
-
-  .home-mobile__duo--tight {
-    margin-top: 8px;
-    grid-template-columns: 0.9fr 1.2fr;
-    align-items: start;
-  }
-
-  .home-mobile__duo img {
-    width: 100%;
-    object-fit: cover;
-    filter: grayscale(1);
-    background: var(--sand);
-  }
-
-  .home-mobile__duo-tall {
-    aspect-ratio: 3 / 4;
-  }
-
-  .home-mobile__duo-square {
-    aspect-ratio: 1 / 1;
-    margin-bottom: 18%;
-  }
-
-  .home-mobile__duo--tight .home-mobile__duo-square {
-    margin-bottom: 0;
-    margin-top: 22%;
-  }
-
   .home-mobile--services-head {
     gap: 12px;
     padding: 48px var(--chrome) 0;
