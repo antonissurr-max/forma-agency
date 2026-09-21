@@ -1345,17 +1345,10 @@ a.work__proof-line:hover {
 
   .home-mobile--hero {
     gap: 16px;
-    min-height: 100svh;
-    padding: 72px var(--chrome) 40px;
+    min-height: 0;
+    padding: 72px var(--chrome) 36px;
     align-content: start;
-    background:
-      linear-gradient(
-        to bottom,
-        color-mix(in srgb, var(--work-bg) 96%, #000) 0%,
-        var(--work-bg) 42%,
-        color-mix(in srgb, var(--work-bg) 88%, #000) 100%
-      ),
-      var(--work-bg);
+    background: var(--work-bg);
     color: var(--paper);
   }
 
@@ -1400,10 +1393,10 @@ a.work__proof-line:hover {
 
   .home-mobile--hero .home-mobile__lede {
     margin: 0;
-    max-width: 30ch;
+    max-width: 34ch;
     font-size: 14px;
     line-height: 1.55;
-    opacity: 0.72;
+    opacity: 0.78;
     color: var(--paper);
   }
 
@@ -1421,16 +1414,11 @@ a.work__proof-line:hover {
     text-decoration: none;
   }
 
-  .home-mobile__cta-line--ink {
-    border-top-color: color-mix(in srgb, var(--ink) 28%, transparent);
-    color: var(--ink);
-  }
-
-  .home-mobile--about {
-    gap: 14px;
-    padding: 56px var(--chrome) 48px;
-    background: var(--paper);
-    color: var(--ink);
+  .home-mobile--services-head {
+    gap: 12px;
+    padding: 28px var(--chrome) 0;
+    background: var(--work-bg);
+    color: var(--paper);
   }
 
   .home-mobile__eyebrow {
@@ -1452,21 +1440,6 @@ a.work__proof-line:hover {
   }
 
   .home-mobile__title--light {
-    color: var(--paper);
-  }
-
-  .home-mobile__body {
-    margin: 0;
-    max-width: 34ch;
-    font-size: 14px;
-    line-height: 1.55;
-    opacity: 0.78;
-  }
-
-  .home-mobile--services-head {
-    gap: 12px;
-    padding: 48px var(--chrome) 0;
-    background: var(--work-bg);
     color: var(--paper);
   }
 

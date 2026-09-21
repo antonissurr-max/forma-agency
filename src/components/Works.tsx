@@ -101,12 +101,12 @@ export function Works({ dimmed }: { dimmed: boolean }) {
           </p>
         </div>
         <h2 className="home-mobile__display">{t.homeMobileHeadline}</h2>
-        <p className="home-mobile__lede">{t.aboutSub}</p>
+        <p className="home-mobile__lede">{t.homeMobileAboutBody}</p>
         <Link
           className="home-mobile__cta-line"
           to={pathFromView({ kind: "about" }, locale)}
         >
-          <span>{t.contactUs}</span>
+          <span>{t.startBrief}</span>
           <span aria-hidden="true">→</span>
         </Link>
       </header>
@@ -114,18 +114,6 @@ export function Works({ dimmed }: { dimmed: boolean }) {
       <div className="works__intro">
         <p className="works__pitch">{t.aboutSub}</p>
       </div>
-
-      <section className="home-mobile home-mobile--about">
-        <h2 className="home-mobile__title">{t.homeMobileAboutTitle}</h2>
-        <p className="home-mobile__body">{t.homeMobileAboutBody}</p>
-        <Link
-          className="home-mobile__cta-line home-mobile__cta-line--ink"
-          to={pathFromView({ kind: "about" }, locale)}
-        >
-          <span>{t.startBrief}</span>
-          <span aria-hidden="true">→</span>
-        </Link>
-      </section>
 
       <div className="home-mobile home-mobile--services-head">
         <p className="home-mobile__eyebrow">{t.whatWeDo}</p>
