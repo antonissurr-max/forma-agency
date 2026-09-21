@@ -1487,7 +1487,7 @@ a.work__proof-line:hover {
 
   .works > .tile--0 {
     border-top: 0;
-    padding-top: 20px;
+    padding-top: 12px;
   }
 
   .works > .tile--3 {
@@ -1496,29 +1496,6 @@ a.work__proof-line:hover {
 
   .works > .tile::before {
     display: none;
-  }
-
-  .works > .tile .tile__kicker {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin: 0;
-    padding: 14px var(--chrome) 12px;
-    box-sizing: border-box;
-    color: var(--paper);
-    opacity: 0.55;
-    font-size: 11px;
-    letter-spacing: 0.12em;
-  }
-
-  .works > .tile .tile__kicker-id {
-    display: none;
-  }
-
-  .works > .tile .tile__kicker-step {
-    display: inline;
-    color: var(--paper);
   }
 
   .works > .tile .tile__media {
