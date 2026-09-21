@@ -8,8 +8,12 @@ import { Logo } from "./Logo";
 export function Works({ dimmed }: { dimmed: boolean }) {
   const { locale, t } = useLocale();
   const sectionRef = useRef<HTMLElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const proof = t.pages.social.proof;
   const callHref = phoneHref(site.phone);
+  const coverSocial = pages.find((p) => p.id === "social")?.cover ?? "";
+  const coverContent = pages.find((p) => p.id === "content")?.cover ?? "";
+  const coverWeb = pages.find((p) => p.id === "web")?.cover ?? "";
 
   useEffect(() => {
     const root = sectionRef.current;
@@ -50,40 +54,91 @@ export function Works({ dimmed }: { dimmed: boolean }) {
     };
   }, []);
 
+  useEffect(() => {
+    const hero = heroRef.current;
+    const stage = hero?.closest(".stage");
+    if (!hero || !stage) return;
+
+    const mq = window.matchMedia("(max-width: 899px)");
+    let observer: IntersectionObserver | null = null;
+
+    const setup = () => {
+      observer?.disconnect();
+      observer = null;
+      stage.classList.remove("is-mobile-hero");
+      if (!mq.matches) return;
+
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          stage.classList.toggle(
+            "is-mobile-hero",
+            Boolean(entry?.isIntersecting && entry.intersectionRatio > 0.35),
+          );
+        },
+        { threshold: [0.35, 0.55] },
+      );
+      observer.observe(hero);
+    };
+
+    setup();
+    mq.addEventListener("change", setup);
+    return () => {
+      mq.removeEventListener("change", setup);
+      observer?.disconnect();
+      stage.classList.remove("is-mobile-hero");
+    };
+  }, []);
+
   return (
     <section
       ref={sectionRef}
       className={`works ${dimmed ? "is-dim" : ""}`}
       aria-label={t.sections}
     >
-      <header className="home-mobile">
+      <header ref={heroRef} className="home-mobile home-mobile--hero">
         <Logo className="home-mobile__mark" />
         <p className="home-mobile__brand">
           {site.brand}
           <span className="home-mobile__dot">.</span>
         </p>
-        <p className="home-mobile__headline">{t.homeMobileHeadline}</p>
+        <h2 className="home-mobile__display">{t.homeMobileHeadline}</h2>
         <p className="home-mobile__lede">{t.aboutSub}</p>
-        <div className="home-mobile__cta">
-          <Link
-            className="home-mobile__btn"
-            to={pathFromView({ kind: "about" }, locale)}
-          >
-            {t.startBrief} ↗
-          </Link>
-          {callHref ? (
-            <a className="home-mobile__link" href={`tel:${callHref}`}>
-              {t.contactCall}
-            </a>
-          ) : null}
-        </div>
+        <Link
+          className="home-mobile__cta-line"
+          to={pathFromView({ kind: "about" }, locale)}
+        >
+          <span>{t.contactUs}</span>
+          <span aria-hidden="true">→</span>
+        </Link>
       </header>
 
       <div className="works__intro">
         <p className="works__pitch">{t.aboutSub}</p>
       </div>
 
-      <p className="home-mobile__section">{t.whatWeDo}</p>
+      <section className="home-mobile home-mobile--about">
+        <p className="home-mobile__eyebrow">{t.about}</p>
+        <h2 className="home-mobile__title">{t.homeMobileAboutTitle}</h2>
+        <p className="home-mobile__body">{t.homeMobileAboutBody}</p>
+        <Link
+          className="home-mobile__cta-line home-mobile__cta-line--ink"
+          to={pathFromView({ kind: "about" }, locale)}
+        >
+          <span>{t.startBrief}</span>
+          <span aria-hidden="true">→</span>
+        </Link>
+        <div className="home-mobile__duo" aria-hidden="true">
+          <img src={coverSocial} alt="" className="home-mobile__duo-tall" />
+          <img src={coverContent} alt="" className="home-mobile__duo-square" />
+        </div>
+      </section>
+
+      <div className="home-mobile home-mobile--services-head">
+        <p className="home-mobile__eyebrow">{t.whatWeDo}</p>
+        <h2 className="home-mobile__title home-mobile__title--light">
+          {t.homeMobileServicesTitle}
+        </h2>
+      </div>
 
       {pages.map((page, i) => {
         const title = t.pages[page.id].title;
@@ -92,12 +147,15 @@ export function Works({ dimmed }: { dimmed: boolean }) {
             key={page.id}
             className={`tile tile--${i}`}
             to={pathFromView({ kind: "page", id: page.id }, locale)}
-            style={{
-              ["--i" as string]: String(i),
-            }}
+            style={{ ["--i" as string]: String(i) }}
             aria-label={`${page.kicker} ${title}`}
           >
-            <span className="tile__kicker">{page.kicker}_</span>
+            <span className="tile__kicker">
+              <span className="tile__kicker-id">{page.kicker}_</span>
+              <span className="tile__kicker-step">
+                {String(i + 1).padStart(2, "0")}/04
+              </span>
+            </span>
             <span className="tile__media">
               <img src={page.cover} alt="" />
             </span>
@@ -107,30 +165,44 @@ export function Works({ dimmed }: { dimmed: boolean }) {
       })}
 
       {proof ? (
-        <aside className="home-mobile__proof">
-          <p className="home-mobile__section">{t.homeMobileProofKicker}</p>
-          <p className="home-mobile__proof-client">{proof.client ?? "Europatch"}</p>
+        <aside className="home-mobile home-mobile--proof">
+          <p className="home-mobile__eyebrow">{t.homeMobileProofKicker}</p>
+          <h2 className="home-mobile__title">{proof.client ?? "Europatch"}</h2>
           <p className="home-mobile__proof-value">{proof.value}</p>
-          <p className="home-mobile__proof-story">{t.homeMobileProofStory}</p>
+          <div className="home-mobile__feature">
+            <img src={coverSocial} alt="" />
+          </div>
+          <p className="home-mobile__body">{t.homeMobileProofStory}</p>
+          <div className="home-mobile__duo home-mobile__duo--tight" aria-hidden="true">
+            <img src={coverWeb} alt="" className="home-mobile__duo-square" />
+            <img src={coverContent} alt="" className="home-mobile__duo-tall" />
+          </div>
           <Link
-            className="home-mobile__link"
+            className="home-mobile__cta-line home-mobile__cta-line--ink"
             to={pathFromView({ kind: "page", id: "social" }, locale)}
           >
-            {t.pages.social.title} ↗
+            <span>{t.pages.social.title}</span>
+            <span aria-hidden="true">→</span>
           </Link>
         </aside>
       ) : null}
 
-      <footer className="home-mobile__close">
-        <p className="home-mobile__headline home-mobile__headline--sm">
+      <footer className="home-mobile home-mobile--close">
+        <h2 className="home-mobile__display home-mobile__display--sm">
           {t.homeMobileClose}
-        </p>
+        </h2>
         <Link
-          className="home-mobile__btn"
+          className="home-mobile__cta-line"
           to={pathFromView({ kind: "about" }, locale)}
         >
-          {t.startBrief} ↗
+          <span>{t.startBrief}</span>
+          <span aria-hidden="true">→</span>
         </Link>
+        {callHref ? (
+          <a className="home-mobile__ghost" href={`tel:${callHref}`}>
+            {t.contactCall}
+          </a>
+        ) : null}
         <p className="home-mobile__place">{t.location}</p>
       </footer>
     </section>
