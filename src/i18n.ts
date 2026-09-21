@@ -440,28 +440,7 @@ export const copy: Record<Locale, Copy> = {
         body: "A short weekly read: keep, kill, or scale. No 40-page decks.",
       },
     ],
-    webWork: [
-      {
-        src: "/images/work-pyrgiotis-home.jpg",
-        title: "Pyrgiotis OE — home",
-        detail: "Industrial brand site",
-      },
-      {
-        src: "/images/work-pyrgiotis-office.jpg",
-        title: "Pyrgiotis OE — office",
-        detail: "Product & company pages",
-      },
-      {
-        src: "/images/work-pyrgiotis-check.jpg",
-        title: "Pyrgiotis OE — detail",
-        detail: "Clear path to contact",
-      },
-      {
-        src: "/images/work-omnidot.jpg",
-        title: "omnidot. — landing",
-        detail: "Agency site",
-      },
-    ],
+    webWork: [],
     socialWork: [
       {
         src: "/images/social.jpg",
@@ -771,28 +750,7 @@ export const copy: Record<Locale, Copy> = {
         body: "Σύντομη εβδομαδιαία ανάγνωση: κρατάμε, κόβουμε ή μεγαλώνουμε. Όχι decks 40 σελίδων.",
       },
     ],
-    webWork: [
-      {
-        src: "/images/work-pyrgiotis-home.jpg",
-        title: "Pyrgiotis OE — home",
-        detail: "Industrial brand site",
-      },
-      {
-        src: "/images/work-pyrgiotis-office.jpg",
-        title: "Pyrgiotis OE — office",
-        detail: "Σελίδες προϊόντος & εταιρείας",
-      },
-      {
-        src: "/images/work-pyrgiotis-check.jpg",
-        title: "Pyrgiotis OE — detail",
-        detail: "Καθαρή διαδρομή επικοινωνίας",
-      },
-      {
-        src: "/images/work-omnidot.jpg",
-        title: "omnidot. — landing",
-        detail: "Site πρακτορείου",
-      },
-    ],
+    webWork: [],
     socialWork: [
       {
         src: "/images/social.jpg",
