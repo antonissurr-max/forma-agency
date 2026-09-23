@@ -280,6 +280,9 @@ a.chrome__about {
 }
 
 .chrome__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   padding: 0;
   border: 0;
   background: none;
@@ -288,6 +291,19 @@ a.chrome__about {
 .chrome__logo svg {
   width: clamp(32px, 2.8vw, 42px);
   height: clamp(22px, 2vw, 28px);
+  flex: 0 0 auto;
+}
+
+.chrome__word {
+  display: none;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.chrome__word-dot {
+  color: var(--hydrangea);
 }
 
 .stage.is-work .chrome {
@@ -1290,6 +1306,10 @@ a.work__proof-line:hover {
     display: none;
   }
 
+  .chrome__word {
+    display: inline;
+  }
+
   .stage.is-index .chrome__brand {
     display: none;
   }
@@ -1300,8 +1320,13 @@ a.work__proof-line:hover {
 
   .stage.is-index.is-mobile-hero .chrome,
   .stage.is-index.is-mobile-hero .chrome__lang,
-  .stage.is-index.is-mobile-hero .chrome__about {
+  .stage.is-index.is-mobile-hero .chrome__about,
+  .stage.is-index.is-mobile-hero .chrome__word {
     color: var(--paper);
+  }
+
+  .stage.is-index.is-mobile-hero .chrome__word-dot {
+    color: var(--hydrangea);
   }
 
   .stage.is-index.is-mobile-hero .chrome__logo svg {
@@ -1346,39 +1371,14 @@ a.work__proof-line:hover {
   .home-mobile--hero {
     gap: 16px;
     min-height: 0;
-    padding: 72px var(--chrome) 36px;
+    padding: 88px var(--chrome) 36px;
     align-content: start;
     background: var(--work-bg);
     color: var(--paper);
   }
 
-  .home-mobile__identity {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .home-mobile--hero .home-mobile__mark {
-    width: 34px;
-    height: 34px;
-    flex: 0 0 auto;
-    color: var(--paper);
-  }
-
-  .home-mobile--hero .home-mobile__brand {
-    margin: 0;
-    font-size: clamp(28px, 9vw, 38px);
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 1;
-  }
-
-  .home-mobile--hero .home-mobile__dot {
-    color: var(--hydrangea);
-  }
-
   .home-mobile__display {
-    margin: 12px 0 0;
+    margin: 0;
     max-width: 11ch;
     font-size: clamp(34px, 11vw, 48px);
     font-weight: 600;
@@ -1416,7 +1416,7 @@ a.work__proof-line:hover {
 
   .home-mobile--services-head {
     gap: 12px;
-    padding: 28px var(--chrome) 0;
+    padding: 28px var(--chrome) 22px;
     background: var(--work-bg);
     color: var(--paper);
   }
@@ -1473,7 +1473,7 @@ a.work__proof-line:hover {
 
   .works > .tile--0 {
     border-top: 0;
-    padding-top: 12px;
+    padding-top: 4px;
   }
 
   .works > .tile--3 {
@@ -1620,9 +1620,16 @@ a.work__proof-line:hover {
 
   .stage.is-index:not(.is-mobile-hero) .chrome,
   .stage.is-index:not(.is-mobile-hero) .chrome__lang,
+  .stage.is-index:not(.is-mobile-hero) .chrome__word,
   .stage.is-about .chrome,
-  .stage.is-about .chrome__lang {
+  .stage.is-about .chrome__lang,
+  .stage.is-about .chrome__word {
     color: var(--ink);
+  }
+
+  .stage.is-index:not(.is-mobile-hero) .chrome__word-dot,
+  .stage.is-about .chrome__word-dot {
+    color: var(--hydrangea);
   }
 
   .stage.is-index:not(.is-mobile-hero) .chrome__logo svg,

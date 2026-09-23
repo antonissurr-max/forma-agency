@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BrandWord } from "./BrandWord";
 import { Logo } from "./Logo";
+import { site } from "../site";
 import { useLocale } from "../locale";
 import { pathForLocale, pathFromView } from "../routing";
 import type { View } from "../types";
@@ -32,6 +33,10 @@ export function Chrome({
           aria-label={t.homeAria}
         >
           <Logo />
+          <span className="chrome__word">
+            {site.brand}
+            <span className="chrome__word-dot">.</span>
+          </span>
         </Link>
 
         <button

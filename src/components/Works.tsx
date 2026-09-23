@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { pages, site } from "../site";
+import { pages } from "../site";
 import { useLocale } from "../locale";
 import { pathFromView } from "../routing";
-import { Logo } from "./Logo";
 
 export function Works({ dimmed }: { dimmed: boolean }) {
   const { locale, t } = useLocale();
@@ -93,14 +92,7 @@ export function Works({ dimmed }: { dimmed: boolean }) {
       aria-label={t.sections}
     >
       <header ref={heroRef} className="home-mobile home-mobile--hero">
-        <div className="home-mobile__identity">
-          <Logo className="home-mobile__mark" />
-          <p className="home-mobile__brand">
-            {site.brand}
-            <span className="home-mobile__dot">.</span>
-          </p>
-        </div>
-        <h2 className="home-mobile__display">{t.homeMobileHeadline}</h2>
+        <h1 className="home-mobile__display">{t.homeMobileHeadline}</h1>
         <p className="home-mobile__lede">{t.homeMobileAboutBody}</p>
         <Link
           className="home-mobile__cta-line"
