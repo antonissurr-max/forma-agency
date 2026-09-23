@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { BoxedTitle } from "./BoxedTitle";
 import { ExhibitGallery, mediaIsVideo } from "./ExhibitGallery";
-import { pageOrder, pages, type MediaItem, type PageId } from "../site";
+import { pageOrder, type MediaItem, type PageId } from "../site";
 import { useLocale } from "../locale";
 
 export function WorkShow({
@@ -22,7 +22,6 @@ export function WorkShow({
   onBrief: () => void;
 }) {
   const { t } = useLocale();
-  const page = pages.find((p) => p.id === id)!;
   const copy = t.pages[id];
   const gallery =
     media && media.length > 0
