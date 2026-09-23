@@ -108,9 +108,8 @@ export function Works({ dimmed }: { dimmed: boolean }) {
       </div>
 
       <div className="home-mobile home-mobile--services-head">
-        <p className="home-mobile__eyebrow">{t.whatWeDo}</p>
         <h2 className="home-mobile__title home-mobile__title--light">
-          {t.homeMobileServicesTitle}
+          {t.whatWeDo}
         </h2>
       </div>
 
