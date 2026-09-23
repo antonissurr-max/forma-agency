@@ -47,7 +47,6 @@ export function WorkShow({
   const current = gallery[active];
   const mediaCount = gallery.length;
   const showExhibit = mediaCount > 0 && (!isFolder || folderOpen);
-  const splitDesktop = isFolder && folderOpen && showExhibit;
 
   useEffect(() => {
     setActive(0);
@@ -163,55 +162,50 @@ export function WorkShow({
   return (
     <div
       className={`work is-open${gallery.length === 0 ? " work--text" : ""}${
-        splitDesktop ? " work--split" : ""
-      }${exiting ? " is-exit" : ""}`}
+        exiting ? " is-exit" : ""
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label={copy.title}
     >
-      <div
-        className={`work__scroll${splitDesktop ? " work__scroll--split" : ""}`}
-        key={id}
-      >
-        <div className="work__main">
-          <header className="work__head">
-            <div className="work__lead">
-              <BoxedTitle text={copy.title} />
+      <div className="work__scroll" key={id}>
+        <header className="work__head">
+          <div className="work__lead">
+            <BoxedTitle text={copy.title} />
 
-              <div className="work__meta">
-                {copy.meta.map((item) => (
-                  <div key={item.label} className="work__meta-item">
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </div>
-                ))}
-                {mediaCount > 1 && !isFolder && (
-                  <button
-                    className="work__explore"
-                    type="button"
-                    onClick={() =>
-                      exhibitRef.current?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start",
-                      })
-                    }
-                  >
-                    {t.explore} ↗
-                  </button>
-                )}
-              </div>
+            <div className="work__meta">
+              {copy.meta.map((item) => (
+                <div key={item.label} className="work__meta-item">
+                  <span>{item.label}</span>
+                  <strong>{item.value}</strong>
+                </div>
+              ))}
+              {mediaCount > 1 && !isFolder && (
+                <button
+                  className="work__explore"
+                  type="button"
+                  onClick={() =>
+                    exhibitRef.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    })
+                  }
+                >
+                  {t.explore} ↗
+                </button>
+              )}
             </div>
-            {proofBlock}
+          </div>
+          {proofBlock}
 
-            <button className="work__brief" type="button" onClick={onBrief}>
-              {t.startBrief} ↗
-            </button>
-          </header>
-
-          {children && <div className="work__body">{children}</div>}
-        </div>
+          <button className="work__brief" type="button" onClick={onBrief}>
+            {t.startBrief} ↗
+          </button>
+        </header>
 
         {exhibit}
+
+        {children && <div className="work__body">{children}</div>}
       </div>
 
       <button

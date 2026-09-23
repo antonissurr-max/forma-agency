@@ -874,24 +874,6 @@ a.work__proof-line:hover {
   margin: 8px 0 36px;
 }
 
-.work__main {
-  min-width: 0;
-}
-
-.work__scroll--split {
-  display: flex;
-  flex-direction: column;
-}
-
-.work__scroll--split .work__main {
-  order: 1;
-}
-
-.work__scroll--split .work__exhibit {
-  order: 2;
-  margin-top: 8px;
-}
-
 .exhibit {
   display: grid;
   gap: 16px;
@@ -2831,56 +2813,6 @@ a.work__proof-line:hover {
 @media (min-width: 900px) {
   .work__scroll {
     padding: 8vw 14vw 6vw;
-  }
-
-  .work__scroll--split {
-    display: grid;
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-    gap: clamp(28px, 4vw, 56px);
-    align-items: start;
-    height: 100%;
-    overflow: hidden;
-    padding: 6vw 8vw 4vw;
-  }
-
-  .work__scroll--split .work__main {
-    order: unset;
-    height: 100%;
-    overflow: auto;
-    overscroll-behavior: contain;
-    padding-right: 8px;
-    scrollbar-width: thin;
-  }
-
-  .work__scroll--split .work__head {
-    max-width: none;
-  }
-
-  .work__scroll--split .work__body {
-    max-width: none;
-  }
-
-  .work__scroll--split .work__exhibit {
-    order: unset;
-    position: sticky;
-    top: 0;
-    margin: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    min-height: 0;
-  }
-
-  .work__scroll--split .exhibit {
-    width: 100%;
-  }
-
-  .work__scroll--split .exhibit__stage {
-    height: min(68vh, 560px);
-  }
-
-  .work__scroll--split .exhibit__frame {
-    width: min(38vw, 420px);
   }
 
   .work__meta {
