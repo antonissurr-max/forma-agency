@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { Logo } from "./Logo";
 import { formatPhoneDisplay, pages, phoneHref, site } from "../site";
 import { useLocale } from "../locale";
 import { pathFromView } from "../routing";
@@ -46,22 +45,6 @@ export function Footer() {
   return (
     <footer className="site-foot">
       <div className="site-foot__inner">
-        <div className="site-foot__brand">
-          <Link
-            className="site-foot__mark"
-            to={pathFromView({ kind: "index" }, locale)}
-            aria-label={t.homeAria}
-          >
-            <Logo className="site-foot__logo" />
-            <span className="site-foot__name">
-              {site.brand}
-              <span className="site-foot__dot">.</span>
-            </span>
-          </Link>
-          <p className="site-foot__tag">{t.footerStudio}</p>
-          <p className="site-foot__blurb">{t.aboutSub}</p>
-        </div>
-
         <div className="site-foot__col">
           <h3 className="site-foot__heading">{t.footerMenu}</h3>
           <nav className="site-foot__list" aria-label={t.footerMenu}>
