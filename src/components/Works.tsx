@@ -130,14 +130,8 @@ export function Works({ dimmed }: { dimmed: boolean }) {
             className={`tile tile--${i}`}
             to={pathFromView({ kind: "page", id: page.id }, locale)}
             style={{ ["--i" as string]: String(i) }}
-            aria-label={`${page.kicker} ${title}`}
+            aria-label={title}
           >
-            <span className="tile__kicker">
-              <span className="tile__kicker-id">{page.kicker}_</span>
-              <span className="tile__kicker-step">
-                {String(i + 1).padStart(2, "0")}/04
-              </span>
-            </span>
             <span className="tile__media">
               <img src={page.cover} alt="" />
             </span>

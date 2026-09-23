@@ -176,7 +176,6 @@ export function WorkShow({
       >
         <div className="work__main">
           <header className="work__head">
-            <p className="work__kicker">{page.kicker}_</p>
             <div className="work__lead">
               <BoxedTitle text={copy.title} />
 
