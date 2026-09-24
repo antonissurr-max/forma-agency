@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 100" fill="none" role="img" aria-label="omnidot.">
+  <rect width="360" height="100" rx="0" fill="#FAF9F6"/>
+  <g transform="translate(28, 32)">
+    <circle cx="7.5" cy="18" r="5.5" fill="#23395B"/>
+    <circle cx="28.5" cy="18" r="5.5" fill="#23395B"/>
+    <path d="M13 18h10" stroke="#23395B" stroke-width="2.4" stroke-linecap="round"/>
+  </g>
+  <text
+    x="76"
+    y="64"
+    fill="#23395B"
+    font-family="IBM Plex Sans, system-ui, sans-serif"
+    font-size="36"
+    font-weight="600"
+    letter-spacing="-1.4"
+  >omnidot.</text>
+</svg>
