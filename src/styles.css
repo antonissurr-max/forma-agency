@@ -5,8 +5,8 @@
   --sand: #e8d9c5;
   --white: #faf9f6;
   --night: #1c1c1c;
-  /* Service pages: black */
-  --work-bg: #000;
+  /* Service pages: soft dark charcoal */
+  --work-bg: #141414;
   --paper: var(--white);
   --ink: var(--navy);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
