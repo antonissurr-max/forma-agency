@@ -1365,6 +1365,10 @@ a.work__proof-line:hover {
     box-sizing: border-box;
   }
 
+  .works__pin {
+    display: contents;
+  }
+
   .works__intro {
     display: none;
   }
@@ -1457,9 +1461,9 @@ a.work__proof-line:hover {
   }
 
   /* Full-bleed blue stack: one under another, white titles */
-  .works > .tile,
-  .works > .tile:nth-of-type(odd),
-  .works > .tile:nth-of-type(even) {
+  .works__pin > .tile,
+  .works__pin > .tile:nth-of-type(odd),
+  .works__pin > .tile:nth-of-type(even) {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -1479,20 +1483,20 @@ a.work__proof-line:hover {
     animation: none;
   }
 
-  .works > .tile--0 {
+  .works__pin > .tile--0 {
     border-top: 0;
     padding-top: 4px;
   }
 
-  .works > .tile--3 {
+  .works__pin > .tile--3 {
     padding-bottom: 40px;
   }
 
-  .works > .tile::before {
+  .works__pin > .tile::before {
     display: none;
   }
 
-  .works > .tile .tile__media {
+  .works__pin > .tile .tile__media {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 10;
@@ -1504,7 +1508,7 @@ a.work__proof-line:hover {
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--paper) 12%, transparent);
   }
 
-  .works > .tile .tile__media img {
+  .works__pin > .tile .tile__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -1512,13 +1516,13 @@ a.work__proof-line:hover {
     transform: none;
   }
 
-  .works > .tile.is-inview .tile__media img,
-  .works > .tile:hover .tile__media img,
-  .works > .tile:focus-visible .tile__media img {
+  .works__pin > .tile.is-inview .tile__media img,
+  .works__pin > .tile:hover .tile__media img,
+  .works__pin > .tile:focus-visible .tile__media img {
     filter: none;
   }
 
-  .works > .tile .tile__title {
+  .works__pin > .tile .tile__title {
     margin: 0;
     padding: 14px var(--chrome) 22px;
     max-width: none;
@@ -2769,7 +2773,7 @@ a.work__proof-line:hover {
   border-color: var(--cursor);
 }
 
-/* Desktop landing: size from vw+vh so it fills the board; gap-lg > tile so no overlap */
+/* Desktop landing: circular tiles + scroll-driven rightward reveal */
 @media (min-width: 900px) {
   .chrome {
     padding: 2.2vw 2.4vw 0;
@@ -2779,11 +2783,10 @@ a.work__proof-line:hover {
     position: relative;
     inset: auto;
     display: block;
-    min-height: 100dvh;
+    /* Tall runway so sticky pin can scrub through the sequence */
+    height: 320vh;
+    min-height: 0;
     padding: 0;
-    /* One scale unit: gaps stay proportional to tiles as the viewport changes.
-       gap-lg must exceed tile-size so Content and Performance do not overlap
-       (clear gap between them = gap-lg - tile-size). */
     --tile-size: clamp(200px, min(18.5vw, 26vh), 360px);
     --tile-gap-sm: calc(var(--tile-size) * 0.06);
     --tile-gap-lg: calc(var(--tile-size) * 1.22);
@@ -2798,6 +2801,14 @@ a.work__proof-line:hover {
     );
   }
 
+  .works__pin {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    width: 100%;
+    overflow: hidden;
+  }
+
   .works__intro {
     position: absolute;
     left: 50%;
@@ -2809,11 +2820,25 @@ a.work__proof-line:hover {
     pointer-events: none;
   }
 
+  .stage.is-ready .tile {
+    animation: none;
+  }
+
   .tile {
     position: absolute;
     width: var(--tile-size);
     margin: 0;
     gap: calc(var(--tile-size) * 0.022);
+    justify-items: center;
+    text-align: center;
+    opacity: var(--t, 0);
+    transform: translate3d(
+      calc((1 - var(--t, 0)) * -14vw + var(--drift, 0) * 22vw),
+      0,
+      0
+    );
+    will-change: transform, opacity;
+    transition: none;
   }
 
   /*
@@ -2860,10 +2885,13 @@ a.work__proof-line:hover {
     width: 100%;
     aspect-ratio: 1 / 1;
     height: auto;
+    border-radius: 50%;
+    overflow: hidden;
   }
 
   .tile__title {
     font-size: calc(var(--tile-size) * 0.055);
+    text-align: center;
   }
 }
 
@@ -2874,6 +2902,19 @@ a.work__proof-line:hover {
     --tile-gap-sm: calc(var(--tile-size) * 0.06);
     --tile-gap-lg: calc(var(--tile-size) * 1.22);
     --tile-mid: calc(var(--tile-size) * 0.42);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @media (min-width: 900px) {
+    .works {
+      height: 100dvh;
+    }
+
+    .tile {
+      opacity: 1 !important;
+      transform: none !important;
+    }
   }
 }
 
