@@ -1529,17 +1529,25 @@ a.work__proof-line:hover {
   }
 
   .works__carousel > .tile .tile__title {
+    position: static;
+    display: block;
+    flex: none;
     margin: 0;
     padding: 14px var(--chrome) 22px;
     max-width: none;
     width: 100%;
+    min-height: 0;
     box-sizing: border-box;
     color: var(--paper);
     opacity: 1;
     font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.1em;
+    line-height: 1.3;
     text-transform: uppercase;
+    text-align: left;
+    white-space: normal;
+    overflow: visible;
     background: var(--work-bg);
   }
 
