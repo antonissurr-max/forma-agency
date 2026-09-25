@@ -1365,14 +1365,6 @@ a.work__proof-line:hover {
     box-sizing: border-box;
   }
 
-  .works__pin {
-    display: contents;
-  }
-
-  .works__carousel {
-    display: contents;
-  }
-
   .works__intro {
     display: none;
   }
@@ -1465,9 +1457,9 @@ a.work__proof-line:hover {
   }
 
   /* Full-bleed blue stack: one under another, white titles */
-  .works__carousel > .tile,
-  .works__carousel > .tile:nth-of-type(odd),
-  .works__carousel > .tile:nth-of-type(even) {
+  .works > .tile,
+  .works > .tile:nth-of-type(odd),
+  .works > .tile:nth-of-type(even) {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -1487,20 +1479,20 @@ a.work__proof-line:hover {
     animation: none;
   }
 
-  .works__carousel > .tile--0 {
+  .works > .tile--0 {
     border-top: 0;
     padding-top: 4px;
   }
 
-  .works__carousel > .tile--3 {
+  .works > .tile--3 {
     padding-bottom: 40px;
   }
 
-  .works__carousel > .tile::before {
+  .works > .tile::before {
     display: none;
   }
 
-  .works__carousel > .tile .tile__media {
+  .works > .tile .tile__media {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 10;
@@ -1508,13 +1500,11 @@ a.work__proof-line:hover {
     height: auto;
     margin: 0;
     border: 0;
-    border-radius: 0;
     background: color-mix(in srgb, var(--night) 40%, var(--work-bg));
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--paper) 12%, transparent);
-    filter: none;
   }
 
-  .works__carousel > .tile .tile__media img {
+  .works > .tile .tile__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -1522,32 +1512,24 @@ a.work__proof-line:hover {
     transform: none;
   }
 
-  .works__carousel > .tile.is-inview .tile__media img,
-  .works__carousel > .tile:hover .tile__media img,
-  .works__carousel > .tile:focus-visible .tile__media img {
+  .works > .tile.is-inview .tile__media img,
+  .works > .tile:hover .tile__media img,
+  .works > .tile:focus-visible .tile__media img {
     filter: none;
   }
 
-  .works__carousel > .tile .tile__title {
-    position: static;
-    display: block;
-    flex: none;
+  .works > .tile .tile__title {
     margin: 0;
     padding: 14px var(--chrome) 22px;
     max-width: none;
     width: 100%;
-    min-height: 0;
     box-sizing: border-box;
     color: var(--paper);
     opacity: 1;
     font-size: 15px;
     font-weight: 600;
     letter-spacing: 0.1em;
-    line-height: 1.3;
     text-transform: uppercase;
-    text-align: left;
-    white-space: normal;
-    overflow: visible;
     background: var(--work-bg);
   }
 
@@ -2787,197 +2769,111 @@ a.work__proof-line:hover {
   border-color: var(--cursor);
 }
 
-/* Desktop landing: large circles, dual-axis scroll, footer always visible */
+/* Desktop landing: size from vw+vh so it fills the board; gap-lg > tile so no overlap */
 @media (min-width: 900px) {
   .chrome {
     padding: 2.2vw 2.4vw 0;
-  }
-
-  .stage.is-index {
-    --foot-reserve: min(38vh, 300px);
   }
 
   .works {
     position: relative;
     inset: auto;
     display: block;
-    height: calc(100dvh - var(--foot-reserve));
-    min-height: calc(100dvh - var(--foot-reserve));
-    margin: 0;
+    min-height: 100dvh;
     padding: 0;
-    /* Triple-scale circles (capped by viewport) */
-    --tile-size: clamp(360px, min(66vh, 48vw), 720px);
-    --tile-radius: calc(var(--tile-size) * 0.5);
-  }
-
-  .works__pin {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    height: auto;
-    width: auto;
-    overflow: auto;
-    overscroll-behavior: contain;
-    pointer-events: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .works.is-dim .works__pin {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+    /* One scale unit: gaps stay proportional to tiles as the viewport changes.
+       gap-lg must exceed tile-size so Content and Performance do not overlap
+       (clear gap between them = gap-lg - tile-size). */
+    --tile-size: clamp(200px, min(18.5vw, 26vh), 360px);
+    --tile-gap-sm: calc(var(--tile-size) * 0.06);
+    --tile-gap-lg: calc(var(--tile-size) * 1.22);
+    --tile-mid: calc(var(--tile-size) * 0.48);
+    --tile-comp-w: calc(
+      var(--tile-size) * 3 + var(--tile-gap-sm) * 2 + var(--tile-gap-lg)
+    );
+    --tile-comp-h: calc(var(--tile-mid) * 2 + var(--tile-size) + 2.4em);
+    --tile-origin-x: calc((100vw - var(--tile-comp-w)) / 2);
+    --tile-origin-y: calc(
+      (100dvh - var(--tile-comp-h)) / 2 - var(--tile-mid) * 0.35
+    );
   }
 
   .works__intro {
-    position: sticky;
-    left: 0;
+    position: absolute;
+    left: 50%;
     top: max(16px, 1.6vw);
     z-index: 2;
     width: min(34rem, 70vw);
-    margin: 0 auto;
-    padding: 0 clamp(20px, 3vw, 48px);
-    text-align: center;
+    margin: 0;
+    transform: translateX(-50%);
     pointer-events: none;
   }
 
-  .works__carousel {
-    position: relative;
-    left: auto;
-    right: auto;
-    top: auto;
-    z-index: 1;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    width: max-content;
-    min-width: 100%;
-    min-height: calc(100% - 2rem);
+  .tile {
+    position: absolute;
+    width: var(--tile-size);
     margin: 0;
-    padding: clamp(48px, 8vh, 96px) 8vw clamp(48px, 8vh, 96px)
-      clamp(20px, 3vw, 48px);
-    box-sizing: border-box;
-    transform: none;
-    pointer-events: none;
+    gap: calc(var(--tile-size) * 0.022);
   }
 
-  .stage.is-ready .tile {
-    animation: none;
-    opacity: 1;
+  /*
+   * Vertical order: 1 → 2 → 4 → 3
+   * 1 & 2 shifted down · 3 & 4 shifted up · top of 3 = middle of 2
+   */
+  .tile:nth-of-type(1) {
+    top: calc(var(--tile-origin-y) + var(--tile-mid) * 0.5);
+    left: var(--tile-origin-x);
   }
 
-  .works__carousel > .tile {
-    position: relative;
-    top: auto;
-    left: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: max-content;
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    gap: 0;
-    opacity: 1;
-    filter: none;
-    transform: none;
-    pointer-events: auto;
-    will-change: auto;
-    transition: none;
+  .tile:nth-of-type(2) {
+    top: calc(var(--tile-origin-y) + var(--tile-mid) * 1.5);
+    left: calc(var(--tile-origin-x) + var(--tile-size) + var(--tile-gap-sm));
   }
 
-  .works__carousel > .tile:nth-of-type(odd),
-  .works__carousel > .tile:nth-of-type(even) {
+  .tile:nth-of-type(3) {
+    top: calc(var(--tile-origin-y) + var(--tile-mid) * 2.5);
+    left: calc(
+      var(--tile-origin-x) + var(--tile-size) + var(--tile-gap-sm) +
+        var(--tile-gap-lg)
+    );
+  }
+
+  .tile:nth-of-type(4) {
+    top: calc(var(--tile-origin-y) + var(--tile-mid) * 2);
+    left: calc(
+      var(--tile-origin-x) + var(--tile-size) * 2 + var(--tile-gap-sm) * 2 +
+        var(--tile-gap-lg)
+    );
+  }
+
+  .tile:nth-of-type(odd),
+  .tile:nth-of-type(even) {
     margin-left: 0;
     margin-right: 0;
-    align-self: center;
   }
 
-  .works__carousel > .tile .tile__media {
-    width: var(--tile-size);
-    height: var(--tile-size);
+  .tile__kicker {
+    font-size: calc(var(--tile-size) * 0.05);
+  }
+
+  .tile__media {
+    width: 100%;
     aspect-ratio: 1 / 1;
-    flex-shrink: 0;
-    border-radius: 50%;
-    overflow: hidden;
+    height: auto;
   }
 
-  .works__carousel > .tile .tile__media img {
-    filter: grayscale(1);
-  }
-
-  .works__carousel > .tile:hover .tile__media img,
-  .works__carousel > .tile:focus-visible .tile__media img {
-    filter: none;
-  }
-
-  /* One-line title as spacing connector — no visible rule */
-  .works__carousel > .tile .tile__title {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 var(--tile-radius);
-    width: var(--tile-radius);
-    max-width: var(--tile-radius);
-    min-height: 1.2em;
-    margin: 0;
-    padding: 0 0.15em;
-    box-sizing: border-box;
-    font-size: clamp(9px, calc(var(--tile-size) * 0.032), 14px);
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    line-height: 1;
-    text-transform: uppercase;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    color: var(--navy);
-    opacity: 0.9;
-    background: none;
-  }
-
-  .works__carousel > .tile:not(:first-child) .tile__media img {
-    filter: grayscale(1) blur(2.5px);
-  }
-
-  .works__carousel > .tile:not(:first-child):hover .tile__media img,
-  .works__carousel > .tile:not(:first-child):focus-visible .tile__media img {
-    filter: none;
-  }
-
-  /* Footer always visible on desktop home */
-  .stage.is-index .site-foot {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 40;
-    max-height: var(--foot-reserve);
-    overflow: auto;
-    padding-top: 28px;
-    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    box-shadow: 0 -12px 40px color-mix(in srgb, #000 18%, transparent);
-  }
-
-  .stage.is-index .site-foot__inner {
-    gap: 20px;
-  }
-
-  .stage.is-index .site-foot__copy {
-    margin-top: 16px;
-    padding-top: 12px;
+  .tile__title {
+    font-size: calc(var(--tile-size) * 0.055);
   }
 }
 
+/* Short laptops only: slightly smaller tiles; gaps still track tile-size */
 @media (min-width: 900px) and (max-height: 780px) {
-  .stage.is-index {
-    --foot-reserve: min(34vh, 240px);
-  }
-
   .works {
-    --tile-size: clamp(300px, min(58vh, 42vw), 520px);
+    --tile-size: clamp(168px, min(16vw, 22vh), 230px);
+    --tile-gap-sm: calc(var(--tile-size) * 0.06);
+    --tile-gap-lg: calc(var(--tile-size) * 1.22);
+    --tile-mid: calc(var(--tile-size) * 0.42);
   }
 }
 

@@ -91,81 +91,77 @@ export function Works({ dimmed }: { dimmed: boolean }) {
       className={`works ${dimmed ? "is-dim" : ""}`}
       aria-label={t.sections}
     >
-      <div className="works__pin">
-        <header ref={heroRef} className="home-mobile home-mobile--hero">
-          <h1 className="home-mobile__display">{t.homeMobileHeadline}</h1>
-          <p className="home-mobile__lede">{t.homeMobileAboutBody}</p>
-          <Link
-            className="home-mobile__cta-line"
-            to={pathFromView({ kind: "about" }, locale)}
-          >
-            <span>{t.startBrief}</span>
-            <span aria-hidden="true">→</span>
-          </Link>
-        </header>
+      <header ref={heroRef} className="home-mobile home-mobile--hero">
+        <h1 className="home-mobile__display">{t.homeMobileHeadline}</h1>
+        <p className="home-mobile__lede">{t.homeMobileAboutBody}</p>
+        <Link
+          className="home-mobile__cta-line"
+          to={pathFromView({ kind: "about" }, locale)}
+        >
+          <span>{t.startBrief}</span>
+          <span aria-hidden="true">→</span>
+        </Link>
+      </header>
 
-        <div className="works__intro">
-          <p className="works__pitch">{t.aboutSub}</p>
-        </div>
-
-        <div className="home-mobile home-mobile--services-head">
-          <h2 className="home-mobile__title home-mobile__title--light">
-            {t.whatWeDo}
-          </h2>
-        </div>
-
-        <div className="works__carousel">
-          {pages.map((page, i) => {
-            const title = t.pages[page.id].title;
-            return (
-              <Link
-                key={page.id}
-                className={`tile tile--${i}`}
-                to={pathFromView({ kind: "page", id: page.id }, locale)}
-                style={{ ["--i" as string]: String(i) }}
-                aria-label={title}
-              >
-                <span className="tile__media">
-                  <img src={page.cover} alt="" />
-                </span>
-                <span className="tile__title">{title}</span>
-              </Link>
-            );
-          })}
-        </div>
-
-        {proof ? (
-          <aside className="home-mobile home-mobile--proof">
-            <p className="home-mobile__eyebrow">{t.homeMobileProofKicker}</p>
-            <h2 className="home-mobile__title">{proof.client ?? "Europatch"}</h2>
-            <p className="home-mobile__proof-value">{proof.value}</p>
-            <div className="home-mobile__feature">
-              <img src={proofFeature} alt="" />
-            </div>
-            <p className="home-mobile__body">{t.homeMobileProofStory}</p>
-            <Link
-              className="home-mobile__cta-line home-mobile__cta-line--ink"
-              to={pathFromView({ kind: "page", id: "social" }, locale)}
-            >
-              <span>{t.pages.social.title}</span>
-              <span aria-hidden="true">→</span>
-            </Link>
-          </aside>
-        ) : null}
-
-        <footer className="home-mobile home-mobile--close">
-          <h2 className="home-mobile__display home-mobile__display--sm">
-            {t.homeMobileClose}
-          </h2>
-          <Link
-            className="home-mobile__cta-line"
-            to={pathFromView({ kind: "about" }, locale)}
-          >
-            <span>{t.startBrief}</span>
-            <span aria-hidden="true">→</span>
-          </Link>
-        </footer>
+      <div className="works__intro">
+        <p className="works__pitch">{t.aboutSub}</p>
       </div>
+
+      <div className="home-mobile home-mobile--services-head">
+        <h2 className="home-mobile__title home-mobile__title--light">
+          {t.whatWeDo}
+        </h2>
+      </div>
+
+      {pages.map((page, i) => {
+        const title = t.pages[page.id].title;
+        return (
+          <Link
+            key={page.id}
+            className={`tile tile--${i}`}
+            to={pathFromView({ kind: "page", id: page.id }, locale)}
+            style={{ ["--i" as string]: String(i) }}
+            aria-label={title}
+          >
+            <span className="tile__media">
+              <img src={page.cover} alt="" />
+            </span>
+            <span className="tile__title">{title}</span>
+          </Link>
+        );
+      })}
+
+      {proof ? (
+        <aside className="home-mobile home-mobile--proof">
+          <p className="home-mobile__eyebrow">{t.homeMobileProofKicker}</p>
+          <h2 className="home-mobile__title">{proof.client ?? "Europatch"}</h2>
+          <p className="home-mobile__proof-value">{proof.value}</p>
+          <div className="home-mobile__feature">
+            <img src={proofFeature} alt="" />
+          </div>
+          <p className="home-mobile__body">{t.homeMobileProofStory}</p>
+          <Link
+            className="home-mobile__cta-line home-mobile__cta-line--ink"
+            to={pathFromView({ kind: "page", id: "social" }, locale)}
+          >
+            <span>{t.pages.social.title}</span>
+            <span aria-hidden="true">→</span>
+          </Link>
+        </aside>
+      ) : null}
+
+      <footer className="home-mobile home-mobile--close">
+        <h2 className="home-mobile__display home-mobile__display--sm">
+          {t.homeMobileClose}
+        </h2>
+        <Link
+          className="home-mobile__cta-line"
+          to={pathFromView({ kind: "about" }, locale)}
+        >
+          <span>{t.startBrief}</span>
+          <span aria-hidden="true">→</span>
+        </Link>
+      </footer>
     </section>
   );
 }
