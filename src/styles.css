@@ -2706,7 +2706,7 @@ a.work__proof-line:hover {
   border-color: var(--cursor);
 }
 
-/* Desktop landing: size from vw+vh so it fills the board; gap-lg ≥ tile so no overlap */
+/* Desktop landing: size from vw+vh so it fills the board; gap-lg > tile so no overlap */
 @media (min-width: 900px) {
   .chrome {
     padding: 2.2vw 2.4vw 0;
@@ -2718,10 +2718,12 @@ a.work__proof-line:hover {
     display: block;
     min-height: 100dvh;
     padding: 0;
-    /* One scale unit: gaps stay proportional to tiles as the viewport changes */
+    /* One scale unit: gaps stay proportional to tiles as the viewport changes.
+       gap-lg must exceed tile-size so Content and Performance do not overlap
+       (clear gap between them = gap-lg - tile-size). */
     --tile-size: clamp(200px, min(18.5vw, 26vh), 360px);
     --tile-gap-sm: calc(var(--tile-size) * 0.06);
-    --tile-gap-lg: calc(var(--tile-size) * 0.95);
+    --tile-gap-lg: calc(var(--tile-size) * 1.22);
     --tile-mid: calc(var(--tile-size) * 0.48);
     --tile-comp-w: calc(
       var(--tile-size) * 3 + var(--tile-gap-sm) * 2 + var(--tile-gap-lg)
@@ -2807,7 +2809,7 @@ a.work__proof-line:hover {
   .works {
     --tile-size: clamp(168px, min(16vw, 22vh), 230px);
     --tile-gap-sm: calc(var(--tile-size) * 0.06);
-    --tile-gap-lg: calc(var(--tile-size) * 0.9);
+    --tile-gap-lg: calc(var(--tile-size) * 1.22);
     --tile-mid: calc(var(--tile-size) * 0.42);
   }
 }
