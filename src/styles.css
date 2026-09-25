@@ -2718,9 +2718,10 @@ a.work__proof-line:hover {
     display: block;
     min-height: 100dvh;
     padding: 0;
+    /* One scale unit: gaps stay proportional to tiles as the viewport changes */
     --tile-size: clamp(200px, min(18.5vw, 26vh), 360px);
-    --tile-gap-sm: clamp(10px, 1.1vw, 18px);
-    --tile-gap-lg: max(calc(var(--tile-size) * 0.95), 16vw);
+    --tile-gap-sm: calc(var(--tile-size) * 0.06);
+    --tile-gap-lg: calc(var(--tile-size) * 0.95);
     --tile-mid: calc(var(--tile-size) * 0.48);
     --tile-comp-w: calc(
       var(--tile-size) * 3 + var(--tile-gap-sm) * 2 + var(--tile-gap-lg)
@@ -2801,11 +2802,12 @@ a.work__proof-line:hover {
   }
 }
 
-/* Short laptops only: slightly smaller, keep gap proportional to tile */
+/* Short laptops only: slightly smaller tiles; gaps still track tile-size */
 @media (min-width: 900px) and (max-height: 780px) {
   .works {
     --tile-size: clamp(168px, min(16vw, 22vh), 230px);
-    --tile-gap-lg: max(calc(var(--tile-size) * 0.9), 12vw);
+    --tile-gap-sm: calc(var(--tile-size) * 0.06);
+    --tile-gap-lg: calc(var(--tile-size) * 0.9);
     --tile-mid: calc(var(--tile-size) * 0.42);
   }
 }
