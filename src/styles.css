@@ -1369,6 +1369,10 @@ a.work__proof-line:hover {
     display: contents;
   }
 
+  .works__carousel {
+    display: contents;
+  }
+
   .works__intro {
     display: none;
   }
@@ -2773,7 +2777,7 @@ a.work__proof-line:hover {
   border-color: var(--cursor);
 }
 
-/* Desktop landing: circular tiles + scroll-driven rightward reveal */
+/* Desktop landing: large circle carousel scrubbed by vertical scroll */
 @media (min-width: 900px) {
   .chrome {
     padding: 2.2vw 2.4vw 0;
@@ -2783,22 +2787,14 @@ a.work__proof-line:hover {
     position: relative;
     inset: auto;
     display: block;
-    /* Tall runway so sticky pin can scrub through the sequence */
-    height: 320vh;
+    height: 360vh;
     min-height: 0;
     padding: 0;
-    --tile-size: clamp(200px, min(18.5vw, 26vh), 360px);
-    --tile-gap-sm: calc(var(--tile-size) * 0.06);
-    --tile-gap-lg: calc(var(--tile-size) * 1.22);
-    --tile-mid: calc(var(--tile-size) * 0.48);
-    --tile-comp-w: calc(
-      var(--tile-size) * 3 + var(--tile-gap-sm) * 2 + var(--tile-gap-lg)
-    );
-    --tile-comp-h: calc(var(--tile-mid) * 2 + var(--tile-size) + 2.4em);
-    --tile-origin-x: calc((100vw - var(--tile-comp-w)) / 2);
-    --tile-origin-y: calc(
-      (100dvh - var(--tile-comp-h)) / 2 - var(--tile-mid) * 0.35
-    );
+    /* ~3× previous mid size, capped by viewport */
+    --tile-size: clamp(360px, min(66vh, 48vw), 720px);
+    --tile-radius: calc(var(--tile-size) * 0.5);
+    /* Edge gap = radius → stride between centers = diameter + radius */
+    --tile-stride: calc(var(--tile-size) + var(--tile-radius));
   }
 
   .works__pin {
@@ -2820,88 +2816,99 @@ a.work__proof-line:hover {
     pointer-events: none;
   }
 
+  .works__carousel {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
   .stage.is-ready .tile {
     animation: none;
   }
 
-  .tile {
+  .works__carousel > .tile {
     position: absolute;
-    width: var(--tile-size);
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(14px, 1.6vw, 28px);
+    width: max-content;
+    max-width: none;
     margin: 0;
-    gap: calc(var(--tile-size) * 0.022);
-    justify-items: center;
-    text-align: center;
-    opacity: var(--t, 0);
+    justify-items: unset;
+    text-align: left;
+    /* Center the CIRCLE (not the title) on the carousel axis */
+    opacity: calc(1 - min(var(--abs, var(--i, 1)), 1.35) * 0.42);
     transform: translate3d(
-      calc((1 - var(--t, 0)) * -14vw + var(--drift, 0) * 22vw),
-      0,
+      calc(
+        var(--dist, var(--i, 0)) * var(--tile-stride) - var(--tile-size) / 2
+      ),
+      -50%,
       0
     );
-    will-change: transform, opacity;
+    filter: blur(calc(min(var(--abs, var(--i, 1)), 1.5) * 7px));
+    pointer-events: auto;
+    will-change: transform, filter, opacity;
     transition: none;
+    z-index: 5;
   }
 
-  /*
-   * Vertical order: 1 → 2 → 4 → 3
-   * 1 & 2 shifted down · 3 & 4 shifted up · top of 3 = middle of 2
-   */
-  .tile:nth-of-type(1) {
-    top: calc(var(--tile-origin-y) + var(--tile-mid) * 0.5);
-    left: var(--tile-origin-x);
+  .works__carousel > .tile.is-active {
+    opacity: 1;
+    filter: none;
+    z-index: 20;
   }
 
-  .tile:nth-of-type(2) {
-    top: calc(var(--tile-origin-y) + var(--tile-mid) * 1.5);
-    left: calc(var(--tile-origin-x) + var(--tile-size) + var(--tile-gap-sm));
-  }
-
-  .tile:nth-of-type(3) {
-    top: calc(var(--tile-origin-y) + var(--tile-mid) * 2.5);
-    left: calc(
-      var(--tile-origin-x) + var(--tile-size) + var(--tile-gap-sm) +
-        var(--tile-gap-lg)
-    );
-  }
-
-  .tile:nth-of-type(4) {
-    top: calc(var(--tile-origin-y) + var(--tile-mid) * 2);
-    left: calc(
-      var(--tile-origin-x) + var(--tile-size) * 2 + var(--tile-gap-sm) * 2 +
-        var(--tile-gap-lg)
-    );
-  }
-
-  .tile:nth-of-type(odd),
-  .tile:nth-of-type(even) {
+  .works__carousel > .tile:nth-of-type(odd),
+  .works__carousel > .tile:nth-of-type(even) {
     margin-left: 0;
     margin-right: 0;
+    align-self: unset;
   }
 
-  .tile__kicker {
-    font-size: calc(var(--tile-size) * 0.05);
-  }
-
-  .tile__media {
-    width: 100%;
+  .works__carousel > .tile .tile__media {
+    width: var(--tile-size);
+    height: var(--tile-size);
     aspect-ratio: 1 / 1;
-    height: auto;
+    flex-shrink: 0;
     border-radius: 50%;
     overflow: hidden;
   }
 
-  .tile__title {
-    font-size: calc(var(--tile-size) * 0.055);
-    text-align: center;
+  .works__carousel > .tile .tile__media img {
+    filter: grayscale(1);
+  }
+
+  .works__carousel > .tile.is-active .tile__media img,
+  .works__carousel > .tile:hover .tile__media img,
+  .works__carousel > .tile:focus-visible .tile__media img {
+    filter: none;
+  }
+
+  .works__carousel > .tile .tile__title {
+    margin: 0;
+    max-width: 11ch;
+    font-size: clamp(13px, calc(var(--tile-size) * 0.045), 22px);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.25;
+    text-transform: uppercase;
+    text-align: left;
+    opacity: calc(1 - min(var(--abs, 1), 1) * 0.55);
+  }
+
+  .works__carousel > .tile.is-active .tile__title {
+    opacity: 0.92;
   }
 }
 
-/* Short laptops only: slightly smaller tiles; gaps still track tile-size */
+/* Short laptops: keep circles large but fit the viewport */
 @media (min-width: 900px) and (max-height: 780px) {
   .works {
-    --tile-size: clamp(168px, min(16vw, 22vh), 230px);
-    --tile-gap-sm: calc(var(--tile-size) * 0.06);
-    --tile-gap-lg: calc(var(--tile-size) * 1.22);
-    --tile-mid: calc(var(--tile-size) * 0.42);
+    --tile-size: clamp(280px, min(58vh, 40vw), 480px);
   }
 }
 
@@ -2911,9 +2918,17 @@ a.work__proof-line:hover {
       height: 100dvh;
     }
 
-    .tile {
+    .works__carousel > .tile {
+      opacity: 0 !important;
+      filter: none !important;
+      transform: translate3d(-50%, -50%, 0) !important;
+      pointer-events: none;
+    }
+
+    .works__carousel > .tile.is-active,
+    .works__carousel > .tile:first-child {
       opacity: 1 !important;
-      transform: none !important;
+      pointer-events: auto;
     }
   }
 }

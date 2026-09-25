@@ -85,20 +85,23 @@ export function Works({ dimmed }: { dimmed: boolean }) {
     };
   }, []);
 
-  /* Desktop: scroll progress drives circle reveal + rightward drift */
+  /* Desktop: scroll progress drives circle carousel (center sharp, sides blurred) */
   useEffect(() => {
     const root = sectionRef.current;
     if (!root) return;
 
     const desktop = window.matchMedia("(min-width: 900px)");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const tiles = () => root.querySelectorAll<HTMLElement>(".tile");
+    const tiles = () =>
+      Array.from(root.querySelectorAll<HTMLElement>(".works__carousel .tile"));
 
     const reset = () => {
       root.style.removeProperty("--scroll");
+      root.style.removeProperty("--active");
       tiles().forEach((tile) => {
-        tile.style.removeProperty("--t");
-        tile.style.removeProperty("--drift");
+        tile.style.removeProperty("--dist");
+        tile.style.removeProperty("--abs");
+        tile.classList.remove("is-active");
       });
     };
 
@@ -108,11 +111,17 @@ export function Works({ dimmed }: { dimmed: boolean }) {
         return;
       }
 
+      const list = tiles();
+      const last = Math.max(list.length - 1, 1);
+
       if (reduce.matches) {
         root.style.setProperty("--scroll", "1");
-        tiles().forEach((tile) => {
-          tile.style.setProperty("--t", "1");
-          tile.style.setProperty("--drift", "1");
+        root.style.setProperty("--active", "0");
+        list.forEach((tile, i) => {
+          const dist = i;
+          tile.style.setProperty("--dist", String(dist));
+          tile.style.setProperty("--abs", String(Math.abs(dist)));
+          tile.classList.toggle("is-active", i === 0);
         });
         return;
       }
@@ -123,15 +132,16 @@ export function Works({ dimmed }: { dimmed: boolean }) {
         Math.max(total, 0),
       );
       const p = total > 0 ? scrolled / total : 0;
+      const active = p * last;
       root.style.setProperty("--scroll", p.toFixed(4));
+      root.style.setProperty("--active", active.toFixed(4));
 
-      tiles().forEach((tile, i) => {
-        // First circle starts partly visible; each next one enters as you scroll
-        const start = i * 0.18 - 0.12;
-        const span = 0.2;
-        const local = Math.min(1, Math.max(0, (p - start) / span));
-        tile.style.setProperty("--t", local.toFixed(4));
-        tile.style.setProperty("--drift", p.toFixed(4));
+      list.forEach((tile, i) => {
+        const dist = i - active;
+        const abs = Math.abs(dist);
+        tile.style.setProperty("--dist", dist.toFixed(4));
+        tile.style.setProperty("--abs", abs.toFixed(4));
+        tile.classList.toggle("is-active", abs < 0.45);
       });
     };
 
@@ -189,23 +199,25 @@ export function Works({ dimmed }: { dimmed: boolean }) {
           </h2>
         </div>
 
-        {pages.map((page, i) => {
-          const title = t.pages[page.id].title;
-          return (
-            <Link
-              key={page.id}
-              className={`tile tile--${i}`}
-              to={pathFromView({ kind: "page", id: page.id }, locale)}
-              style={{ ["--i" as string]: String(i) }}
-              aria-label={title}
-            >
-              <span className="tile__media">
-                <img src={page.cover} alt="" />
-              </span>
-              <span className="tile__title">{title}</span>
-            </Link>
-          );
-        })}
+        <div className="works__carousel">
+          {pages.map((page, i) => {
+            const title = t.pages[page.id].title;
+            return (
+              <Link
+                key={page.id}
+                className={`tile tile--${i}`}
+                to={pathFromView({ kind: "page", id: page.id }, locale)}
+                style={{ ["--i" as string]: String(i) }}
+                aria-label={title}
+              >
+                <span className="tile__media">
+                  <img src={page.cover} alt="" />
+                </span>
+                <span className="tile__title">{title}</span>
+              </Link>
+            );
+          })}
+        </div>
 
         {proof ? (
           <aside className="home-mobile home-mobile--proof">
