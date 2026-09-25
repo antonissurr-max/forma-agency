@@ -1704,6 +1704,43 @@ a.work__proof-line:hover {
   align-items: center;
 }
 
+.about-layer__intro {
+  position: relative;
+}
+
+.about-layer__spark {
+  position: absolute;
+  z-index: 3;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--hydrangea);
+  transform: translate(-50%, -50%);
+  transition:
+    transform 0.35s var(--ease),
+    background 0.35s var(--ease),
+    opacity 0.35s var(--ease);
+}
+
+.about-layer__spark::after {
+  content: "";
+  position: absolute;
+  inset: -14px;
+}
+
+.about-layer__spark:hover,
+.about-layer__spark:focus-visible {
+  transform: translate(-50%, -50%) scale(1.18);
+  background: var(--sea);
+}
+
+.about-layer__spark[aria-pressed="true"] {
+  background: var(--navy);
+}
+
 .about-layer__title {
   margin: 0 0 14px;
   font-size: clamp(16px, 2.8vw, 28px);
@@ -2965,6 +3002,11 @@ a.work__proof-line:hover {
 
   .about-layer__intro {
     text-align: left;
+  }
+
+  .about-layer__spark {
+    width: 18px;
+    height: 18px;
   }
 
   .about-layer__title,

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Contact } from "./Contact";
 import { useLocale } from "../locale";
 import type { PageId } from "../types";
@@ -33,18 +33,29 @@ export function About({
   revealed,
   exiting = false,
   onGo,
+  onToggleReveal,
   interest,
 }: {
   revealed: boolean;
   exiting?: boolean;
   onClose: () => void;
   onGo: (id: PageId) => void;
+  onToggleReveal: () => void;
   interest?: PageId;
 }) {
   const { t } = useLocale();
   const pageIds = ["social", "content", "performance", "web"] as const;
   const layerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [spark] = useState(() => {
+    const right = Math.random() > 0.5;
+    return {
+      top: `${18 + Math.random() * 36}%`,
+      ...(right
+        ? { right: `${2 + Math.random() * 10}%`, left: "auto" as const }
+        : { left: `${2 + Math.random() * 10}%`, right: "auto" as const }),
+    };
+  });
 
   useEffect(() => {
     const layer = layerRef.current;
@@ -88,6 +99,15 @@ export function About({
       <div ref={scrollRef} className="about-layer__scroll">
         <div className={`about-layer__center ${revealed ? "is-revealed" : ""}`}>
           <div className="about-layer__intro">
+            <button
+              type="button"
+              className="about-layer__spark"
+              style={spark}
+              aria-pressed={revealed}
+              aria-label={revealed ? t.revealFull : t.revealShort}
+              onClick={onToggleReveal}
+            />
+
             <h2 className="about-layer__title">
               <span className="about-verse" aria-live="polite">
                 {t.aboutVerse.map((row) => (

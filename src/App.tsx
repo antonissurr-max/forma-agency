@@ -159,6 +159,7 @@ export default function App() {
           exiting={panelExit}
           onClose={goIndex}
           onGo={goPage}
+          onToggleReveal={toggleAbout}
           interest={view.interest}
         />
       )}
