@@ -2787,63 +2787,77 @@ a.work__proof-line:hover {
   border-color: var(--cursor);
 }
 
-/* Desktop landing: fixed left-aligned circle chain (logo-like connectors) */
+/* Desktop landing: large circles, dual-axis scroll, footer always visible */
 @media (min-width: 900px) {
   .chrome {
     padding: 2.2vw 2.4vw 0;
+  }
+
+  .stage.is-index {
+    --foot-reserve: min(38vh, 300px);
   }
 
   .works {
     position: relative;
     inset: auto;
     display: block;
-    /* Reserves one screen; scroll down reveals the footer beneath */
-    height: 100dvh;
-    min-height: 100dvh;
+    height: calc(100dvh - var(--foot-reserve));
+    min-height: calc(100dvh - var(--foot-reserve));
+    margin: 0;
     padding: 0;
-    --tile-size: clamp(220px, min(38vh, 22vw), 420px);
+    /* Triple-scale circles (capped by viewport) */
+    --tile-size: clamp(360px, min(66vh, 48vw), 720px);
     --tile-radius: calc(var(--tile-size) * 0.5);
   }
 
   .works__pin {
-    position: fixed;
+    position: absolute;
     inset: 0;
     z-index: 1;
-    height: 100dvh;
-    width: 100%;
-    overflow: hidden;
-    pointer-events: none;
+    height: auto;
+    width: auto;
+    overflow: auto;
+    overscroll-behavior: contain;
+    pointer-events: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .works.is-dim .works__pin {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
   }
 
   .works__intro {
-    position: absolute;
-    left: 50%;
+    position: sticky;
+    left: 0;
     top: max(16px, 1.6vw);
     z-index: 2;
     width: min(34rem, 70vw);
-    margin: 0;
-    transform: translateX(-50%);
+    margin: 0 auto;
+    padding: 0 clamp(20px, 3vw, 48px);
+    text-align: center;
     pointer-events: none;
   }
 
   .works__carousel {
-    position: absolute;
-    left: clamp(20px, 3vw, 48px);
+    position: relative;
+    left: auto;
     right: auto;
-    top: 50%;
+    top: auto;
     z-index: 1;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
     width: max-content;
-    max-width: none;
-    transform: translateY(-50%);
+    min-width: 100%;
+    min-height: calc(100% - 2rem);
+    margin: 0;
+    padding: clamp(48px, 8vh, 96px) 8vw clamp(48px, 8vh, 96px)
+      clamp(20px, 3vw, 48px);
+    box-sizing: border-box;
+    transform: none;
     pointer-events: none;
   }
 
@@ -2897,7 +2911,7 @@ a.work__proof-line:hover {
     filter: none;
   }
 
-  /* Title = one-line connector between circles (logo bar) */
+  /* One-line title as spacing connector — no visible rule */
   .works__carousel > .tile .tile__title {
     position: relative;
     z-index: 1;
@@ -2911,7 +2925,7 @@ a.work__proof-line:hover {
     margin: 0;
     padding: 0 0.15em;
     box-sizing: border-box;
-    font-size: clamp(8px, calc(var(--tile-size) * 0.036), 12px);
+    font-size: clamp(9px, calc(var(--tile-size) * 0.032), 14px);
     font-weight: 600;
     letter-spacing: 0.05em;
     line-height: 1;
@@ -2921,16 +2935,9 @@ a.work__proof-line:hover {
     overflow: hidden;
     color: var(--navy);
     opacity: 0.9;
-    background: linear-gradient(
-      to bottom,
-      transparent calc(50% - 0.75px),
-      color-mix(in srgb, var(--navy) 40%, transparent) calc(50% - 0.75px),
-      color-mix(in srgb, var(--navy) 40%, transparent) calc(50% + 0.75px),
-      transparent calc(50% + 0.75px)
-    );
+    background: none;
   }
 
-  /* Lead circle sharp; others softly blurred */
   .works__carousel > .tile:not(:first-child) .tile__media img {
     filter: grayscale(1) blur(2.5px);
   }
@@ -2940,15 +2947,37 @@ a.work__proof-line:hover {
     filter: none;
   }
 
-  .site-foot {
-    position: relative;
-    z-index: 5;
+  /* Footer always visible on desktop home */
+  .stage.is-index .site-foot {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    max-height: var(--foot-reserve);
+    overflow: auto;
+    padding-top: 28px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -12px 40px color-mix(in srgb, #000 18%, transparent);
+  }
+
+  .stage.is-index .site-foot__inner {
+    gap: 20px;
+  }
+
+  .stage.is-index .site-foot__copy {
+    margin-top: 16px;
+    padding-top: 12px;
   }
 }
 
 @media (min-width: 900px) and (max-height: 780px) {
+  .stage.is-index {
+    --foot-reserve: min(34vh, 240px);
+  }
+
   .works {
-    --tile-size: clamp(180px, min(34vh, 20vw), 300px);
+    --tile-size: clamp(300px, min(58vh, 42vw), 520px);
   }
 }
 
