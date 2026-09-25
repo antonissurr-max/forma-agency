@@ -882,18 +882,12 @@ a.work__proof-line:hover {
 }
 
 .exhibit__viewer {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: center;
-  gap: clamp(8px, 1.5vw, 20px);
+  display: block;
   width: 100%;
 }
 
-.exhibit__viewer.has-nav {
-  grid-template-columns: auto minmax(0, 1fr) auto;
-}
-
 .exhibit__stage {
+  --exhibit-frame-w: min(62vw, 360px);
   position: relative;
   width: 100%;
   height: min(52vh, 440px);
@@ -907,7 +901,7 @@ a.work__proof-line:hover {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: min(62vw, 360px);
+  width: var(--exhibit-frame-w);
   aspect-ratio: 4 / 5;
   padding: 0;
   border: 1px solid color-mix(in srgb, var(--paper) 22%, transparent);
@@ -1011,23 +1005,36 @@ a.work__proof-line:hover {
 }
 
 .exhibit__nav-btn {
+  position: absolute;
+  top: 50%;
   display: grid;
   place-items: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--paper) 28%, transparent);
-  background: color-mix(in srgb, var(--work-bg) 70%, transparent);
-  color: inherit;
+  border: 1px solid color-mix(in srgb, var(--paper) 55%, transparent);
+  background: color-mix(in srgb, #000 55%, transparent);
+  color: var(--paper);
   font-size: 16px;
   line-height: 1;
-  z-index: 5;
+  z-index: 6;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(4px);
+}
+
+/* Sit on the visible wing of the prev/next cards behind the center */
+.exhibit__nav-btn--prev {
+  left: calc(50% - var(--exhibit-frame-w) * 0.7);
+}
+
+.exhibit__nav-btn--next {
+  left: calc(50% + var(--exhibit-frame-w) * 0.7);
 }
 
 .exhibit__nav-btn:hover,
 .exhibit__nav-btn:focus-visible {
-  border-color: color-mix(in srgb, var(--paper) 70%, transparent);
+  border-color: color-mix(in srgb, var(--paper) 90%, transparent);
+  background: color-mix(in srgb, #000 72%, transparent);
 }
 
 .exhibit__count {
@@ -1041,8 +1048,9 @@ a.work__proof-line:hover {
 }
 
 @media (max-width: 899px) {
-  .exhibit__viewer {
-    gap: 6px;
+  .exhibit__stage {
+    --exhibit-frame-w: min(72vw, 280px);
+    height: min(48vh, 380px);
   }
 
   .exhibit__nav-btn {
@@ -1050,12 +1058,12 @@ a.work__proof-line:hover {
     height: 36px;
   }
 
-  .exhibit__stage {
-    height: min(48vh, 380px);
+  .exhibit__nav-btn--prev {
+    left: calc(50% - var(--exhibit-frame-w) * 0.62);
   }
 
-  .exhibit__frame {
-    width: min(72vw, 280px);
+  .exhibit__nav-btn--next {
+    left: calc(50% + var(--exhibit-frame-w) * 0.62);
   }
 }
 

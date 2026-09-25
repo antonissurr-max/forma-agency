@@ -72,20 +72,7 @@ export function ExhibitGallery({
 
   return (
     <div className="exhibit" aria-roledescription="carousel">
-      <div
-        className={`exhibit__viewer${items.length > 1 ? " has-nav" : ""}`}
-      >
-        {items.length > 1 ? (
-          <button
-            type="button"
-            className="exhibit__nav-btn exhibit__nav-btn--prev"
-            onClick={() => onSelect((active - 1 + items.length) % items.length)}
-            aria-label={prevLabel}
-          >
-            ←
-          </button>
-        ) : null}
-
+      <div className="exhibit__viewer">
         <div
           className="exhibit__stage"
           onTouchStart={(e) => {
@@ -145,18 +132,34 @@ export function ExhibitGallery({
               </button>
             );
           })}
-        </div>
 
-        {items.length > 1 ? (
-          <button
-            type="button"
-            className="exhibit__nav-btn exhibit__nav-btn--next"
-            onClick={() => onSelect((active + 1) % items.length)}
-            aria-label={nextLabel}
-          >
-            →
-          </button>
-        ) : null}
+          {items.length > 1 ? (
+            <>
+              <button
+                type="button"
+                className="exhibit__nav-btn exhibit__nav-btn--prev"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelect((active - 1 + items.length) % items.length);
+                }}
+                aria-label={prevLabel}
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                className="exhibit__nav-btn exhibit__nav-btn--next"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelect((active + 1) % items.length);
+                }}
+                aria-label={nextLabel}
+              >
+                →
+              </button>
+            </>
+          ) : null}
+        </div>
       </div>
 
       <div className="exhibit__meta">
