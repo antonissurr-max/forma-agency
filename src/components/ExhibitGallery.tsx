@@ -73,92 +73,102 @@ export function ExhibitGallery({
   return (
     <div className="exhibit" aria-roledescription="carousel">
       <div
-        className="exhibit__stage"
-        onTouchStart={(e) => {
-          touchX.current = e.changedTouches[0]?.clientX ?? null;
-        }}
-        onTouchEnd={(e) => {
-          const start = touchX.current;
-          const end = e.changedTouches[0]?.clientX;
-          touchX.current = null;
-          if (start == null || end == null) return;
-          const delta = end - start;
-          if (Math.abs(delta) < 40) return;
-          if (delta < 0) onSelect((active + 1) % items.length);
-          else onSelect((active - 1 + items.length) % items.length);
-        }}
+        className={`exhibit__viewer${items.length > 1 ? " has-nav" : ""}`}
       >
-        {items.map((item, idx) => {
-          const offset = idx - active;
-          const wrapped =
-            offset > items.length / 2
-              ? offset - items.length
-              : offset < -items.length / 2
-                ? offset + items.length
-                : offset;
-          const role =
-            wrapped === 0
-              ? "is-active"
-              : wrapped === -1
-                ? "is-prev"
-                : wrapped === 1
-                  ? "is-next"
-                  : wrapped === -2
-                    ? "is-near is-near-prev"
-                    : wrapped === 2
-                      ? "is-near is-near-next"
-                      : "is-far";
-
-          return (
-            <button
-              key={`${item.src}-${idx}`}
-              type="button"
-              className={`exhibit__frame ${role}${isVideo(item) ? " is-video" : ""}`}
-              onClick={() => {
-                if (idx === active) onZoom(idx);
-                else onSelect(idx);
-              }}
-              aria-label={
-                idx === active ? `${zoomLabel}: ${item.title}` : item.title
-              }
-              aria-current={idx === active ? "true" : undefined}
-              tabIndex={Math.abs(wrapped) <= 1 ? 0 : -1}
-            >
-              <ExhibitMedia item={item} active={idx === active && Math.abs(wrapped) === 0} />
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="exhibit__meta">
-        <p className="exhibit__title">{current.title}</p>
-        <p className="exhibit__detail">{current.detail}</p>
-      </div>
-
-      {items.length > 1 ? (
-        <div className="exhibit__nav">
+        {items.length > 1 ? (
           <button
             type="button"
-            className="exhibit__nav-btn"
+            className="exhibit__nav-btn exhibit__nav-btn--prev"
             onClick={() => onSelect((active - 1 + items.length) % items.length)}
             aria-label={prevLabel}
           >
             ←
           </button>
-          <span className="exhibit__count" aria-hidden="true">
-            {String(active + 1).padStart(2, "0")} /{" "}
-            {String(items.length).padStart(2, "0")}
-          </span>
+        ) : null}
+
+        <div
+          className="exhibit__stage"
+          onTouchStart={(e) => {
+            touchX.current = e.changedTouches[0]?.clientX ?? null;
+          }}
+          onTouchEnd={(e) => {
+            const start = touchX.current;
+            const end = e.changedTouches[0]?.clientX;
+            touchX.current = null;
+            if (start == null || end == null) return;
+            const delta = end - start;
+            if (Math.abs(delta) < 40) return;
+            if (delta < 0) onSelect((active + 1) % items.length);
+            else onSelect((active - 1 + items.length) % items.length);
+          }}
+        >
+          {items.map((item, idx) => {
+            const offset = idx - active;
+            const wrapped =
+              offset > items.length / 2
+                ? offset - items.length
+                : offset < -items.length / 2
+                  ? offset + items.length
+                  : offset;
+            const role =
+              wrapped === 0
+                ? "is-active"
+                : wrapped === -1
+                  ? "is-prev"
+                  : wrapped === 1
+                    ? "is-next"
+                    : wrapped === -2
+                      ? "is-near is-near-prev"
+                      : wrapped === 2
+                        ? "is-near is-near-next"
+                        : "is-far";
+
+            return (
+              <button
+                key={`${item.src}-${idx}`}
+                type="button"
+                className={`exhibit__frame ${role}${isVideo(item) ? " is-video" : ""}`}
+                onClick={() => {
+                  if (idx === active) onZoom(idx);
+                  else onSelect(idx);
+                }}
+                aria-label={
+                  idx === active ? `${zoomLabel}: ${item.title}` : item.title
+                }
+                aria-current={idx === active ? "true" : undefined}
+                tabIndex={Math.abs(wrapped) <= 1 ? 0 : -1}
+              >
+                <ExhibitMedia
+                  item={item}
+                  active={idx === active && Math.abs(wrapped) === 0}
+                />
+              </button>
+            );
+          })}
+        </div>
+
+        {items.length > 1 ? (
           <button
             type="button"
-            className="exhibit__nav-btn"
+            className="exhibit__nav-btn exhibit__nav-btn--next"
             onClick={() => onSelect((active + 1) % items.length)}
             aria-label={nextLabel}
           >
             →
           </button>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
+
+      <div className="exhibit__meta">
+        <p className="exhibit__title">{current.title}</p>
+        <p className="exhibit__detail">{current.detail}</p>
+        {items.length > 1 ? (
+          <p className="exhibit__count" aria-hidden="true">
+            {String(active + 1).padStart(2, "0")} /{" "}
+            {String(items.length).padStart(2, "0")}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

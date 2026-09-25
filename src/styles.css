@@ -5,8 +5,8 @@
   --sand: #e8d9c5;
   --white: #faf9f6;
   --night: #1c1c1c;
-  /* Service pages: deep navy (brand ink) instead of flat black */
-  --work-bg: #1a2a42;
+  /* Service pages: black */
+  --work-bg: #000;
   --paper: var(--white);
   --ink: var(--navy);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -881,6 +881,18 @@ a.work__proof-line:hover {
   width: 100%;
 }
 
+.exhibit__viewer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 20px);
+  width: 100%;
+}
+
+.exhibit__viewer.has-nav {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
 .exhibit__stage {
   position: relative;
   width: 100%;
@@ -998,23 +1010,19 @@ a.work__proof-line:hover {
   opacity: 0.55;
 }
 
-.exhibit__nav {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
 .exhibit__nav-btn {
   display: grid;
   place-items: center;
+  flex-shrink: 0;
   width: 40px;
   height: 40px;
   padding: 0;
   border: 1px solid color-mix(in srgb, var(--paper) 28%, transparent);
-  background: none;
+  background: color-mix(in srgb, var(--work-bg) 70%, transparent);
   color: inherit;
   font-size: 16px;
   line-height: 1;
+  z-index: 5;
 }
 
 .exhibit__nav-btn:hover,
@@ -1023,6 +1031,7 @@ a.work__proof-line:hover {
 }
 
 .exhibit__count {
+  margin: 10px 0 0;
   min-width: 5.5ch;
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -1032,6 +1041,15 @@ a.work__proof-line:hover {
 }
 
 @media (max-width: 899px) {
+  .exhibit__viewer {
+    gap: 6px;
+  }
+
+  .exhibit__nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+
   .exhibit__stage {
     height: min(48vh, 380px);
   }
