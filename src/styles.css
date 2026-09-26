@@ -2159,6 +2159,49 @@ a.work__proof-line:hover {
   pointer-events: none;
 }
 
+@keyframes pricing-copy-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.15rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-lead,
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub,
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
+.pricing-layer.is-enter .pricing-layer__foot {
+  animation: pricing-copy-in 0.78s var(--ease) both;
+}
+
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-lead {
+  animation-delay: 0.1s;
+}
+
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub {
+  animation-delay: 0.22s;
+}
+
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note {
+  animation-delay: 0.36s;
+}
+
+.pricing-layer.is-enter .pricing-layer__foot {
+  animation-delay: 0.48s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-lead,
+  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub,
+  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
+  .pricing-layer.is-enter .pricing-layer__foot {
+    animation: none;
+  }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

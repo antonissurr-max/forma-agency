@@ -47,6 +47,7 @@ export function Pricing({
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const [zoomAnim, setZoomAnim] = useState(false);
+  const [entering, setEntering] = useState(true);
   const plans = t.pricingPlans;
   const activePlan = plans[active];
   const midCopy = Math.floor(LOOP_COPIES / 2);
@@ -290,6 +291,18 @@ export function Pricing({
   }, [plans.length, midCopy]);
 
   useEffect(() => {
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setEntering(false);
+      return;
+    }
+    const timer = window.setTimeout(() => setEntering(false), 1100);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
     if (!zoomed) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -313,9 +326,9 @@ export function Pricing({
 
   return (
     <div
-      className={`pricing-layer${exiting ? " is-exit" : ""}${zoomed ? " is-zoomed" : ""}${
-        zoomAnim ? " is-zoom-anim" : ""
-      }`}
+      className={`pricing-layer${exiting ? " is-exit" : ""}${entering ? " is-enter" : ""}${
+        zoomed ? " is-zoomed" : ""
+      }${zoomAnim ? " is-zoom-anim" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={t.pricingTitle}
