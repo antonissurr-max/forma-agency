@@ -2469,7 +2469,7 @@ a.work__proof-line:hover {
 }
 
 .pricing-dots {
-  --dot-size: min(80.6vh, 624px);
+  --dot-size: min(72vh, 560px, 46vw);
   --dot-gap: clamp(64px, 10vh, 120px);
   --dot-focus-y: 38vh;
   position: relative;
@@ -2477,14 +2477,15 @@ a.work__proof-line:hover {
   min-width: 0;
   min-height: 0;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   scroll-snap-type: none;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  padding-right: 36px;
+  padding-right: 48px;
+  padding-left: 12px;
   scroll-behavior: auto;
 }
 

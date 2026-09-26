@@ -192,13 +192,15 @@ export function Pricing({
         return;
       }
 
+      const asideInner = layer.querySelector<HTMLElement>(".pricing-layer__aside-inner");
       const layerBox = layer.getBoundingClientRect();
       const titleBox = title.getBoundingClientRect();
       const ringBox = ring.getBoundingClientRect();
+      const asideRight = asideInner?.getBoundingClientRect().right ?? titleBox.right;
       const y = ringBox.top + ringBox.height / 2 - layerBox.top;
-      const x1 = titleBox.right - layerBox.left + 14;
+      const x1 = Math.min(titleBox.right, asideRight) - layerBox.left + 12;
       const x2 = ringBox.left - layerBox.left - 2;
-      if (x2 - x1 < 24) {
+      if (x2 - x1 < 16) {
         bridge.classList.remove("is-on");
         return;
       }
