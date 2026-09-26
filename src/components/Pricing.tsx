@@ -17,6 +17,8 @@ const LOOP_COPIES = 3;
 /** Lower = creamier / slower settle */
 const SCROLL_EASE = 0.082;
 const WHEEL_GAIN = 0.92;
+/** Fraction of track height for the active circle center (lower = higher on screen, aligns with title) */
+const FOCUS_Y = 0.42;
 
 function offsetInScroller(el: HTMLElement, scroller: HTMLElement) {
   return (
@@ -127,9 +129,11 @@ export function Pricing({
       }
     };
 
+    const focusY = () => track.clientHeight * FOCUS_Y;
+
     const applyFocus = () => {
       const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
-      const center = current + track.clientHeight / 2;
+      const center = current + focusY();
       let best = activeRef.current;
       let bestDist = Number.POSITIVE_INFINITY;
 
@@ -176,7 +180,7 @@ export function Pricing({
     };
 
     const centerOf = (node: HTMLElement) =>
-      offsetInScroller(node, track) - (track.clientHeight - node.offsetHeight) / 2;
+      offsetInScroller(node, track) + node.offsetHeight / 2 - focusY();
 
     scrollApi.current = {
       goTo(index: number, smooth = true) {
@@ -243,7 +247,7 @@ export function Pricing({
       wrapPair();
 
       const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
-      const center = current + track.clientHeight / 2;
+      const center = current + focusY();
       let nearest: HTMLElement | null = null;
       let bestDist = Number.POSITIVE_INFINITY;
       for (const node of nodes) {

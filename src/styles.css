@@ -2302,8 +2302,9 @@ a.work__proof-line:hover {
 }
 
 .pricing-dots {
-  --dot-size: min(62vh, 480px);
-  --dot-gap: clamp(56px, 9vh, 110px);
+  --dot-size: min(80.6vh, 624px);
+  --dot-gap: clamp(64px, 10vh, 120px);
+  --dot-focus-y: 42vh;
   position: relative;
   z-index: 1;
   min-width: 0;
@@ -2333,7 +2334,8 @@ a.work__proof-line:hover {
   gap: 0;
   width: max-content;
   min-height: 100%;
-  padding-block: calc(50vh - (var(--dot-size) / 2));
+  padding-top: calc(var(--dot-focus-y) - (var(--dot-size) / 2));
+  padding-bottom: calc((100vh - var(--dot-focus-y)) - (var(--dot-size) / 2));
   box-sizing: border-box;
 }
 
@@ -2620,14 +2622,16 @@ a.work__proof-line:hover {
   }
 
   .pricing-dots {
-    --dot-size: min(72vw, 400px);
+    --dot-size: min(93.6vw, 520px);
     --dot-gap: clamp(48px, 10vh, 88px);
-    scroll-padding-block: calc(50% - (var(--dot-size) / 2));
+    --dot-focus-y: 48vh;
+    scroll-padding-block: calc(var(--dot-focus-y) - (var(--dot-size) / 2));
     padding-right: 28px;
   }
 
   .pricing-dots__track {
-    padding-block: calc(42vh - (var(--dot-size) / 2));
+    padding-top: calc(var(--dot-focus-y) - (var(--dot-size) / 2));
+    padding-bottom: calc((100vh - var(--dot-focus-y)) - (var(--dot-size) / 2));
   }
 
   .pricing-dot__content {
