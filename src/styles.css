@@ -2162,11 +2162,13 @@ a.work__proof-line:hover {
 @keyframes pricing-copy-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 1.15rem, 0);
+    transform: translate3d(0, 1.6rem, 0);
+    filter: blur(6px);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
+    filter: blur(0);
   }
 }
 
@@ -2174,23 +2176,23 @@ a.work__proof-line:hover {
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub,
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
 .pricing-layer.is-enter .pricing-layer__foot {
-  animation: pricing-copy-in 0.78s var(--ease) both;
+  animation: pricing-copy-in 0.95s var(--ease) both;
 }
 
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-lead {
-  animation-delay: 0.1s;
+  animation-delay: 0.18s;
 }
 
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub {
-  animation-delay: 0.22s;
+  animation-delay: 0.32s;
 }
 
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note {
-  animation-delay: 0.36s;
+  animation-delay: 0.48s;
 }
 
 .pricing-layer.is-enter .pricing-layer__foot {
-  animation-delay: 0.48s;
+  animation-delay: 0.64s;
 }
 
 @media (prefers-reduced-motion: reduce) {
