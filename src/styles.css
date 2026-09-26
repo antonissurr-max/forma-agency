@@ -2498,7 +2498,7 @@ a.work__proof-line:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
+  gap: var(--dot-gap);
   width: max-content;
   min-height: 100%;
   padding-top: calc(var(--dot-focus-y) - (var(--dot-size) / 2));
@@ -2506,18 +2506,26 @@ a.work__proof-line:hover {
   box-sizing: border-box;
 }
 
-/* Vertical navy segments between circle edges (logo mark) */
-.pricing-dots__link {
-  flex: 0 0 var(--dot-gap);
-  width: 5px;
-  height: var(--dot-gap);
-  margin: 0;
+/* Title → active circle bridge (only when settled on center) */
+.pricing-bridge {
+  position: absolute;
+  z-index: 2;
+  height: 3px;
+  margin-top: -1.5px;
   border-radius: 999px;
   background: var(--navy);
-  flex-shrink: 0;
-  opacity: 0.92;
   pointer-events: none;
-  z-index: 0;
+  opacity: 0;
+  transform: scaleX(0.92);
+  transform-origin: left center;
+  transition:
+    opacity 0.4s var(--ease),
+    transform 0.45s var(--ease);
+}
+
+.pricing-bridge.is-on {
+  opacity: 0.92;
+  transform: scaleX(1);
 }
 
 @property --focus {

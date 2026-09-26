@@ -1,5 +1,4 @@
 import {
-  Fragment,
   useCallback,
   useEffect,
   useMemo,
@@ -17,6 +16,7 @@ const LOOP_COPIES = 3;
 /** Lower = creamier / slower settle */
 const SCROLL_EASE = 0.082;
 const WHEEL_GAIN = 0.92;
+const BRIDGE_FOCUS = 0.78;
 /** Fallback focus line; live-synced to the aside title center when possible */
 const FOCUS_Y = 0.38;
 
@@ -41,6 +41,7 @@ export function Pricing({
   const { locale, t } = useLocale();
   const trackRef = useRef<HTMLDivElement>(null);
   const layerRef = useRef<HTMLDivElement>(null);
+  const bridgeRef = useRef<HTMLDivElement>(null);
   const focusYRef = useRef(FOCUS_Y);
   const activeRef = useRef(0);
   const zoomedRef = useRef(false);
@@ -99,7 +100,6 @@ export function Pricing({
       if (index !== activeRef.current) goTo(index, true);
       zoomedRef.current = true;
       setZoomAnim(true);
-      // Paint with transition armed, then apply zoom so scale eases in
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
           setZoomed(true);
@@ -122,6 +122,7 @@ export function Pricing({
     let target = track.scrollTop;
     let raf = 0;
     let touching = false;
+    let wheelIdle = 0;
 
     const measureSetSpan = () => {
       const a = track.querySelector<HTMLElement>(`[data-copy="0"][data-dot="0"]`);
@@ -145,11 +146,75 @@ export function Pricing({
 
     const focusY = () => track.clientHeight * focusYRef.current;
 
+    const centerOf = (node: HTMLElement) =>
+      offsetInScroller(node, track) + node.offsetHeight / 2 - focusY();
+
+    const nearestDot = () => {
+      const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
+      const center = current + focusY();
+      let nearest: HTMLElement | null = null;
+      let bestDist = Number.POSITIVE_INFINITY;
+      for (const node of nodes) {
+        const mid = offsetInScroller(node, track) + node.offsetHeight / 2;
+        const dist = Math.abs(mid - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          nearest = node;
+        }
+      }
+      return nearest;
+    };
+
+    const updateBridge = (bestNode: HTMLElement | null, bestDist: number) => {
+      const bridge = bridgeRef.current;
+      const layer = layerRef.current;
+      if (!bridge || !layer) return;
+
+      const live =
+        enterPhaseRef.current === "circles" || enterPhaseRef.current === "done";
+      if (!live || !bestNode || bestDist > bestNode.offsetHeight * 0.22) {
+        bridge.classList.remove("is-on");
+        return;
+      }
+
+      const focus = Number(bestNode.style.getPropertyValue("--focus")) || 0;
+      if (focus < BRIDGE_FOCUS) {
+        bridge.classList.remove("is-on");
+        return;
+      }
+
+      const title = layer.querySelector<HTMLElement>(
+        ".pricing-layer__copy-panel.is-in .pricing-layer__title",
+      );
+      const ring = bestNode.querySelector<HTMLElement>(".pricing-dot__ring");
+      if (!title || !ring) {
+        bridge.classList.remove("is-on");
+        return;
+      }
+
+      const layerBox = layer.getBoundingClientRect();
+      const titleBox = title.getBoundingClientRect();
+      const ringBox = ring.getBoundingClientRect();
+      const y = ringBox.top + ringBox.height / 2 - layerBox.top;
+      const x1 = titleBox.right - layerBox.left + 14;
+      const x2 = ringBox.left - layerBox.left - 2;
+      if (x2 - x1 < 24) {
+        bridge.classList.remove("is-on");
+        return;
+      }
+
+      bridge.style.top = `${y}px`;
+      bridge.style.left = `${x1}px`;
+      bridge.style.width = `${x2 - x1}px`;
+      bridge.classList.add("is-on");
+    };
+
     const applyFocus = () => {
       const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
       const center = current + focusY();
       let best = activeRef.current;
       let bestDist = Number.POSITIVE_INFINITY;
+      let bestNode: HTMLElement | null = null;
 
       for (const node of nodes) {
         const index = Number(node.dataset.dot);
@@ -157,12 +222,12 @@ export function Pricing({
         const mid = offsetInScroller(node, track) + node.offsetHeight / 2;
         const dist = Math.abs(mid - center);
         const norm = Math.min(1, dist / (node.offsetHeight * 0.9));
-        // Softer falloff so neighbors ease in/out instead of flipping
         const focus = Math.pow(1 - norm, 1.35);
         node.style.setProperty("--focus", focus.toFixed(4));
         if (dist < bestDist) {
           bestDist = dist;
           best = index;
+          bestNode = node;
         }
       }
 
@@ -170,6 +235,18 @@ export function Pricing({
         activeRef.current = best;
         setActive(best);
       }
+      updateBridge(bestNode, bestDist);
+    };
+
+    const kick = () => {
+      if (!raf) raf = window.requestAnimationFrame(tick);
+    };
+
+    const softSnap = () => {
+      const nearest = nearestDot();
+      if (!nearest) return;
+      target = centerOf(nearest);
+      kick();
     };
 
     const tick = () => {
@@ -188,13 +265,6 @@ export function Pricing({
         raf = 0;
       }
     };
-
-    const kick = () => {
-      if (!raf) raf = window.requestAnimationFrame(tick);
-    };
-
-    const centerOf = (node: HTMLElement) =>
-      offsetInScroller(node, track) + node.offsetHeight / 2 - focusY();
 
     scrollApi.current = {
       goTo(index: number, smooth = true) {
@@ -227,20 +297,21 @@ export function Pricing({
         if (Math.abs(e.deltaY) > 2) revealCircles();
         return;
       }
+      bridgeRef.current?.classList.remove("is-on");
       target += e.deltaY * WHEEL_GAIN;
       const setSpan = measureSetSpan();
       if (setSpan > 0) {
-        // Keep target near the live scroll window so wrap stays invisible
         if (target < setSpan * 0.2) target += setSpan;
         if (target > setSpan * 1.8) target -= setSpan;
       }
       kick();
+      window.clearTimeout(wheelIdle);
+      wheelIdle = window.setTimeout(softSnap, 140);
     };
 
     const onScroll = () => {
       if (enterPhaseRef.current !== "circles" && enterPhaseRef.current !== "done") return;
       if (raf || touching) {
-        // During lerp we own scrollTop; during touch, follow native momentum
         if (touching && !raf) {
           current = track.scrollTop;
           target = current;
@@ -248,7 +319,6 @@ export function Pricing({
           if (Math.abs(track.scrollTop - current) > 1) track.scrollTop = current;
           applyFocus();
         }
-        return;
       }
     };
 
@@ -259,6 +329,8 @@ export function Pricing({
       }
       if (enterPhaseRef.current !== "circles" && enterPhaseRef.current !== "done") return;
       touching = true;
+      window.clearTimeout(wheelIdle);
+      bridgeRef.current?.classList.remove("is-on");
       if (raf) {
         window.cancelAnimationFrame(raf);
         raf = 0;
@@ -272,26 +344,7 @@ export function Pricing({
       touching = false;
       current = track.scrollTop;
       wrapPair();
-
-      const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
-      const center = current + focusY();
-      let nearest: HTMLElement | null = null;
-      let bestDist = Number.POSITIVE_INFINITY;
-      for (const node of nodes) {
-        const mid = offsetInScroller(node, track) + node.offsetHeight / 2;
-        const dist = Math.abs(mid - center);
-        if (dist < bestDist) {
-          bestDist = dist;
-          nearest = node;
-        }
-      }
-      if (nearest) {
-        target = centerOf(nearest);
-        kick();
-      } else {
-        target = current;
-        applyFocus();
-      }
+      softSnap();
     };
 
     track.addEventListener("wheel", onWheel, { passive: false });
@@ -311,6 +364,7 @@ export function Pricing({
       track.removeEventListener("touchstart", onTouchStart);
       track.removeEventListener("touchend", onTouchEnd);
       track.removeEventListener("touchcancel", onTouchEnd);
+      window.clearTimeout(wheelIdle);
       if (raf) window.cancelAnimationFrame(raf);
       if (zoomAnimTimer.current != null) window.clearTimeout(zoomAnimTimer.current);
     };
@@ -349,7 +403,7 @@ export function Pricing({
 
   useEffect(() => {
     if (enterPhase !== "await-scroll") return;
-    const layer = trackRef.current?.closest(".pricing-layer") as HTMLElement | null;
+    const layer = layerRef.current;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       if (Math.abs(e.deltaY) > 2) revealCircles();
@@ -386,7 +440,6 @@ export function Pricing({
     return () => window.removeEventListener("keydown", onKey, true);
   }, [zoomed, closeZoom]);
 
-  // Keep the active circle center on the same horizontal line as the aside title
   useEffect(() => {
     if (enterPhase === "pending" || enterPhase === "title") return;
     const layer = layerRef.current;
@@ -513,52 +566,50 @@ export function Pricing({
         </div>
       </aside>
 
+      <div ref={bridgeRef} className="pricing-bridge" aria-hidden="true" />
+
       <div className="pricing-dots" ref={trackRef}>
         <div className="pricing-dots__track">
-          {loopItems.map((item, i) => {
+          {loopItems.map((item) => {
             const isActive = item.planIndex === active;
             const tone = DOT_TONES[item.planIndex % DOT_TONES.length];
             return (
-              <Fragment key={`${item.copy}-${item.plan.id}`}>
-                {i > 0 ? (
-                  <span className="pricing-dots__link" aria-hidden="true" />
-                ) : null}
-                <article
-                  data-dot={item.planIndex}
-                  data-copy={item.copy}
-                  data-slot={item.slot}
-                  className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
-                  aria-current={isActive ? "true" : undefined}
-                  onClick={onDotClick(item.planIndex)}
-                >
-                  <div className="pricing-dot__ring">
-                    <div className="pricing-dot__content">
-                      <p className="pricing-dot__kicker">
-                        {String(item.planIndex + 1).padStart(2, "0")}
-                      </p>
-                      <h2 className="pricing-dot__name">{item.plan.name}</h2>
-                      <p className="pricing-dot__price">{item.plan.price}</p>
-                      <p className="pricing-dot__blurb">{item.plan.blurb}</p>
-                      <ul className="pricing-dot__list">
-                        {item.plan.items.map((line) => (
-                          <li key={line}>{line}</li>
-                        ))}
-                      </ul>
-                      <button
-                        type="button"
-                        className="pricing-dot__cta"
-                        tabIndex={isActive ? 0 : -1}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onBrief(item.plan.id as PageId);
-                        }}
-                      >
-                        {t.pricingCta} ↗
-                      </button>
-                    </div>
+              <article
+                key={`${item.copy}-${item.plan.id}`}
+                data-dot={item.planIndex}
+                data-copy={item.copy}
+                data-slot={item.slot}
+                className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
+                aria-current={isActive ? "true" : undefined}
+                onClick={onDotClick(item.planIndex)}
+              >
+                <div className="pricing-dot__ring">
+                  <div className="pricing-dot__content">
+                    <p className="pricing-dot__kicker">
+                      {String(item.planIndex + 1).padStart(2, "0")}
+                    </p>
+                    <h2 className="pricing-dot__name">{item.plan.name}</h2>
+                    <p className="pricing-dot__price">{item.plan.price}</p>
+                    <p className="pricing-dot__blurb">{item.plan.blurb}</p>
+                    <ul className="pricing-dot__list">
+                      {item.plan.items.map((line) => (
+                        <li key={line}>{line}</li>
+                      ))}
+                    </ul>
+                    <button
+                      type="button"
+                      className="pricing-dot__cta"
+                      tabIndex={isActive ? 0 : -1}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onBrief(item.plan.id as PageId);
+                      }}
+                    >
+                      {t.pricingCta} ↗
+                    </button>
                   </div>
-                </article>
-              </Fragment>
+                </div>
+              </article>
             );
           })}
         </div>
