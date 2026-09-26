@@ -3,6 +3,7 @@
   --hydrangea: #8fafd1;
   --sea: #bfd8d2;
   --sand: #e8d9c5;
+  --blush: #e8c9ce;
   --white: #faf9f6;
   --night: #1c1c1c;
   /* Service pages: deep navy */
@@ -2211,22 +2212,17 @@ a.work__proof-line:hover {
   width: calc(
     (var(--plan-count, 4) - 1) * (var(--dot-size) + var(--dot-gap))
   );
-  height: 2px;
-  margin-top: -1px;
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--ink) 12%, transparent),
-    color-mix(in srgb, var(--hydrangea) 75%, var(--ink)) 8%,
-    color-mix(in srgb, var(--hydrangea) 75%, var(--ink)) 92%,
-    color-mix(in srgb, var(--ink) 12%, transparent)
-  );
+  height: 5px;
+  margin-top: -2.5px;
+  background: var(--navy);
   border-radius: 999px;
-  opacity: 0.5;
+  opacity: 0.92;
   pointer-events: none;
   z-index: 0;
 }
 
 .pricing-dot {
+  --dot-tone: var(--hydrangea);
   flex: 0 0 auto;
   width: var(--dot-size);
   height: var(--dot-size);
@@ -2243,6 +2239,22 @@ a.work__proof-line:hover {
   z-index: 1;
 }
 
+.pricing-dot--blue {
+  --dot-tone: var(--hydrangea);
+}
+
+.pricing-dot--pink {
+  --dot-tone: var(--blush);
+}
+
+.pricing-dot--green {
+  --dot-tone: var(--sea);
+}
+
+.pricing-dot--sand {
+  --dot-tone: var(--sand);
+}
+
 .pricing-dot.is-active {
   filter: none;
   opacity: 1;
@@ -2254,27 +2266,27 @@ a.work__proof-line:hover {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  border: 1.5px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--navy) 16%, var(--dot-tone));
   background:
     radial-gradient(
-      circle at 32% 28%,
-      color-mix(in srgb, var(--white) 92%, var(--hydrangea)) 0%,
-      var(--paper) 48%,
-      color-mix(in srgb, var(--paper) 88%, var(--hydrangea)) 100%
+      circle at 30% 26%,
+      color-mix(in srgb, var(--white) 72%, var(--dot-tone)) 0%,
+      color-mix(in srgb, var(--paper) 35%, var(--dot-tone)) 46%,
+      color-mix(in srgb, var(--dot-tone) 82%, var(--paper)) 100%
     );
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--hydrangea) 22%, transparent),
-    0 24px 60px color-mix(in srgb, var(--ink) 8%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--dot-tone) 35%, transparent),
+    0 24px 60px color-mix(in srgb, var(--navy) 10%, transparent);
   display: grid;
   place-items: center;
   overflow: hidden;
 }
 
 .pricing-dot.is-active .pricing-dot__ring {
-  border-color: color-mix(in srgb, var(--ink) 28%, var(--hydrangea));
+  border-color: color-mix(in srgb, var(--navy) 34%, var(--dot-tone));
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--hydrangea) 40%, transparent),
-    0 28px 70px color-mix(in srgb, var(--ink) 12%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--navy) 18%, var(--dot-tone)),
+    0 28px 70px color-mix(in srgb, var(--navy) 14%, transparent);
 }
 
 .pricing-dot__content {
@@ -2310,7 +2322,7 @@ a.work__proof-line:hover {
   margin: 2px 0 0;
   font-size: clamp(14px, 1.4vw, 17px);
   letter-spacing: 0.02em;
-  color: color-mix(in srgb, var(--ink) 70%, var(--hydrangea));
+  color: color-mix(in srgb, var(--navy) 78%, var(--dot-tone));
 }
 
 .pricing-dot__blurb {
@@ -2347,7 +2359,7 @@ a.work__proof-line:hover {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--hydrangea);
+  background: color-mix(in srgb, var(--navy) 55%, var(--dot-tone));
 }
 
 .pricing-dot__cta {

@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useLocale } from "../locale";
 import { pathFromView } from "../routing";
 import type { PageId } from "../types";
+
+const DOT_TONES = ["blue", "pink", "green", "sand"] as const;
 
 export function Pricing({
   exiting = false,
@@ -14,8 +16,31 @@ export function Pricing({
 }) {
   const { locale, t } = useLocale();
   const trackRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef(0);
+  const lockedRef = useRef(false);
+  const unlockTimer = useRef<number | null>(null);
   const [active, setActive] = useState(0);
   const plans = t.pricingPlans;
+
+  const goTo = useCallback((index: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const next = Math.max(0, Math.min(plans.length - 1, index));
+    if (next === activeRef.current && lockedRef.current) return;
+
+    const node = track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
+    if (!node) return;
+
+    activeRef.current = next;
+    setActive(next);
+    lockedRef.current = true;
+    if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
+    node.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    unlockTimer.current = window.setTimeout(() => {
+      lockedRef.current = false;
+      unlockTimer.current = null;
+    }, 640);
+  }, [plans.length]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -26,6 +51,7 @@ export function Pricing({
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (lockedRef.current) return;
         let best: { index: number; ratio: number } | null = null;
         for (const entry of entries) {
           const index = Number((entry.target as HTMLElement).dataset.dot);
@@ -34,28 +60,38 @@ export function Pricing({
             best = { index, ratio: entry.intersectionRatio };
           }
         }
-        if (best && best.ratio > 0.45) setActive(best.index);
+        if (best && best.ratio > 0.55 && best.index !== activeRef.current) {
+          activeRef.current = best.index;
+          setActive(best.index);
+        }
       },
       {
         root: track,
-        threshold: [0.35, 0.5, 0.65, 0.8],
+        threshold: [0.45, 0.6, 0.75],
       },
     );
 
     nodes.forEach((node) => observer.observe(node));
 
+    let lastStepAt = 0;
     const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const dominant = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+      if (Math.abs(dominant) < 6) return;
       e.preventDefault();
-      track.scrollBy({ left: e.deltaY, behavior: "auto" });
+      const now = performance.now();
+      if (lockedRef.current || now - lastStepAt < 560) return;
+      lastStepAt = now;
+      goTo(activeRef.current + (dominant > 0 ? 1 : -1));
     };
+
     track.addEventListener("wheel", onWheel, { passive: false });
 
     return () => {
       observer.disconnect();
       track.removeEventListener("wheel", onWheel);
+      if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
     };
-  }, [plans.length]);
+  }, [plans.length, goTo]);
 
   return (
     <div
@@ -76,11 +112,12 @@ export function Pricing({
           {plans.map((plan, index) => {
             const isActive = index === active;
             const distance = Math.abs(index - active);
+            const tone = DOT_TONES[index % DOT_TONES.length];
             return (
               <article
                 key={plan.id}
                 data-dot={index}
-                className={`pricing-dot${isActive ? " is-active" : ""}`}
+                className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
                 style={{ "--dot-distance": String(distance) } as CSSProperties}
                 aria-current={isActive ? "true" : undefined}
               >
@@ -132,11 +169,7 @@ export function Pricing({
               aria-selected={index === active}
               aria-label={plan.name}
               className={`pricing-dots__pip${index === active ? " is-on" : ""}`}
-              onClick={() => {
-                const track = trackRef.current;
-                const node = track?.querySelector<HTMLElement>(`[data-dot="${index}"]`);
-                node?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-              }}
+              onClick={() => goTo(index)}
             />
           ))}
         </div>
