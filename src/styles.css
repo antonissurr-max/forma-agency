@@ -2383,8 +2383,11 @@ a.work__proof-line:hover {
 }
 
 .pricing-layer.is-zoomed .pricing-layer__title {
-  max-width: min(18ch, 100%);
-  flex-wrap: wrap;
+  max-width: 18rem;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 0.12em;
   white-space: normal;
 }
 
@@ -2402,6 +2405,22 @@ a.work__proof-line:hover {
   letter-spacing: -0.045em;
   line-height: 1.05;
   color: color-mix(in srgb, var(--navy) 28%, #9a9a9a);
+}
+
+/* Zoomed aside stays at summary size — no scale-up with the circle */
+.pricing-layer.is-zoomed .pricing-layer__title-lead {
+  font-size: clamp(26px, 2.8vw, 34px);
+  letter-spacing: -0.03em;
+}
+
+.pricing-layer.is-zoomed .pricing-layer__title-sub {
+  font-size: clamp(18px, 1.8vw, 22px);
+  letter-spacing: -0.02em;
+}
+
+.pricing-layer.is-zoomed .pricing-layer__note {
+  font-size: 13px;
+  max-width: 32ch;
 }
 
 .pricing-layer__note {
@@ -2452,7 +2471,7 @@ a.work__proof-line:hover {
 .pricing-dots {
   --dot-size: min(80.6vh, 624px);
   --dot-gap: clamp(64px, 10vh, 120px);
-  --dot-focus-y: 34vh;
+  --dot-focus-y: 38vh;
   position: relative;
   z-index: 1;
   min-width: 0;

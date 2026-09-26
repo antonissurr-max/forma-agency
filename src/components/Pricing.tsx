@@ -17,8 +17,8 @@ const LOOP_COPIES = 3;
 /** Lower = creamier / slower settle */
 const SCROLL_EASE = 0.082;
 const WHEEL_GAIN = 0.92;
-/** Fraction of track height for the active circle center (lower = higher on screen, aligns with title) */
-const FOCUS_Y = 0.34;
+/** Fallback focus line; live-synced to the aside title center when possible */
+const FOCUS_Y = 0.38;
 
 function offsetInScroller(el: HTMLElement, scroller: HTMLElement) {
   return (
@@ -40,6 +40,8 @@ export function Pricing({
 }) {
   const { locale, t } = useLocale();
   const trackRef = useRef<HTMLDivElement>(null);
+  const layerRef = useRef<HTMLDivElement>(null);
+  const focusYRef = useRef(FOCUS_Y);
   const activeRef = useRef(0);
   const zoomedRef = useRef(false);
   const scrollApi = useRef<{
@@ -141,7 +143,7 @@ export function Pricing({
       }
     };
 
-    const focusY = () => track.clientHeight * FOCUS_Y;
+    const focusY = () => track.clientHeight * focusYRef.current;
 
     const applyFocus = () => {
       const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
@@ -384,6 +386,42 @@ export function Pricing({
     return () => window.removeEventListener("keydown", onKey, true);
   }, [zoomed, closeZoom]);
 
+  // Keep the active circle center on the same horizontal line as the aside title
+  useEffect(() => {
+    if (enterPhase === "pending" || enterPhase === "title") return;
+    const layer = layerRef.current;
+    const track = trackRef.current;
+    if (!layer || !track) return;
+
+    const sync = () => {
+      const title = layer.querySelector<HTMLElement>(
+        ".pricing-layer__copy-panel.is-in .pricing-layer__title",
+      );
+      if (!title) return;
+      const titleBox = title.getBoundingClientRect();
+      const trackBox = track.getBoundingClientRect();
+      if (trackBox.height < 1) return;
+      const mid = titleBox.top + titleBox.height / 2;
+      const ratio = (mid - trackBox.top) / trackBox.height;
+      if (ratio < 0.18 || ratio > 0.72) return;
+      focusYRef.current = ratio;
+      track.style.setProperty("--dot-focus-y", `${Math.max(0, mid - trackBox.top)}px`);
+      scrollApi.current?.goTo(activeRef.current, false);
+    };
+
+    const raf = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(sync);
+    });
+    const ro = new ResizeObserver(() => sync());
+    ro.observe(layer);
+    window.addEventListener("resize", sync);
+    return () => {
+      window.cancelAnimationFrame(raf);
+      ro.disconnect();
+      window.removeEventListener("resize", sync);
+    };
+  }, [zoomed, active, enterPhase, ready]);
+
   const onDotClick = (index: number) => (e: MouseEvent) => {
     if (!circlesLive) return;
     const target = e.target as HTMLElement;
@@ -408,6 +446,7 @@ export function Pricing({
 
   return (
     <div
+      ref={layerRef}
       className={`pricing-layer${exiting ? " is-exit" : ""}${enterClass}${
         zoomed ? " is-zoomed" : ""
       }${zoomAnim ? " is-zoom-anim" : ""}`}
