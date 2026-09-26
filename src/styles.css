@@ -2263,11 +2263,12 @@ a.work__proof-line:hover {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior-y: contain;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-padding-block: calc(50% - (var(--dot-size) / 2));
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding-right: 36px;
+  scroll-behavior: auto;
 }
 
 .pricing-dots::-webkit-scrollbar {
@@ -2307,7 +2308,7 @@ a.work__proof-line:hover {
   width: var(--dot-size);
   height: var(--dot-size);
   scroll-snap-align: center;
-  scroll-snap-stop: always;
+  scroll-snap-stop: normal;
   z-index: 1;
   cursor: pointer;
 }
@@ -2351,12 +2352,10 @@ a.work__proof-line:hover {
   opacity: calc(1 - min(var(--dot-distance, 1), 2) * 0.42);
   transform: scale(calc(1 - min(var(--dot-distance, 1), 2) * 0.06));
   transition:
-    filter 0.45s var(--ease),
-    opacity 0.45s var(--ease),
-    transform 0.55s var(--ease),
-    width 0.55s var(--ease),
-    height 0.55s var(--ease),
-    box-shadow 0.45s var(--ease);
+    filter 0.28s ease-out,
+    opacity 0.28s ease-out,
+    transform 0.28s ease-out,
+    box-shadow 0.28s ease-out;
   will-change: filter, opacity, transform;
 }
 

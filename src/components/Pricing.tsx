@@ -44,35 +44,39 @@ export function Pricing({
   }, []);
 
   const goTo = useCallback(
-    (index: number) => {
+    (index: number, behavior: ScrollBehavior = "smooth") => {
       const track = trackRef.current;
       if (!track || plans.length === 0) return;
       const next = ((index % plans.length) + plans.length) % plans.length;
-      if (next === activeRef.current && lockedRef.current) return;
 
       const node = track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
       if (!node) return;
 
       activeRef.current = next;
       setActive(next);
-      lockedRef.current = true;
+      lockedRef.current = behavior === "smooth";
       if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
-      node.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
-      unlockTimer.current = window.setTimeout(() => {
+      node.scrollIntoView({ behavior, block: "center", inline: "nearest" });
+      if (behavior === "smooth") {
+        unlockTimer.current = window.setTimeout(() => {
+          lockedRef.current = false;
+          unlockTimer.current = null;
+        }, 480);
+      } else {
         lockedRef.current = false;
-        unlockTimer.current = null;
-      }, 640);
+      }
     },
     [plans.length],
   );
 
-  const openZoom = useCallback((index: number) => {
-    if (index !== activeRef.current) {
-      goTo(index);
-    }
-    zoomedRef.current = true;
-    setZoomed(true);
-  }, [goTo]);
+  const openZoom = useCallback(
+    (index: number) => {
+      if (index !== activeRef.current) goTo(index);
+      zoomedRef.current = true;
+      setZoomed(true);
+    },
+    [goTo],
+  );
 
   useEffect(() => {
     const track = trackRef.current;
@@ -81,50 +85,66 @@ export function Pricing({
     const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
     if (!nodes.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (lockedRef.current || zoomedRef.current) return;
-        let best: { index: number; ratio: number } | null = null;
-        for (const entry of entries) {
-          const index = Number((entry.target as HTMLElement).dataset.dot);
-          if (!Number.isFinite(index)) continue;
-          if (!best || entry.intersectionRatio > best.ratio) {
-            best = { index, ratio: entry.intersectionRatio };
-          }
+    const syncActiveFromScroll = () => {
+      if (zoomedRef.current) return;
+      const center = track.scrollTop + track.clientHeight / 2;
+      let best = activeRef.current;
+      let bestDist = Number.POSITIVE_INFINITY;
+      for (const node of nodes) {
+        const index = Number(node.dataset.dot);
+        if (!Number.isFinite(index)) continue;
+        const mid = node.offsetTop + node.offsetHeight / 2;
+        const dist = Math.abs(mid - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          best = index;
         }
-        if (best && best.ratio > 0.55 && best.index !== activeRef.current) {
-          activeRef.current = best.index;
-          setActive(best.index);
-        }
-      },
-      {
-        root: track,
-        threshold: [0.45, 0.6, 0.75],
-      },
-    );
+      }
+      if (best !== activeRef.current) {
+        activeRef.current = best;
+        setActive(best);
+      }
+    };
 
-    nodes.forEach((node) => observer.observe(node));
+    let scrollRaf = 0;
+    const onScroll = () => {
+      if (scrollRaf) return;
+      scrollRaf = window.requestAnimationFrame(() => {
+        scrollRaf = 0;
+        if (!lockedRef.current) syncActiveFromScroll();
+      });
+    };
 
-    let lastStepAt = 0;
     const onWheel = (e: WheelEvent) => {
       if (zoomedRef.current) {
         e.preventDefault();
         return;
       }
-      const dominant = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-      if (Math.abs(dominant) < 6) return;
-      e.preventDefault();
-      const now = performance.now();
-      if (lockedRef.current || now - lastStepAt < 560) return;
-      lastStepAt = now;
-      goTo(activeRef.current + (dominant > 0 ? 1 : -1));
+
+      // Native free scroll; only intercept at edges for circular loop
+      const maxScroll = Math.max(0, track.scrollHeight - track.clientHeight);
+      const atEnd = track.scrollTop >= maxScroll - 1;
+      const atStart = track.scrollTop <= 1;
+
+      if (e.deltaY > 0 && atEnd) {
+        e.preventDefault();
+        if (!lockedRef.current) goTo(0);
+        return;
+      }
+      if (e.deltaY < 0 && atStart) {
+        e.preventDefault();
+        if (!lockedRef.current) goTo(plans.length - 1);
+      }
     };
 
+    track.addEventListener("scroll", onScroll, { passive: true });
     track.addEventListener("wheel", onWheel, { passive: false });
+    syncActiveFromScroll();
 
     return () => {
-      observer.disconnect();
+      track.removeEventListener("scroll", onScroll);
       track.removeEventListener("wheel", onWheel);
+      if (scrollRaf) window.cancelAnimationFrame(scrollRaf);
       if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
     };
   }, [plans.length, goTo]);
