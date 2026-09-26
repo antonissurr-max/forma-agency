@@ -3569,6 +3569,7 @@ a.work__proof-line:hover {
   .pricing-dot__ring {
     filter: none !important;
     opacity: 1 !important;
+    transform: none !important;
   }
 
   .stage.is-ready .tile {
