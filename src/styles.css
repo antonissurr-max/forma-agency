@@ -2304,7 +2304,7 @@ a.work__proof-line:hover {
 .pricing-dots {
   --dot-size: min(80.6vh, 624px);
   --dot-gap: clamp(64px, 10vh, 120px);
-  --dot-focus-y: 42vh;
+  --dot-focus-y: 34vh;
   position: relative;
   z-index: 1;
   min-width: 0;

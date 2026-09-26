@@ -18,7 +18,7 @@ const LOOP_COPIES = 3;
 const SCROLL_EASE = 0.082;
 const WHEEL_GAIN = 0.92;
 /** Fraction of track height for the active circle center (lower = higher on screen, aligns with title) */
-const FOCUS_Y = 0.42;
+const FOCUS_Y = 0.34;
 
 function offsetInScroller(el: HTMLElement, scroller: HTMLElement) {
   return (
