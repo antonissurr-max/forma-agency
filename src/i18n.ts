@@ -266,7 +266,7 @@ export const copy: Record<Locale, Copy> = {
     contactUs: "Contact us",
     trustedBy: "Trusted by",
     trustedByBody: "Brands we work with — and backlink to.",
-    pricingTitle: "Pricing",
+    pricingTitle: "Packages & pricing",
     pricingLede:
       "Clear monthly retainers and project fees. Ad spend is always separate. Scope is written down before we start.",
     pricingNote:
@@ -665,7 +665,7 @@ export const copy: Record<Locale, Copy> = {
     contactUs: "Επικοινωνία",
     trustedBy: "Μας εμπιστεύονται",
     trustedByBody: "Συνεργάτες μας — με σύνδεσμο προς τις σελίδες τους.",
-    pricingTitle: "Τιμολόγηση",
+    pricingTitle: "Πακέτα & τιμές",
     pricingLede:
       "Καθαρά μηνιαία πακέτα και τιμές έργου. Το ad spend μένει πάντα δικό σας. Το scope γράφεται πριν ξεκινήσουμε.",
     pricingNote:

@@ -2170,9 +2170,27 @@ a.work__proof-line:hover {
   border: 0;
 }
 
+.pricing-layer__head {
+  flex: 0 0 auto;
+  display: grid;
+  justify-items: center;
+  padding: 64px var(--chrome) 8px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pricing-layer__title {
+  margin: 0;
+  font-size: clamp(22px, 3.2vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--navy);
+}
+
 .pricing-dots {
-  --dot-size: min(76vh, 560px);
-  --dot-gap: clamp(48px, 10vw, 120px);
+  --dot-size: min(68vh, 520px);
+  --dot-gap: clamp(96px, 18vw, 220px);
   position: relative;
   flex: 1;
   min-height: 0;
@@ -2196,26 +2214,23 @@ a.work__proof-line:hover {
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: var(--dot-gap);
+  gap: 0;
   padding-inline: max(4vw, calc(50% - (var(--dot-size) / 2)));
   width: max-content;
   min-height: 100%;
   box-sizing: border-box;
 }
 
-.pricing-dots__line {
-  position: absolute;
-  top: 50%;
-  left: calc(
-    max(4vw, calc(50% - (var(--dot-size) / 2))) + (var(--dot-size) / 2)
-  );
-  width: calc(
-    (var(--plan-count, 4) - 1) * (var(--dot-size) + var(--dot-gap))
-  );
+/* Segments between circle edges — logo-like connectors, not behind the dots */
+.pricing-dots__link {
+  flex: 0 0 var(--dot-gap);
+  width: var(--dot-gap);
   height: 5px;
-  margin-top: -2.5px;
-  background: var(--navy);
+  margin: 0;
   border-radius: 999px;
+  background: var(--navy);
+  align-self: center;
+  flex-shrink: 0;
   opacity: 0.92;
   pointer-events: none;
   z-index: 0;
@@ -2228,14 +2243,6 @@ a.work__proof-line:hover {
   height: var(--dot-size);
   scroll-snap-align: center;
   scroll-snap-stop: always;
-  filter: blur(calc(var(--dot-distance, 1) * 7px));
-  opacity: calc(1 - min(var(--dot-distance, 1), 2) * 0.38);
-  transform: scale(calc(1 - min(var(--dot-distance, 1), 2) * 0.08));
-  transition:
-    filter 0.45s var(--ease),
-    opacity 0.45s var(--ease),
-    transform 0.45s var(--ease);
-  will-change: filter, opacity, transform;
   z-index: 1;
 }
 
@@ -2253,13 +2260,6 @@ a.work__proof-line:hover {
 
 .pricing-dot--sand {
   --dot-tone: var(--sand);
-}
-
-.pricing-dot.is-active {
-  filter: none;
-  opacity: 1;
-  transform: scale(1);
-  z-index: 2;
 }
 
 .pricing-dot__ring {
@@ -2280,9 +2280,22 @@ a.work__proof-line:hover {
   display: grid;
   place-items: center;
   overflow: hidden;
+  filter: blur(calc(var(--dot-distance, 1) * 7px));
+  opacity: calc(1 - min(var(--dot-distance, 1), 2) * 0.38);
+  transform: scale(1);
+  transition:
+    filter 0.45s var(--ease),
+    opacity 0.45s var(--ease);
+  will-change: filter, opacity;
+}
+
+.pricing-dot.is-active {
+  z-index: 2;
 }
 
 .pricing-dot.is-active .pricing-dot__ring {
+  filter: none;
+  opacity: 1;
   border-color: color-mix(in srgb, var(--navy) 34%, var(--dot-tone));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--navy) 18%, var(--dot-tone)),
@@ -2460,20 +2473,23 @@ a.work__proof-line:hover {
 }
 
 @media (max-width: 699px) {
+  .pricing-layer__head {
+    padding-top: 56px;
+    padding-bottom: 4px;
+  }
+
+  .pricing-layer__title {
+    font-size: clamp(20px, 6vw, 28px);
+  }
+
   .pricing-dots {
-    --dot-size: min(78vw, 420px);
-    --dot-gap: clamp(36px, 14vw, 72px);
+    --dot-size: min(72vw, 400px);
+    --dot-gap: clamp(72px, 22vw, 140px);
     scroll-padding-inline: max(3vw, calc(50% - (var(--dot-size) / 2)));
   }
 
   .pricing-dots__track {
     padding-inline: max(3vw, calc(50% - (var(--dot-size) / 2)));
-  }
-
-  .pricing-dots__line {
-    left: calc(
-      max(3vw, calc(50% - (var(--dot-size) / 2))) + (var(--dot-size) / 2)
-    );
   }
 
   .pricing-dot__content {
@@ -3534,16 +3550,15 @@ a.work__proof-line:hover {
   .about-layer.is-exit,
   .pricing-layer,
   .pricing-layer.is-exit,
-  .pricing-dot,
+  .pricing-dot__ring,
   .exhibit__frame {
     animation: none !important;
     transition: none !important;
   }
 
-  .pricing-dot {
+  .pricing-dot__ring {
     filter: none !important;
     opacity: 1 !important;
-    transform: none !important;
   }
 
   .stage.is-ready .tile {

@@ -12,7 +12,7 @@ const navEn = [
   { href: "/content", label: "Content Creation" },
   { href: "/performance", label: "Performance Marketing" },
   { href: "/web", label: "Web Development" },
-  { href: "/pricing", label: "Pricing" },
+  { href: "/pricing", label: "Packages & pricing" },
   { href: "/about", label: "About / Contact" },
 ];
 
@@ -21,7 +21,7 @@ const navEl = [
   { href: "/el/content", label: "Δημιουργία Περιεχομένου" },
   { href: "/el/performance", label: "Performance Marketing" },
   { href: "/el/web", label: "Ανάπτυξη Ιστοσελίδων" },
-  { href: "/el/pricing", label: "Τιμολόγηση" },
+  { href: "/el/pricing", label: "Πακέτα & τιμές" },
   { href: "/el/about", label: "Σχετικά / Επικοινωνία" },
 ];
 
@@ -195,18 +195,18 @@ const routeDefs = [
     elFile: "el/pricing/index.html",
     image: `${origin}/images/work-omnidot.jpg`,
     en: {
-      title: "Pricing - omnidot.",
+      title: "Packages & pricing - omnidot.",
       description:
         "Clear monthly retainers and project fees for social, content, performance and web. Ad spend is always separate.",
-      h1: "Pricing",
+      h1: "Packages & pricing",
       body: "Clear monthly retainers and project fees. Ad spend is always separate. Scope is written down before we start. Social from €750/mo, content packs from €350, performance from €350/mo, web from €800.",
       story: "",
     },
     el: {
-      title: "Τιμολόγηση - omnidot.",
+      title: "Πακέτα & τιμές - omnidot.",
       description:
         "Καθαρά μηνιαία retainers και project fees για social, content, performance και web. Το ad spend είναι πάντα ξεχωριστά.",
-      h1: "Τιμολόγηση",
+      h1: "Πακέτα & τιμές",
       body: "Καθαρά μηνιαία retainers και project fees. Το ad spend είναι πάντα ξεχωριστά. Το scope γράφεται πριν ξεκινήσουμε. Social από €750/μήνα, content packs από €350, performance από €350/μήνα, web από €800.",
       story: "",
     },
@@ -263,7 +263,7 @@ function jsonLdFor(def, locale) {
     return {
       "@context": "https://schema.org",
       "@type": "WebPage",
-      name: locale === "el" ? "Τιμολόγηση" : "Pricing",
+      name: locale === "el" ? "Πακέτα & τιμές" : "Packages & pricing",
       description: copy.description,
       url,
       isPartOf: { "@type": "WebSite", name: "omnidot.", url: origin },

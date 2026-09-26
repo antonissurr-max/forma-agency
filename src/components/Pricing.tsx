@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { useLocale } from "../locale";
 import { pathFromView } from "../routing";
@@ -100,51 +100,52 @@ export function Pricing({
       aria-modal="true"
       aria-label={t.pricingTitle}
     >
-      <h1 className="sr-only">{t.pricingTitle}</h1>
+      <header className="pricing-layer__head">
+        <h1 className="pricing-layer__title">{t.pricingTitle}</h1>
+      </header>
 
-      <div
-        className="pricing-dots"
-        ref={trackRef}
-        style={{ "--plan-count": plans.length } as CSSProperties}
-      >
+      <div className="pricing-dots" ref={trackRef}>
         <div className="pricing-dots__track">
-          <span className="pricing-dots__line" aria-hidden="true" />
           {plans.map((plan, index) => {
             const isActive = index === active;
             const distance = Math.abs(index - active);
             const tone = DOT_TONES[index % DOT_TONES.length];
             return (
-              <article
-                key={plan.id}
-                data-dot={index}
-                className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
-                style={{ "--dot-distance": String(distance) } as CSSProperties}
-                aria-current={isActive ? "true" : undefined}
-              >
-                <div className="pricing-dot__ring">
-                  <div className="pricing-dot__content">
-                    <p className="pricing-dot__kicker">
-                      {String(index + 1).padStart(2, "0")}
-                    </p>
-                    <h2 className="pricing-dot__name">{plan.name}</h2>
-                    <p className="pricing-dot__price">{plan.price}</p>
-                    <p className="pricing-dot__blurb">{plan.blurb}</p>
-                    <ul className="pricing-dot__list">
-                      {plan.items.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                    <button
-                      type="button"
-                      className="pricing-dot__cta"
-                      tabIndex={isActive ? 0 : -1}
-                      onClick={() => onBrief(plan.id as PageId)}
-                    >
-                      {t.pricingCta} ↗
-                    </button>
+              <Fragment key={plan.id}>
+                {index > 0 ? (
+                  <span className="pricing-dots__link" aria-hidden="true" />
+                ) : null}
+                <article
+                  data-dot={index}
+                  className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
+                  style={{ "--dot-distance": String(distance) } as CSSProperties}
+                  aria-current={isActive ? "true" : undefined}
+                >
+                  <div className="pricing-dot__ring">
+                    <div className="pricing-dot__content">
+                      <p className="pricing-dot__kicker">
+                        {String(index + 1).padStart(2, "0")}
+                      </p>
+                      <h2 className="pricing-dot__name">{plan.name}</h2>
+                      <p className="pricing-dot__price">{plan.price}</p>
+                      <p className="pricing-dot__blurb">{plan.blurb}</p>
+                      <ul className="pricing-dot__list">
+                        {plan.items.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                      <button
+                        type="button"
+                        className="pricing-dot__cta"
+                        tabIndex={isActive ? 0 : -1}
+                        onClick={() => onBrief(plan.id as PageId)}
+                      >
+                        {t.pricingCta} ↗
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </article>
+              </Fragment>
             );
           })}
         </div>
