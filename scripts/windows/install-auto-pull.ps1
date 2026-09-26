@@ -44,5 +44,6 @@ Write-Host "Interval: every 2 minutes (skips if you have local unsaved/uncommitt
 Write-Host "Log: $env:LOCALAPPDATA\OmnidotSync\auto-pull.log"
 Write-Host ""
 Write-Host "To remove later:"
-Write-Host "  Unregister-ScheduledTask -TaskName $TaskName -Confirm:`$false"
+Write-Host "  powershell -ExecutionPolicy Bypass -File .\scripts\windows\uninstall-auto-pull.ps1"
+Write-Host "  # or: Unregister-ScheduledTask -TaskName $TaskName -Confirm:`$false"
 Write-Host ""
