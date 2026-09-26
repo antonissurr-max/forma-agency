@@ -47,7 +47,7 @@ export function Pricing({
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const [zoomAnim, setZoomAnim] = useState(false);
-  const [entering, setEntering] = useState(true);
+  const [enterPhase, setEnterPhase] = useState<"pending" | "in" | "done">("pending");
   const plans = t.pricingPlans;
   const activePlan = plans[active];
   const midCopy = Math.floor(LOOP_COPIES / 2);
@@ -295,11 +295,20 @@ export function Pricing({
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      setEntering(false);
+      setEnterPhase("done");
       return;
     }
-    const timer = window.setTimeout(() => setEntering(false), 2000);
-    return () => window.clearTimeout(timer);
+    let settleTimer = 0;
+    const raf = window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        setEnterPhase("in");
+        settleTimer = window.setTimeout(() => setEnterPhase("done"), 2100);
+      });
+    });
+    return () => {
+      window.cancelAnimationFrame(raf);
+      if (settleTimer) window.clearTimeout(settleTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -326,9 +335,11 @@ export function Pricing({
 
   return (
     <div
-      className={`pricing-layer${exiting ? " is-exit" : ""}${entering ? " is-enter" : ""}${
-        zoomed ? " is-zoomed" : ""
-      }${zoomAnim ? " is-zoom-anim" : ""}`}
+      className={`pricing-layer${exiting ? " is-exit" : ""}${
+        enterPhase === "pending" ? " is-enter-pending" : ""
+      }${enterPhase === "in" ? " is-enter" : ""}${zoomed ? " is-zoomed" : ""}${
+        zoomAnim ? " is-zoom-anim" : ""
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label={t.pricingTitle}

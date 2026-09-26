@@ -2170,31 +2170,52 @@ a.work__proof-line:hover {
   }
 }
 
+.pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__title,
+.pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__note,
+.pricing-layer.is-enter-pending .pricing-layer__foot {
+  opacity: 0;
+  transform: translate3d(0, 1.75rem, 0);
+}
+
+.pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__title,
+.pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__note,
+.pricing-layer.is-enter-pending .pricing-layer__foot,
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title,
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
 .pricing-layer.is-enter .pricing-layer__foot {
-  opacity: 0;
-  animation: pricing-copy-in 1.05s var(--ease) both;
+  transition:
+    opacity 1.05s var(--ease),
+    transform 1.05s var(--ease);
 }
 
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title {
-  animation-delay: 0.28s;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0.22s;
 }
 
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note {
-  animation-delay: 0.5s;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0.44s;
 }
 
 .pricing-layer.is-enter .pricing-layer__foot {
-  animation-delay: 0.72s;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0.66s;
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__title,
+  .pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__note,
+  .pricing-layer.is-enter-pending .pricing-layer__foot,
   .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title,
   .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
   .pricing-layer.is-enter .pricing-layer__foot {
-    animation: none;
     opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
 
