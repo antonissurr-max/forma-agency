@@ -51,6 +51,7 @@ export function Footer() {
             <Link to={pathFromView({ kind: "index" }, locale)}>
               {t.footerHome}
             </Link>
+            <Link to={pathFromView({ kind: "pricing" }, locale)}>{t.pricing}</Link>
             <Link to={pathFromView({ kind: "about" }, locale)}>{t.about}</Link>
             <Link to={pathFromView({ kind: "about" }, locale)}>
               {t.startBrief}

@@ -33,6 +33,10 @@ export function pathFromView(view: View, locale: Locale = "en"): string {
     return view.interest ? `${base}?interest=${view.interest}` : base;
   }
 
+  if (view.kind === "pricing") {
+    return `${prefix}/pricing`;
+  }
+
   return `${prefix}/${view.id}`;
 }
 
@@ -46,6 +50,7 @@ export function viewFromLocation(pathname: string, search: string): View {
     }
     return { kind: "about" };
   }
+  if (bare === "/pricing") return { kind: "pricing" };
   const id = bare.slice(1) as PageId;
   if (PAGE_IDS.includes(id)) return { kind: "page", id };
   return { kind: "notfound" };

@@ -21,8 +21,10 @@ export function Chrome({
   const location = useLocation();
   const navigate = useNavigate();
   const onAbout = view.kind === "about";
+  const onPricing = view.kind === "pricing";
   const onIndex = view.kind === "index";
   const BrandTag = onIndex ? "h1" : "p";
+  const showBrand = onIndex || onAbout || onPricing;
 
   return (
     <header className="chrome">
@@ -52,7 +54,7 @@ export function Chrome({
         </button>
       </div>
 
-      {onAbout ? (
+      {onAbout || onPricing ? (
         <button
           className="chrome__about"
           type="button"
@@ -61,12 +63,23 @@ export function Chrome({
           {t.close}
         </button>
       ) : (
-        <Link className="chrome__about" to={pathFromView({ kind: "about" }, locale)}>
-          {onIndex || view.kind === "notfound" ? t.contactUs : t.about}
-        </Link>
+        <div className="chrome__end">
+          <Link
+            className="chrome__pricing"
+            to={pathFromView({ kind: "pricing" }, locale)}
+          >
+            {t.pricing}
+          </Link>
+          <Link
+            className="chrome__about"
+            to={pathFromView({ kind: "about" }, locale)}
+          >
+            {onIndex || view.kind === "notfound" ? t.contactUs : t.about}
+          </Link>
+        </div>
       )}
 
-      {(onIndex || onAbout) && (
+      {showBrand && (
         <BrandTag className={`chrome__brand${onAbout ? " is-about" : ""}`}>
           <BrandWord
             live={onAbout}

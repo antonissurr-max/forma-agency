@@ -81,6 +81,24 @@ export function getRouteSeo(locale: Locale, view: View): RouteSeo {
     };
   }
 
+  if (view.kind === "pricing") {
+    return {
+      title: `${t.pricingTitle} — omnidot.`,
+      description: t.pricingLede.slice(0, 160),
+      path,
+      canonical,
+      image: DEFAULT_OG,
+      jsonLd: {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: t.pricingTitle,
+        description: t.pricingLede,
+        url: canonical,
+        isPartOf: { "@type": "WebSite", name: "omnidot.", url: SITE_ORIGIN },
+      },
+    };
+  }
+
   if (view.kind === "page") {
     const page = t.pages[view.id];
     const description = serviceDescription(locale, view.id);

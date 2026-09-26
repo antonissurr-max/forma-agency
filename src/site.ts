@@ -33,6 +33,31 @@ export type MediaItem = {
   poster?: string;
 };
 
+/** Homepage “Trusted by” strip — logos link out (partner backlinks). */
+export type Partner = {
+  name: string;
+  href: string;
+  logo: string;
+};
+
+export const partners: Partner[] = [
+  {
+    name: "Europatch",
+    href: "https://europatch.gr",
+    logo: "/images/partners/europatch.svg",
+  },
+  {
+    name: "Pyrgiotis OE",
+    href: "https://pyrgiotisoe.com/",
+    logo: "/images/partners/pyrgiotis.svg",
+  },
+  {
+    name: "Nafplio4Sails",
+    href: "https://nafplio4sails.com",
+    logo: "/images/partners/nafplio4sails.svg",
+  },
+];
+
 export const pages: {
   id: PageId;
   kicker: string;

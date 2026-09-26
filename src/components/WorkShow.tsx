@@ -3,6 +3,35 @@ import { BoxedTitle } from "./BoxedTitle";
 import { ExhibitGallery, mediaIsVideo } from "./ExhibitGallery";
 import { pageOrder, type MediaItem, type PageId } from "../site";
 import { useLocale } from "../locale";
+import type { ProofClient } from "../i18n";
+
+function resolveClients(
+  proof:
+    | {
+        client?: string;
+        story?: string;
+        value: string;
+        notes?: string[];
+        links?: { label: string; href: string }[];
+        clients?: ProofClient[];
+      }
+    | undefined,
+): ProofClient[] {
+  if (!proof) return [];
+  if (proof.clients?.length) return proof.clients;
+  if (proof.client) {
+    return [
+      {
+        client: proof.client,
+        story: proof.story,
+        value: proof.value,
+        notes: proof.notes,
+        links: proof.links,
+      },
+    ];
+  }
+  return [];
+}
 
 export function WorkShow({
   id,
@@ -23,7 +52,7 @@ export function WorkShow({
 }) {
   const { t } = useLocale();
   const copy = t.pages[id];
-  const gallery =
+  const pageGallery =
     media && media.length > 0
       ? media
       : id === "social"
@@ -35,30 +64,44 @@ export function WorkShow({
             : id === "web"
               ? t.webWork
               : [];
-  const isFolder = Boolean(copy.proof?.client);
+  const clients = resolveClients(copy.proof);
+  const isFolder = clients.length > 0;
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState(false);
-  const [folderOpen, setFolderOpen] = useState(false);
+  const [openClient, setOpenClient] = useState<string | null>(null);
   const exhibitRef = useRef<HTMLDivElement>(null);
+
+  const activeCase = clients.find((c) => c.client === openClient);
+  const gallery = !isFolder
+    ? pageGallery
+    : !openClient
+      ? []
+      : activeCase?.media !== undefined
+        ? activeCase.media
+        : pageGallery;
+  const mediaCount = gallery.length;
+  const showExhibit = mediaCount > 0 && (!isFolder || Boolean(openClient));
 
   const i = pageOrder.indexOf(id);
   const prev = pageOrder[(i - 1 + pageOrder.length) % pageOrder.length];
   const next = pageOrder[(i + 1) % pageOrder.length];
   const current = gallery[active];
-  const mediaCount = gallery.length;
-  const showExhibit = mediaCount > 0 && (!isFolder || folderOpen);
 
   useEffect(() => {
     setActive(0);
     setLightbox(false);
-    setFolderOpen(false);
+    setOpenClient(null);
   }, [id]);
+
+  useEffect(() => {
+    setActive(0);
+  }, [openClient]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (lightbox) setLightbox(false);
-        else if (folderOpen) setFolderOpen(false);
+        else if (openClient) setOpenClient(null);
         else onClose();
         return;
       }
@@ -76,48 +119,58 @@ export function WorkShow({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [lightbox, folderOpen, onClose, onNavigate, prev, next, mediaCount, showExhibit]);
+  }, [lightbox, openClient, onClose, onNavigate, prev, next, mediaCount, showExhibit]);
 
   const proofBlock = copy.proof ? (
-    <div className={`work__proof${copy.proof.client ? " work__proof--folder" : ""}`}>
+    <div className={`work__proof${isFolder ? " work__proof--folder" : ""}`}>
       <span className="work__proof-label">{copy.proof.label}</span>
-      {copy.proof.client ? (
-        <>
-          <button
-            className="work__proof-name"
-            type="button"
-            aria-expanded={folderOpen}
-            onClick={() => setFolderOpen((on) => !on)}
-          >
-            {copy.proof.client}
-          </button>
-          {folderOpen && (
-            <div className="work__proof-lines">
-              {copy.proof.story ? (
-                <p className="work__proof-story">{copy.proof.story}</p>
-              ) : null}
-              {copy.proof.value ? (
-                <div className="work__proof-line">{copy.proof.value}</div>
-              ) : null}
-              {copy.proof.notes?.map((note) => (
-                <div key={note} className="work__proof-line">
-                  {note}
-                </div>
-              ))}
-              {copy.proof.links?.map((link) => (
-                <a
-                  key={link.href}
-                  className="work__proof-line"
-                  href={link.href}
-                  target="_blank"
-                  rel="noreferrer"
+      {clients.length > 0 ? (
+        <div className="work__proof-clients">
+          {clients.map((item) => {
+            const open = openClient === item.client;
+            return (
+              <div key={item.client} className="work__proof-client">
+                <button
+                  className="work__proof-name"
+                  type="button"
+                  aria-expanded={open}
+                  onClick={() =>
+                    setOpenClient((cur) => (cur === item.client ? null : item.client))
+                  }
                 >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          )}
-        </>
+                  {item.client}
+                </button>
+                {open && (
+                  <div className="work__proof-lines">
+                    {item.story ? <p className="work__proof-story">{item.story}</p> : null}
+                    {item.value ? <div className="work__proof-line">{item.value}</div> : null}
+                    {item.notes?.map((note) => (
+                      <div key={note} className="work__proof-line">
+                        {note}
+                      </div>
+                    ))}
+                    {item.links?.map((link) => (
+                      <a
+                        key={link.href}
+                        className="work__proof-line"
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                    {item.media && item.media.length === 0 ? (
+                      <div className="work__proof-line work__proof-line--muted">
+                        {t.mediaSoon}
+                      </div>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       ) : copy.proof.links && copy.proof.links.length > 0 ? (
         <div className="work__proof-lines">
           {copy.proof.links.map((link) => (
@@ -223,11 +276,11 @@ export function WorkShow({
         onClick={() => onNavigate(next)}
         aria-label={`${t.next}: ${t.pages[next].title}`}
       >
-        <span>→</span>
         <span>{t.next}</span>
+        <span>→</span>
       </button>
 
-      {lightbox && current && (
+      {lightbox && current ? (
         <div
           className="lightbox"
           role="dialog"
@@ -246,12 +299,7 @@ export function WorkShow({
               onClick={(e) => e.stopPropagation()}
             />
           ) : (
-            <img
-              className="lightbox__media"
-              src={current.src}
-              alt={current.title}
-              onClick={(e) => e.stopPropagation()}
-            />
+            <img className="lightbox__media" src={current.src} alt={current.title} />
           )}
           <button
             className="lightbox__close"
@@ -261,7 +309,7 @@ export function WorkShow({
             {t.close}
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

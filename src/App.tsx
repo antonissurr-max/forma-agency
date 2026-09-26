@@ -5,7 +5,9 @@ import { Chrome } from "./components/Chrome";
 import { Cursor } from "./components/Cursor";
 import { Footer } from "./components/Footer";
 import { NotFound } from "./components/NotFound";
+import { Partners } from "./components/Partners";
 import { Preloader, shouldShowIntro } from "./components/Preloader";
+import { Pricing } from "./components/Pricing";
 import { ServiceList } from "./components/ServicePanel";
 import { WorkShow } from "./components/WorkShow";
 import { Works } from "./components/Works";
@@ -34,7 +36,8 @@ export default function App() {
     [navigate, locale],
   );
   const goIndex = useCallback(() => {
-    const fromPanel = view.kind === "page" || view.kind === "about";
+    const fromPanel =
+      view.kind === "page" || view.kind === "about" || view.kind === "pricing";
     const reduce =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -132,14 +135,25 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [view.kind, goIndex]);
 
+  useEffect(() => {
+    if (view.kind !== "pricing") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") goIndex();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [view.kind, goIndex]);
+
   const stage =
     view.kind === "index"
       ? "is-index"
       : view.kind === "about"
         ? "is-about"
-        : view.kind === "notfound"
-          ? "is-notfound"
-          : "is-work";
+        : view.kind === "pricing"
+          ? "is-pricing"
+          : view.kind === "notfound"
+            ? "is-notfound"
+            : "is-work";
 
   return (
     <div className={`stage ${stage} ${ready ? "is-ready" : ""}`}>
@@ -164,6 +178,10 @@ export default function App() {
         />
       )}
 
+      {view.kind === "pricing" && (
+        <Pricing exiting={panelExit} onClose={goIndex} onBrief={goAbout} />
+      )}
+
       {view.kind === "page" && (
         <WorkShow
           id={view.id}
@@ -178,6 +196,7 @@ export default function App() {
 
       {view.kind === "notfound" && <NotFound />}
 
+      <Partners />
       <Footer />
     </div>
   );

@@ -12,6 +12,7 @@ const navEn = [
   { href: "/content", label: "Content Creation" },
   { href: "/performance", label: "Performance Marketing" },
   { href: "/web", label: "Web Development" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About / Contact" },
 ];
 
@@ -20,6 +21,7 @@ const navEl = [
   { href: "/el/content", label: "Δημιουργία Περιεχομένου" },
   { href: "/el/performance", label: "Performance Marketing" },
   { href: "/el/web", label: "Ανάπτυξη Ιστοσελίδων" },
+  { href: "/el/pricing", label: "Τιμολόγηση" },
   { href: "/el/about", label: "Σχετικά / Επικοινωνία" },
 ];
 
@@ -185,6 +187,31 @@ const routeDefs = [
     },
     type: "about",
   },
+  {
+    id: "pricing",
+    enPath: "/pricing",
+    elPath: "/el/pricing",
+    enFile: "pricing/index.html",
+    elFile: "el/pricing/index.html",
+    image: `${origin}/images/work-omnidot.jpg`,
+    en: {
+      title: "Pricing - omnidot.",
+      description:
+        "Clear monthly retainers and project fees for social, content, performance and web. Ad spend is always separate.",
+      h1: "Pricing",
+      body: "Clear monthly retainers and project fees. Ad spend is always separate. Scope is written down before we start. Social from €750/mo, content packs from €350, performance from €350/mo, web from €800.",
+      story: "",
+    },
+    el: {
+      title: "Τιμολόγηση - omnidot.",
+      description:
+        "Καθαρά μηνιαία retainers και project fees για social, content, performance και web. Το ad spend είναι πάντα ξεχωριστά.",
+      h1: "Τιμολόγηση",
+      body: "Καθαρά μηνιαία retainers και project fees. Το ad spend είναι πάντα ξεχωριστά. Το scope γράφεται πριν ξεκινήσουμε. Social από €750/μήνα, content packs από €350, performance από €350/μήνα, web από €800.",
+      story: "",
+    },
+    type: "pricing",
+  },
 ];
 
 function escapeHtml(value) {
@@ -228,6 +255,16 @@ function jsonLdFor(def, locale) {
       "@context": "https://schema.org",
       "@type": "AboutPage",
       name: locale === "el" ? "Σχετικά" : "About",
+      url,
+      isPartOf: { "@type": "WebSite", name: "omnidot.", url: origin },
+    };
+  }
+  if (def.type === "pricing") {
+    return {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: locale === "el" ? "Τιμολόγηση" : "Pricing",
+      description: copy.description,
       url,
       isPartOf: { "@type": "WebSite", name: "omnidot.", url: origin },
     };

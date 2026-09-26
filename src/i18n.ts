@@ -22,12 +22,23 @@ export type ServicePoint = {
   body: string;
 };
 
+export type ProofClient = {
+  client: string;
+  story?: string;
+  value: string;
+  notes?: string[];
+  links?: { label: string; href: string }[];
+  /** When set, gallery switches to these assets while this client is open */
+  media?: MediaItem[];
+};
+
 export type Copy = {
   metaTitle: string;
   metaDescription: string;
   langLabel: string;
   homeAria: string;
   about: string;
+  pricing: string;
   close: string;
   previous: string;
   next: string;
@@ -53,6 +64,21 @@ export type Copy = {
   landingLede: string;
   startBrief: string;
   contactUs: string;
+  trustedBy: string;
+  trustedByBody: string;
+  pricingTitle: string;
+  pricingLede: string;
+  pricingNote: string;
+  pricingCta: string;
+  pricingSetup: string;
+  mediaSoon: string;
+  pricingPlans: {
+    id: string;
+    name: string;
+    price: string;
+    blurb: string;
+    items: string[];
+  }[];
   homeMobileHeadline: string;
   homeMobileAboutTitle: string;
   homeMobileAboutBody: string;
@@ -83,12 +109,12 @@ export type Copy = {
       proof?: {
         label: string;
         client?: string;
-        /** Short case narrative — who, what, outcome */
         story?: string;
         value: string;
         notes?: string[];
         href?: string;
         links?: { label: string; href: string }[];
+        clients?: ProofClient[];
       };
       points: ServicePoint[];
     }
@@ -210,6 +236,7 @@ export const copy: Record<Locale, Copy> = {
     langLabel: "Language",
     homeAria: "omnidot — home",
     about: "About",
+    pricing: "Pricing",
     close: "Close",
     previous: "Previous",
     next: "Next",
@@ -237,6 +264,63 @@ export const copy: Record<Locale, Copy> = {
     landingLede: "Athens · pick a service or start a brief",
     startBrief: "Start a brief",
     contactUs: "Contact us",
+    trustedBy: "Trusted by",
+    trustedByBody: "Brands we work with — and backlink to.",
+    pricingTitle: "Pricing",
+    pricingLede:
+      "Clear monthly retainers and project fees. Ad spend is always separate. Scope is written down before we start.",
+    pricingNote:
+      "Prices in EUR, excl. VAT where applicable. Minimum 3 months on retainers. Creative production can be bundled or billed per asset.",
+    pricingCta: "Start a brief",
+    pricingSetup: "One-time setup",
+    mediaSoon: "Media soon",
+    pricingPlans: [
+      {
+        id: "social",
+        name: "Social Media Management",
+        price: "From €750 / mo",
+        blurb: "Presence that stays consistent — plan, posts, light community, monthly report.",
+        items: [
+          "Starter €450–650 · 1 channel · 8–12 posts",
+          "Growth €750–1,100 · 2 channels · 12–16 posts",
+          "Pro €1,200–1,800 · fuller community + strategy",
+        ],
+      },
+      {
+        id: "content",
+        name: "Content Creation",
+        price: "From €350 / pack",
+        blurb: "Photo and video ready for feed, ads and web — concept through edit.",
+        items: [
+          "8 assets €350–550",
+          "12–16 assets + short video €650–1,000",
+          "Half-day / full shoot on request",
+        ],
+      },
+      {
+        id: "performance",
+        name: "Performance Marketing",
+        price: "From €350 / mo",
+        blurb: "Meta & Google management. Your ad budget stays yours — we charge a fee.",
+        items: [
+          "Minimum €300–450 / mo management",
+          "Tiers by spend · % or flat, whichever is higher",
+          "Creative for ads billed separately",
+          "Campaign setup €150–300 once",
+        ],
+      },
+      {
+        id: "web",
+        name: "Web Development",
+        price: "From €800",
+        blurb: "Sites and landings that load fast, rank cleanly, and stay yours.",
+        items: [
+          "Landing page €800–1,500",
+          "Brochure site €1,800–3,500",
+          "CMS / care from €50–150 / mo",
+        ],
+      },
+    ],
     homeMobileHeadline: "Clear work. Real growth.",
     homeMobileAboutTitle: "One partner. Four crafts.",
     homeMobileAboutBody:
@@ -272,14 +356,27 @@ export const copy: Record<Locale, Copy> = {
         ],
         proof: {
           label: "Selected",
-          client: "Europatch",
-          story:
-            "Europatch sells cold asphalt to B2B buyers — a category that rarely goes viral. We built a steady organic presence around real product use and how-to content. In one year: 4.5M Facebook and 2.5M Instagram views, 100% organic.",
-          value: "4.5M Facebook · 2.5M Instagram · 100% organic · 1 year",
-          notes: [
-            "1.2M unique viewers · 0 from ads",
-            "Reel 397.9K · Facebook post 120.8K",
-            "Last month: 96% of views from non-followers",
+          value: "",
+          clients: [
+            {
+              client: "Europatch",
+              story:
+                "Europatch sells cold asphalt to B2B buyers — a category that rarely goes viral. We built a steady organic presence around real product use and how-to content. In one year: 4.5M Facebook and 2.5M Instagram views, 100% organic.",
+              value: "4.5M Facebook · 2.5M Instagram · 100% organic · 1 year",
+              notes: [
+                "1.2M unique viewers · 0 from ads",
+                "Reel 397.9K · Facebook post 120.8K",
+                "Last month: 96% of views from non-followers",
+              ],
+            },
+            {
+              client: "Nafplio4Sails",
+              story:
+                "Nafplio4Sails — sailing and charter content for social. Video and stills from the water; gallery assets landing here next.",
+              value: "Social + content partnership · videos coming soon",
+              notes: ["Add your Nafplio4Sails videos under public/images or /videos"],
+              media: [],
+            },
           ],
         },
         points: [
@@ -315,11 +412,24 @@ export const copy: Record<Locale, Copy> = {
         ],
         proof: {
           label: "Selected",
-          client: "Europatch",
-          story:
-            "Same Europatch partnership from the content side: how-to reels on the road, product in use, cuts built for feed and Reels. That library powered the organic reach — including one reel to 397.9K.",
-          value: "The content behind 4.5M Facebook · 2.5M Instagram",
-          notes: ["How-to reels on the road · product in use · one reel to 397.9K"],
+          value: "",
+          clients: [
+            {
+              client: "Europatch",
+              story:
+                "Same Europatch partnership from the content side: how-to reels on the road, product in use, cuts built for feed and Reels. That library powered the organic reach — including one reel to 397.9K.",
+              value: "The content behind 4.5M Facebook · 2.5M Instagram",
+              notes: ["How-to reels on the road · product in use · one reel to 397.9K"],
+            },
+            {
+              client: "Nafplio4Sails",
+              story:
+                "Content creation for Nafplio4Sails — sail, sea and charter films. Drop your finished videos into the project and we will wire them into this folder.",
+              value: "Video + stills for sailing / charter · coming soon",
+              notes: ["Placeholder — replace with Nafplio4Sails cuts"],
+              media: [],
+            },
+          ],
         },
         points: [
           {
@@ -525,6 +635,7 @@ export const copy: Record<Locale, Copy> = {
     langLabel: "Γλώσσα",
     homeAria: "omnidot — αρχική",
     about: "Σχετικά",
+    pricing: "Τιμές",
     close: "Κλείσιμο",
     previous: "Προηγούμενο",
     next: "Επόμενο",
@@ -552,6 +663,63 @@ export const copy: Record<Locale, Copy> = {
     landingLede: "Αθήνα · διάλεξε υπηρεσία ή ξεκίνα brief",
     startBrief: "Ξεκίνα ένα brief",
     contactUs: "Επικοινωνία",
+    trustedBy: "Μας εμπιστεύονται",
+    trustedByBody: "Συνεργάτες μας — με σύνδεσμο προς τις σελίδες τους.",
+    pricingTitle: "Τιμολόγηση",
+    pricingLede:
+      "Καθαρά μηνιαία πακέτα και τιμές έργου. Το ad spend μένει πάντα δικό σας. Το scope γράφεται πριν ξεκινήσουμε.",
+    pricingNote:
+      "Τιμές σε €, χωρίς ΦΠΑ όπου εφαρμόζεται. Minimum 3 μήνες στα retainers. Το creative μπορεί να μπει στο πακέτο ή ανά asset.",
+    pricingCta: "Ξεκίνα brief",
+    pricingSetup: "Setup μία φορά",
+    mediaSoon: "Media σύντομα",
+    pricingPlans: [
+      {
+        id: "social",
+        name: "Διαχείριση Social Media",
+        price: "Από €750 / μήνα",
+        blurb: "Σταθερή παρουσία — πλάνο, posts, ελαφρύ community, μηνιαίο report.",
+        items: [
+          "Starter €450–650 · 1 κανάλι · 8–12 posts",
+          "Growth €750–1.100 · 2 κανάλια · 12–16 posts",
+          "Pro €1.200–1.800 · fuller community + στρατηγική",
+        ],
+      },
+      {
+        id: "content",
+        name: "Δημιουργία Περιεχομένου",
+        price: "Από €350 / πακέτο",
+        blurb: "Φωτο και video έτοιμα για feed, ads και web — από concept έως edit.",
+        items: [
+          "8 assets €350–550",
+          "12–16 assets + short video €650–1.000",
+          "Half-day / full shoot κατόπιν συνεννόησης",
+        ],
+      },
+      {
+        id: "performance",
+        name: "Performance Marketing",
+        price: "Από €350 / μήνα",
+        blurb: "Διαχείριση Meta & Google. Το budget διαφημίσεων μένει δικό σας.",
+        items: [
+          "Minimum €300–450 / μήνα management",
+          "Tiers ανά spend · % ή flat, όποιο μεγαλύτερο",
+          "Creative για ads ξεχωριστά",
+          "Setup καμπάνιας €150–300 μία φορά",
+        ],
+      },
+      {
+        id: "web",
+        name: "Ανάπτυξη Ιστοσελίδων",
+        price: "Από €800",
+        blurb: "Sites και landings που φορτώνουν γρήγορα, rank-άρουν καθαρά και μένουν δικά σας.",
+        items: [
+          "Landing page €800–1.500",
+          "Brochure site €1.800–3.500",
+          "CMS / care από €50–150 / μήνα",
+        ],
+      },
+    ],
     homeMobileHeadline: "Καθαρή δουλειά. Πραγματική ανάπτυξη.",
     homeMobileAboutTitle: "Ένας συνεργάτης. Τέσσερα crafts.",
     homeMobileAboutBody:
@@ -587,14 +755,27 @@ export const copy: Record<Locale, Copy> = {
         ],
         proof: {
           label: "Επιλεγμένο",
-          client: "Europatch",
-          story:
-            "Η Europatch πουλάει ψυχρή άσφαλτο σε B2B πελάτες — κατηγορία που σπάνια γίνεται viral online. Χτίσαμε σταθερή οργανική παρουσία γύρω από πραγματική χρήση προϊόντος και how-to περιεχόμενο. Σε έναν χρόνο: 4.5 εκ. views στο Facebook και 2.5 εκ. στο Instagram, 100% organic.",
-          value: "4.5 εκ. Facebook · 2.5 εκ. Instagram · 100% organic · 1 χρόνος",
-          notes: [
-            "1.2 εκ. unique viewers · 0 από ads",
-            "Reel 397.9K · Facebook post 120.8K",
-            "Τελευταίος μήνας: 96% των views από non-followers",
+          value: "",
+          clients: [
+            {
+              client: "Europatch",
+              story:
+                "Η Europatch πουλάει ψυχρή άσφαλτο σε B2B πελάτες — κατηγορία που σπάνια γίνεται viral online. Χτίσαμε σταθερή οργανική παρουσία γύρω από πραγματική χρήση προϊόντος και how-to περιεχόμενο. Σε έναν χρόνο: 4.5 εκ. views στο Facebook και 2.5 εκ. στο Instagram, 100% organic.",
+              value: "4.5 εκ. Facebook · 2.5 εκ. Instagram · 100% organic · 1 χρόνος",
+              notes: [
+                "1.2 εκ. unique viewers · 0 από ads",
+                "Reel 397.9K · Facebook post 120.8K",
+                "Τελευταίος μήνας: 96% των views από non-followers",
+              ],
+            },
+            {
+              client: "Nafplio4Sails",
+              story:
+                "Nafplio4Sails — περιεχόμενο ιστιοπλοΐας και charter για social. Video και stills από τη θάλασσα· τα αρχεία μπαίνουν εδώ στη συνέχεια.",
+              value: "Συνεργασία social + content · videos σύντομα",
+              notes: ["Πρόσθεσε τα video Nafplio4Sails στο project"],
+              media: [],
+            },
           ],
         },
         points: [
@@ -630,11 +811,24 @@ export const copy: Record<Locale, Copy> = {
         ],
         proof: {
           label: "Επιλεγμένο",
-          client: "Europatch",
-          story:
-            "Η ίδια συνεργασία Europatch από την πλευρά του content: how-to reels στον δρόμο, προϊόν σε χρήση, cuts για feed και Reels. Αυτή η βιβλιοθήκη στήριξε την οργανική εμβέλεια — με ένα reel στα 397.9K.",
-          value: "Το περιεχόμενο πίσω από 4.5 εκ. Facebook · 2.5 εκ. Instagram",
-          notes: ["How-to reels στον δρόμο · προϊόν σε χρήση · ένα reel στα 397.9K"],
+          value: "",
+          clients: [
+            {
+              client: "Europatch",
+              story:
+                "Η ίδια συνεργασία Europatch από την πλευρά του content: how-to reels στον δρόμο, προϊόν σε χρήση, cuts για feed και Reels. Αυτή η βιβλιοθήκη στήριξε την οργανική εμβέλεια — με ένα reel στα 397.9K.",
+              value: "Το περιεχόμενο πίσω από 4.5 εκ. Facebook · 2.5 εκ. Instagram",
+              notes: ["How-to reels στον δρόμο · προϊόν σε χρήση · ένα reel στα 397.9K"],
+            },
+            {
+              client: "Nafplio4Sails",
+              story:
+                "Δημιουργία περιεχομένου για Nafplio4Sails — ιστιοπλοΐα, θάλασσα και charter. Βάλε τα έτοιμα video στο project και θα συνδεθούν σε αυτό το folder.",
+              value: "Video + stills για sailing / charter · σύντομα",
+              notes: ["Placeholder — αντικατέστησε με cuts Nafplio4Sails"],
+              media: [],
+            },
+          ],
         },
         points: [
           {
