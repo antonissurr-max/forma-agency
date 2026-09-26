@@ -22,25 +22,28 @@ export function Pricing({
   const [active, setActive] = useState(0);
   const plans = t.pricingPlans;
 
-  const goTo = useCallback((index: number) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const next = Math.max(0, Math.min(plans.length - 1, index));
-    if (next === activeRef.current && lockedRef.current) return;
+  const goTo = useCallback(
+    (index: number) => {
+      const track = trackRef.current;
+      if (!track) return;
+      const next = Math.max(0, Math.min(plans.length - 1, index));
+      if (next === activeRef.current && lockedRef.current) return;
 
-    const node = track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
-    if (!node) return;
+      const node = track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
+      if (!node) return;
 
-    activeRef.current = next;
-    setActive(next);
-    lockedRef.current = true;
-    if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
-    node.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-    unlockTimer.current = window.setTimeout(() => {
-      lockedRef.current = false;
-      unlockTimer.current = null;
-    }, 640);
-  }, [plans.length]);
+      activeRef.current = next;
+      setActive(next);
+      lockedRef.current = true;
+      if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
+      node.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+      unlockTimer.current = window.setTimeout(() => {
+        lockedRef.current = false;
+        unlockTimer.current = null;
+      }, 640);
+    },
+    [plans.length],
+  );
 
   useEffect(() => {
     const track = trackRef.current;
@@ -100,9 +103,18 @@ export function Pricing({
       aria-modal="true"
       aria-label={t.pricingTitle}
     >
-      <header className="pricing-layer__head">
+      <aside className="pricing-layer__aside">
         <h1 className="pricing-layer__title">{t.pricingTitle}</h1>
-      </header>
+        <p className="pricing-layer__note">{t.pricingNote}</p>
+        <div className="pricing-layer__foot">
+          <button type="button" className="pricing-layer__brief" onClick={() => onBrief()}>
+            {t.startBrief} ↗
+          </button>
+          <Link className="pricing-layer__home" to={pathFromView({ kind: "index" }, locale)}>
+            {t.footerHome}
+          </Link>
+        </div>
+      </aside>
 
       <div className="pricing-dots" ref={trackRef}>
         <div className="pricing-dots__track">
@@ -151,29 +163,18 @@ export function Pricing({
         </div>
       </div>
 
-      <div className="pricing-layer__meta">
-        <p className="pricing-layer__note">{t.pricingNote}</p>
-        <div className="pricing-layer__foot">
-          <button type="button" className="pricing-layer__brief" onClick={() => onBrief()}>
-            {t.startBrief} ↗
-          </button>
-          <Link className="pricing-layer__home" to={pathFromView({ kind: "index" }, locale)}>
-            {t.footerHome}
-          </Link>
-        </div>
-        <div className="pricing-dots__pips" role="tablist" aria-label={t.pricingTitle}>
-          {plans.map((plan, index) => (
-            <button
-              key={plan.id}
-              type="button"
-              role="tab"
-              aria-selected={index === active}
-              aria-label={plan.name}
-              className={`pricing-dots__pip${index === active ? " is-on" : ""}`}
-              onClick={() => goTo(index)}
-            />
-          ))}
-        </div>
+      <div className="pricing-dots__pips" role="tablist" aria-label={t.pricingTitle}>
+        {plans.map((plan, index) => (
+          <button
+            key={plan.id}
+            type="button"
+            role="tab"
+            aria-selected={index === active}
+            aria-label={plan.name}
+            className={`pricing-dots__pip${index === active ? " is-on" : ""}`}
+            onClick={() => goTo(index)}
+          />
+        ))}
       </div>
     </div>
   );
