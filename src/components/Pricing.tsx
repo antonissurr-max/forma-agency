@@ -215,7 +215,17 @@ export function Pricing({
       <aside className="pricing-layer__aside">
         <div className="pricing-layer__aside-inner">
           <h1 className="pricing-layer__title">
-            {zoomed && activePlan ? activePlan.name : t.pricingTitle}
+            {zoomed && activePlan ? (
+              <>
+                <span className="pricing-layer__title-lead">{activePlan.name}</span>
+                <span className="pricing-layer__title-sub">{activePlan.price}</span>
+              </>
+            ) : (
+              <>
+                <span className="pricing-layer__title-lead">{t.pricingTitleLead}</span>
+                <span className="pricing-layer__title-sub">{t.pricingTitleSub}</span>
+              </>
+            )}
           </h1>
           <p className="pricing-layer__note">
             {zoomed && activePlan ? activePlan.blurb : t.pricingNote}

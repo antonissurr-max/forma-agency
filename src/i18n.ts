@@ -67,6 +67,8 @@ export type Copy = {
   trustedBy: string;
   trustedByBody: string;
   pricingTitle: string;
+  pricingTitleLead: string;
+  pricingTitleSub: string;
   pricingLede: string;
   pricingNote: string;
   pricingCta: string;
@@ -267,6 +269,8 @@ export const copy: Record<Locale, Copy> = {
     trustedBy: "Trusted by",
     trustedByBody: "Brands we work with — and backlink to.",
     pricingTitle: "Packages & pricing",
+    pricingTitleLead: "Packages",
+    pricingTitleSub: "& pricing",
     pricingLede:
       "Clear monthly retainers and project fees. Ad spend is always separate. Scope is written down before we start.",
     pricingNote:
@@ -666,6 +670,8 @@ export const copy: Record<Locale, Copy> = {
     trustedBy: "Μας εμπιστεύονται",
     trustedByBody: "Συνεργάτες μας — με σύνδεσμο προς τις σελίδες τους.",
     pricingTitle: "Πακέτα & τιμές",
+    pricingTitleLead: "Πακέτα",
+    pricingTitleSub: "& τιμές",
     pricingLede:
       "Καθαρά μηνιαία πακέτα και τιμές έργου. Το ad spend μένει πάντα δικό σας. Το scope γράφεται πριν ξεκινήσουμε.",
     pricingNote:
