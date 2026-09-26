@@ -2146,7 +2146,7 @@ a.work__proof-line:hover {
   inset: 0;
   z-index: 48;
   display: grid;
-  grid-template-columns: minmax(220px, 36%) minmax(0, 1fr);
+  grid-template-columns: minmax(260px, 44%) minmax(0, 1fr);
   align-items: stretch;
   overflow: hidden;
   background: var(--paper);
@@ -2177,8 +2177,8 @@ a.work__proof-line:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  padding: 0 clamp(24px, 5vw, 72px);
+  align-items: flex-end;
+  padding: 0 clamp(16px, 3vw, 36px) 0 clamp(24px, 5vw, 64px);
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -2187,8 +2187,11 @@ a.work__proof-line:hover {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  max-width: 28rem;
+  max-width: 22rem;
+  width: 100%;
+  margin-right: clamp(8px, 2vw, 28px);
   pointer-events: auto;
+  text-align: left;
 }
 
 .pricing-layer__title {
@@ -2373,59 +2376,43 @@ a.work__proof-line:hover {
     0 32px 80px color-mix(in srgb, var(--navy) 14%, transparent);
 }
 
-/* Click zoom — active circle expands like Beaugonin project open */
-.pricing-layer.is-zoomed .pricing-dots {
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  scroll-snap-type: none;
-}
-
-.pricing-layer.is-zoomed .pricing-dots__track {
-  display: contents;
-  padding: 0;
-}
-
-.pricing-layer.is-zoomed .pricing-dots__link,
-.pricing-layer.is-zoomed .pricing-dot:not(.is-active) {
-  display: none;
-}
-
+/* Zoom keeps gallery scrollable — active circle scales up in place */
 .pricing-layer.is-zoomed .pricing-dot.is-active {
-  width: min(78vh, 640px);
-  height: min(78vh, 640px);
   z-index: 5;
-  transition: width 0.55s var(--ease), height 0.55s var(--ease);
 }
 
 .pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__ring {
-  width: 100%;
-  height: 100%;
-  transform: scale(1);
-  animation: pricing-zoom-in 0.55s var(--ease) both;
+  transform: scale(1.18);
+  animation: pricing-zoom-in 0.45s var(--ease) both;
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--navy) 18%, var(--dot-tone)),
     0 40px 100px color-mix(in srgb, var(--navy) 18%, transparent);
 }
 
+.pricing-layer.is-zoomed .pricing-dot:not(.is-active) .pricing-dot__ring {
+  opacity: 0.22;
+  filter: blur(12px);
+  transform: scale(0.9);
+}
+
 @keyframes pricing-zoom-in {
   from {
-    transform: scale(0.72);
-    opacity: 0.85;
+    transform: scale(0.92);
+    opacity: 0.9;
   }
   to {
-    transform: scale(1);
+    transform: scale(1.18);
     opacity: 1;
   }
 }
 
 .pricing-layer.is-zoomed .pricing-dots__pips {
-  opacity: 0.35;
+  opacity: 0.45;
 }
 
-.pricing-layer.is-zoomed .pricing-dot__content {
-  width: min(72%, 380px);
-  max-height: 72%;
+.pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__content {
+  width: min(72%, 360px);
+  max-height: 70%;
 }
 
 .pricing-dot__content {
@@ -2552,12 +2539,14 @@ a.work__proof-line:hover {
 
   .pricing-layer__aside {
     justify-content: flex-start;
+    align-items: flex-start;
     padding: 56px var(--chrome) 8px;
   }
 
   .pricing-layer__aside-inner {
     gap: 10px;
     max-width: none;
+    margin-right: 0;
   }
 
   .pricing-layer__title {
@@ -2589,10 +2578,8 @@ a.work__proof-line:hover {
     max-height: 82%;
   }
 
-  .pricing-layer.is-zoomed .pricing-dot.is-active,
   .pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__ring {
-    width: min(84vw, 440px);
-    height: min(84vw, 440px);
+    transform: scale(1.1);
   }
 }
 

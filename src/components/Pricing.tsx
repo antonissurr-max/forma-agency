@@ -86,7 +86,6 @@ export function Pricing({
     if (!nodes.length) return;
 
     const syncActiveFromScroll = () => {
-      if (zoomedRef.current) return;
       const center = track.scrollTop + track.clientHeight / 2;
       let best = activeRef.current;
       let bestDist = Number.POSITIVE_INFINITY;
@@ -116,12 +115,8 @@ export function Pricing({
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (zoomedRef.current) {
-        e.preventDefault();
-        return;
-      }
-
-      // Native free scroll; only intercept at edges for circular loop
+      // Free continuous scroll always, including zoom mode.
+      // Soft loop only at the edges.
       const maxScroll = Math.max(0, track.scrollHeight - track.clientHeight);
       const atEnd = track.scrollTop >= maxScroll - 1;
       const atStart = track.scrollTop <= 1;
