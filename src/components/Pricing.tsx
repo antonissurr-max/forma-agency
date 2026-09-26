@@ -29,9 +29,11 @@ function offsetInScroller(el: HTMLElement, scroller: HTMLElement) {
 }
 
 export function Pricing({
+  ready = true,
   exiting = false,
   onBrief,
 }: {
+  ready?: boolean;
   exiting?: boolean;
   onClose: () => void;
   onBrief: (interest?: PageId) => void;
@@ -291,6 +293,10 @@ export function Pricing({
   }, [plans.length, midCopy]);
 
   useEffect(() => {
+    if (!ready) {
+      setEnterPhase("pending");
+      return;
+    }
     const reduce =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -309,7 +315,7 @@ export function Pricing({
       window.cancelAnimationFrame(raf);
       if (settleTimer) window.clearTimeout(settleTimer);
     };
-  }, []);
+  }, [ready]);
 
   useEffect(() => {
     if (!zoomed) return;

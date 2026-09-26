@@ -179,7 +179,12 @@ export default function App() {
       )}
 
       {view.kind === "pricing" && (
-        <Pricing exiting={panelExit} onClose={goIndex} onBrief={goAbout} />
+        <Pricing
+          ready={ready}
+          exiting={panelExit}
+          onClose={goIndex}
+          onBrief={goAbout}
+        />
       )}
 
       {view.kind === "page" && (
