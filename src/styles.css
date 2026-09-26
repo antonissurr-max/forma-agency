@@ -2162,45 +2162,39 @@ a.work__proof-line:hover {
 @keyframes pricing-copy-in {
   from {
     opacity: 0;
-    transform: translate3d(0, 1.6rem, 0);
-    filter: blur(6px);
+    transform: translate3d(0, 1.75rem, 0);
   }
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
-    filter: blur(0);
   }
 }
 
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-lead,
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub,
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title,
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
 .pricing-layer.is-enter .pricing-layer__foot {
-  animation: pricing-copy-in 0.95s var(--ease) both;
+  opacity: 0;
+  animation: pricing-copy-in 1.05s var(--ease) both;
 }
 
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-lead {
-  animation-delay: 0.18s;
-}
-
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub {
-  animation-delay: 0.32s;
+.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title {
+  animation-delay: 0.28s;
 }
 
 .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note {
-  animation-delay: 0.48s;
+  animation-delay: 0.5s;
 }
 
 .pricing-layer.is-enter .pricing-layer__foot {
-  animation-delay: 0.64s;
+  animation-delay: 0.72s;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-lead,
-  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title-sub,
+  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title,
   .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
   .pricing-layer.is-enter .pricing-layer__foot {
     animation: none;
+    opacity: 1;
   }
 }
 

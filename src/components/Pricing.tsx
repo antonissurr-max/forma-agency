@@ -298,7 +298,7 @@ export function Pricing({
       setEntering(false);
       return;
     }
-    const timer = window.setTimeout(() => setEntering(false), 1600);
+    const timer = window.setTimeout(() => setEntering(false), 2000);
     return () => window.clearTimeout(timer);
   }, []);
 
