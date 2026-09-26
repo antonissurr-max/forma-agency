@@ -65,7 +65,6 @@ export type Copy = {
   startBrief: string;
   contactUs: string;
   trustedBy: string;
-  trustedByBody: string;
   pricingTitle: string;
   pricingTitleLead: string;
   pricingTitleSub: string;
@@ -268,7 +267,6 @@ export const copy: Record<Locale, Copy> = {
     startBrief: "Start a brief",
     contactUs: "Contact us",
     trustedBy: "Trusted by",
-    trustedByBody: "Brands we work with — and backlink to.",
     pricingTitle: "Packages & pricing",
     pricingTitleLead: "Packages",
     pricingTitleSub: "& pricing",
@@ -375,14 +373,6 @@ export const copy: Record<Locale, Copy> = {
                 "Last month: 96% of views from non-followers",
               ],
             },
-            {
-              client: "Nafplio4Sails",
-              story:
-                "Nafplio4Sails — sailing and charter content for social. Video and stills from the water; gallery assets landing here next.",
-              value: "Social + content partnership · videos coming soon",
-              notes: ["Add your Nafplio4Sails videos under public/images or /videos"],
-              media: [],
-            },
           ],
         },
         points: [
@@ -426,14 +416,6 @@ export const copy: Record<Locale, Copy> = {
                 "Same Europatch partnership from the content side: how-to reels on the road, product in use, cuts built for feed and Reels. That library powered the organic reach — including one reel to 397.9K.",
               value: "The content behind 4.5M Facebook · 2.5M Instagram",
               notes: ["How-to reels on the road · product in use · one reel to 397.9K"],
-            },
-            {
-              client: "Nafplio4Sails",
-              story:
-                "Content creation for Nafplio4Sails — sail, sea and charter films. Drop your finished videos into the project and we will wire them into this folder.",
-              value: "Video + stills for sailing / charter · coming soon",
-              notes: ["Placeholder — replace with Nafplio4Sails cuts"],
-              media: [],
             },
           ],
         },
@@ -670,7 +652,6 @@ export const copy: Record<Locale, Copy> = {
     startBrief: "Ξεκίνα ένα brief",
     contactUs: "Επικοινωνία",
     trustedBy: "Μας εμπιστεύονται",
-    trustedByBody: "Συνεργάτες μας — με σύνδεσμο προς τις σελίδες τους.",
     pricingTitle: "Πακέτα & τιμές",
     pricingTitleLead: "Πακέτα",
     pricingTitleSub: "& τιμές",
@@ -777,14 +758,6 @@ export const copy: Record<Locale, Copy> = {
                 "Τελευταίος μήνας: 96% των views από non-followers",
               ],
             },
-            {
-              client: "Nafplio4Sails",
-              story:
-                "Nafplio4Sails — περιεχόμενο ιστιοπλοΐας και charter για social. Video και stills από τη θάλασσα· τα αρχεία μπαίνουν εδώ στη συνέχεια.",
-              value: "Συνεργασία social + content · videos σύντομα",
-              notes: ["Πρόσθεσε τα video Nafplio4Sails στο project"],
-              media: [],
-            },
           ],
         },
         points: [
@@ -828,14 +801,6 @@ export const copy: Record<Locale, Copy> = {
                 "Η ίδια συνεργασία Europatch από την πλευρά του content: how-to reels στον δρόμο, προϊόν σε χρήση, cuts για feed και Reels. Αυτή η βιβλιοθήκη στήριξε την οργανική εμβέλεια — με ένα reel στα 397.9K.",
               value: "Το περιεχόμενο πίσω από 4.5 εκ. Facebook · 2.5 εκ. Instagram",
               notes: ["How-to reels στον δρόμο · προϊόν σε χρήση · ένα reel στα 397.9K"],
-            },
-            {
-              client: "Nafplio4Sails",
-              story:
-                "Δημιουργία περιεχομένου για Nafplio4Sails — ιστιοπλοΐα, θάλασσα και charter. Βάλε τα έτοιμα video στο project και θα συνδεθούν σε αυτό το folder.",
-              value: "Video + stills για sailing / charter · σύντομα",
-              notes: ["Placeholder — αντικατέστησε με cuts Nafplio4Sails"],
-              media: [],
             },
           ],
         },

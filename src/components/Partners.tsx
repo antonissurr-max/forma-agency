@@ -9,7 +9,6 @@ export function Partners() {
       <div className="partners__inner">
         <header className="partners__head">
           <h2 className="partners__title">{t.trustedBy}</h2>
-          <p className="partners__body">{t.trustedByBody}</p>
         </header>
         <ul className="partners__list">
           {partners.map((partner) => (

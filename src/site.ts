@@ -51,11 +51,6 @@ export const partners: Partner[] = [
     href: "https://pyrgiotisoe.com/",
     logo: "/images/partners/pyrgiotis.svg",
   },
-  {
-    name: "Nafplio4Sails",
-    href: "https://nafplio4sails.com",
-    logo: "/images/partners/nafplio4sails.svg",
-  },
 ];
 
 export const pages: {
