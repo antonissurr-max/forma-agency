@@ -2279,8 +2279,7 @@ a.work__proof-line:hover {
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior-y: contain;
-  scroll-snap-type: y proximity;
-  scroll-padding-block: calc(50% - (var(--dot-size) / 2));
+  scroll-snap-type: none;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding-right: 36px;
@@ -2320,11 +2319,10 @@ a.work__proof-line:hover {
 
 .pricing-dot {
   --dot-tone: var(--hydrangea);
+  --focus: 0;
   flex: 0 0 auto;
   width: var(--dot-size);
   height: var(--dot-size);
-  scroll-snap-align: center;
-  scroll-snap-stop: normal;
   z-index: 1;
   cursor: pointer;
 }
@@ -2364,15 +2362,10 @@ a.work__proof-line:hover {
   place-items: center;
   overflow: hidden;
   transform-origin: center center;
-  filter: blur(calc(var(--dot-distance, 1) * 8px));
-  opacity: calc(1 - min(var(--dot-distance, 1), 2) * 0.42);
-  transform: scale(calc(1 - min(var(--dot-distance, 1), 2) * 0.06));
-  transition:
-    filter 0.28s ease-out,
-    opacity 0.28s ease-out,
-    transform 0.28s ease-out,
-    box-shadow 0.28s ease-out;
-  will-change: filter, opacity, transform;
+  /* Continuous focus from scroll — no blur filter (keeps scroll buttery) */
+  opacity: calc(0.22 + var(--focus) * 0.78);
+  transform: translateZ(0) scale(calc(0.86 + var(--focus) * 0.14));
+  will-change: transform, opacity;
 }
 
 .pricing-dot.is-active {
@@ -2380,9 +2373,6 @@ a.work__proof-line:hover {
 }
 
 .pricing-dot.is-active .pricing-dot__ring {
-  filter: none;
-  opacity: 1;
-  transform: scale(1);
   border-color: color-mix(in srgb, var(--navy) 30%, var(--dot-tone));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--navy) 16%, var(--dot-tone)),
@@ -2395,37 +2385,14 @@ a.work__proof-line:hover {
 }
 
 .pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__ring {
-  transform: scale(1.18);
-  animation: pricing-zoom-in 0.45s var(--ease) both;
+  transform: translateZ(0) scale(calc(1.06 + var(--focus) * 0.12));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--navy) 18%, var(--dot-tone)),
     0 40px 100px color-mix(in srgb, var(--navy) 18%, transparent);
 }
 
-.pricing-layer.is-zoomed .pricing-dot:not(.is-active) .pricing-dot__ring {
-  opacity: 0.22;
-  filter: blur(12px);
-  transform: scale(0.9);
-}
-
-@keyframes pricing-zoom-in {
-  from {
-    transform: scale(0.92);
-    opacity: 0.9;
-  }
-  to {
-    transform: scale(1.18);
-    opacity: 1;
-  }
-}
-
 .pricing-layer.is-zoomed .pricing-dots__pips {
   opacity: 0.45;
-}
-
-.pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__content {
-  width: min(72%, 360px);
-  max-height: 70%;
 }
 
 .pricing-dot__content {
@@ -2439,6 +2406,12 @@ a.work__proof-line:hover {
   justify-items: center;
   scrollbar-width: thin;
   padding: 4px 2px;
+  opacity: calc(0.2 + var(--focus) * 0.8);
+}
+
+.pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__content {
+  width: min(72%, 360px);
+  max-height: 70%;
 }
 
 .pricing-dot__kicker {
@@ -2599,7 +2572,7 @@ a.work__proof-line:hover {
   }
 
   .pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__ring {
-    transform: scale(1.1);
+    transform: translateZ(0) scale(calc(1.02 + var(--focus) * 0.08));
   }
 }
 
@@ -3656,7 +3629,6 @@ a.work__proof-line:hover {
     transition: none !important;
   }
 
-  .pricing-zoom-in,
   .pricing-dot__ring {
     filter: none !important;
     opacity: 1 !important;

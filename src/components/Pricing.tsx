@@ -15,11 +15,9 @@ import type { PageId } from "../types";
 
 const DOT_TONES = ["blue", "pink", "green", "sand"] as const;
 const LOOP_COPIES = 3;
-
-function ringDistance(index: number, active: number, length: number) {
-  const delta = Math.abs(index - active);
-  return Math.min(delta, length - delta);
-}
+/** Lower = creamier / slower settle */
+const SCROLL_EASE = 0.13;
+const WHEEL_GAIN = 1.15;
 
 function offsetInScroller(el: HTMLElement, scroller: HTMLElement) {
   return (
@@ -40,10 +38,10 @@ export function Pricing({
   const { locale, t } = useLocale();
   const trackRef = useRef<HTMLDivElement>(null);
   const activeRef = useRef(0);
-  const lockedRef = useRef(false);
   const zoomedRef = useRef(false);
-  const unlockTimer = useRef<number | null>(null);
-  const wrappingRef = useRef(false);
+  const scrollApi = useRef<{
+    goTo: (index: number, smooth?: boolean) => void;
+  } | null>(null);
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const plans = t.pricingPlans;
@@ -69,39 +67,13 @@ export function Pricing({
     setZoomed(false);
   }, []);
 
-  const goTo = useCallback(
-    (index: number, behavior: ScrollBehavior = "smooth") => {
-      const track = trackRef.current;
-      if (!track || plans.length === 0) return;
-      const next = ((index % plans.length) + plans.length) % plans.length;
-
-      // Prefer the middle copy so infinite wrap stays in the safe zone
-      const node =
-        track.querySelector<HTMLElement>(
-          `[data-copy="${midCopy}"][data-dot="${next}"]`,
-        ) ?? track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
-      if (!node) return;
-
-      activeRef.current = next;
-      setActive(next);
-      lockedRef.current = behavior === "smooth";
-      if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
-      node.scrollIntoView({ behavior, block: "center", inline: "nearest" });
-      if (behavior === "smooth") {
-        unlockTimer.current = window.setTimeout(() => {
-          lockedRef.current = false;
-          unlockTimer.current = null;
-        }, 480);
-      } else {
-        lockedRef.current = false;
-      }
-    },
-    [plans.length, midCopy],
-  );
+  const goTo = useCallback((index: number, smooth = true) => {
+    scrollApi.current?.goTo(index, smooth);
+  }, []);
 
   const openZoom = useCallback(
     (index: number) => {
-      if (index !== activeRef.current) goTo(index);
+      if (index !== activeRef.current) goTo(index, true);
       zoomedRef.current = true;
       setZoomed(true);
     },
@@ -112,6 +84,11 @@ export function Pricing({
     const track = trackRef.current;
     if (!track || plans.length === 0) return;
 
+    let current = track.scrollTop;
+    let target = track.scrollTop;
+    let raf = 0;
+    let touching = false;
+
     const measureSetSpan = () => {
       const a = track.querySelector<HTMLElement>(`[data-copy="0"][data-dot="0"]`);
       const b = track.querySelector<HTMLElement>(`[data-copy="1"][data-dot="0"]`);
@@ -119,69 +96,157 @@ export function Pricing({
       return offsetInScroller(b, track) - offsetInScroller(a, track);
     };
 
-    const syncActiveFromScroll = () => {
+    const wrapPair = () => {
+      const setSpan = measureSetSpan();
+      if (setSpan <= 0) return;
+      while (current < setSpan * 0.45) {
+        current += setSpan;
+        target += setSpan;
+      }
+      while (current > setSpan * 1.55) {
+        current -= setSpan;
+        target -= setSpan;
+      }
+    };
+
+    const applyFocus = () => {
       const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
-      const center = track.scrollTop + track.clientHeight / 2;
+      const center = current + track.clientHeight / 2;
       let best = activeRef.current;
       let bestDist = Number.POSITIVE_INFINITY;
+
       for (const node of nodes) {
         const index = Number(node.dataset.dot);
         if (!Number.isFinite(index)) continue;
         const mid = offsetInScroller(node, track) + node.offsetHeight / 2;
         const dist = Math.abs(mid - center);
+        const norm = Math.min(1, dist / (node.offsetHeight * 0.82));
+        const focus = 1 - norm;
+        node.style.setProperty("--focus", focus.toFixed(4));
         if (dist < bestDist) {
           bestDist = dist;
           best = index;
         }
       }
+
       if (best !== activeRef.current) {
         activeRef.current = best;
         setActive(best);
       }
     };
 
-    const keepInMiddleCopy = () => {
-      if (wrappingRef.current || lockedRef.current) return;
-      const setSpan = measureSetSpan();
-      if (setSpan <= 0) return;
+    const tick = () => {
+      current += (target - current) * SCROLL_EASE;
+      wrapPair();
+      track.scrollTop = current;
+      applyFocus();
 
-      // Stay inside the middle copy range for seamless 04→01 / 01→04
-      if (track.scrollTop < setSpan * 0.5) {
-        wrappingRef.current = true;
-        track.scrollTop += setSpan;
-        wrappingRef.current = false;
-      } else if (track.scrollTop > setSpan * 1.5) {
-        wrappingRef.current = true;
-        track.scrollTop -= setSpan;
-        wrappingRef.current = false;
+      if (Math.abs(target - current) > 0.4) {
+        raf = window.requestAnimationFrame(tick);
+      } else {
+        current = target;
+        wrapPair();
+        track.scrollTop = current;
+        applyFocus();
+        raf = 0;
       }
     };
 
-    let scrollRaf = 0;
-    const onScroll = () => {
-      if (scrollRaf) return;
-      scrollRaf = window.requestAnimationFrame(() => {
-        scrollRaf = 0;
-        if (wrappingRef.current) return;
-        keepInMiddleCopy();
-        if (!lockedRef.current) syncActiveFromScroll();
-      });
+    const kick = () => {
+      if (!raf) raf = window.requestAnimationFrame(tick);
     };
 
-    track.addEventListener("scroll", onScroll, { passive: true });
+    const centerOf = (node: HTMLElement) =>
+      offsetInScroller(node, track) - (track.clientHeight - node.offsetHeight) / 2;
 
-    // Land on middle-copy first package without a visible jump
+    scrollApi.current = {
+      goTo(index: number, smooth = true) {
+        const next = ((index % plans.length) + plans.length) % plans.length;
+        const node =
+          track.querySelector<HTMLElement>(
+            `[data-copy="${midCopy}"][data-dot="${next}"]`,
+          ) ?? track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
+        if (!node) return;
+        activeRef.current = next;
+        setActive(next);
+        const top = centerOf(node);
+        if (smooth) {
+          target = top;
+          kick();
+        } else {
+          current = top;
+          target = top;
+          track.scrollTop = top;
+          applyFocus();
+        }
+      },
+    };
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      target += e.deltaY * WHEEL_GAIN;
+      const setSpan = measureSetSpan();
+      if (setSpan > 0) {
+        // Keep target near the live scroll window so wrap stays invisible
+        if (target < setSpan * 0.2) target += setSpan;
+        if (target > setSpan * 1.8) target -= setSpan;
+      }
+      kick();
+    };
+
+    const onScroll = () => {
+      if (raf || touching) {
+        // During lerp we own scrollTop; during touch, follow native momentum
+        if (touching && !raf) {
+          current = track.scrollTop;
+          target = current;
+          wrapPair();
+          if (Math.abs(track.scrollTop - current) > 1) track.scrollTop = current;
+          applyFocus();
+        }
+        return;
+      }
+    };
+
+    const onTouchStart = () => {
+      touching = true;
+      if (raf) {
+        window.cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      current = track.scrollTop;
+      target = current;
+    };
+
+    const onTouchEnd = () => {
+      touching = false;
+      current = track.scrollTop;
+      target = current;
+      wrapPair();
+      track.scrollTop = current;
+      applyFocus();
+    };
+
+    track.addEventListener("wheel", onWheel, { passive: false });
+    track.addEventListener("scroll", onScroll, { passive: true });
+    track.addEventListener("touchstart", onTouchStart, { passive: true });
+    track.addEventListener("touchend", onTouchEnd, { passive: true });
+    track.addEventListener("touchcancel", onTouchEnd, { passive: true });
+
     requestAnimationFrame(() => {
-      goTo(0, "auto");
-      syncActiveFromScroll();
+      scrollApi.current?.goTo(0, false);
     });
 
     return () => {
+      scrollApi.current = null;
+      track.removeEventListener("wheel", onWheel);
       track.removeEventListener("scroll", onScroll);
-      if (scrollRaf) window.cancelAnimationFrame(scrollRaf);
-      if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
+      track.removeEventListener("touchstart", onTouchStart);
+      track.removeEventListener("touchend", onTouchEnd);
+      track.removeEventListener("touchcancel", onTouchEnd);
+      if (raf) window.cancelAnimationFrame(raf);
     };
-  }, [plans.length, goTo]);
+  }, [plans.length, midCopy]);
 
   useEffect(() => {
     if (!zoomed) return;
@@ -265,7 +330,6 @@ export function Pricing({
         <div className="pricing-dots__track">
           {loopItems.map((item, i) => {
             const isActive = item.planIndex === active;
-            const distance = ringDistance(item.planIndex, active, plans.length);
             const tone = DOT_TONES[item.planIndex % DOT_TONES.length];
             return (
               <Fragment key={`${item.copy}-${item.plan.id}`}>
@@ -277,7 +341,7 @@ export function Pricing({
                   data-copy={item.copy}
                   data-slot={item.slot}
                   className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
-                  style={{ "--dot-distance": String(distance) } as CSSProperties}
+                  style={{ "--focus": isActive ? 1 : 0 } as CSSProperties}
                   aria-current={isActive ? "true" : undefined}
                   onClick={onDotClick(item.planIndex)}
                 >
@@ -325,7 +389,7 @@ export function Pricing({
             className={`pricing-dots__pip${index === active ? " is-on" : ""}`}
             onClick={() => {
               if (zoomed) closeZoom();
-              goTo(index);
+              goTo(index, true);
             }}
           />
         ))}
