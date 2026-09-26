@@ -49,10 +49,19 @@ export function Pricing({
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const [zoomAnim, setZoomAnim] = useState(false);
-  const [enterPhase, setEnterPhase] = useState<"pending" | "in" | "done">("pending");
+  const [enterPhase, setEnterPhase] = useState<
+    "pending" | "title" | "await-scroll" | "circles" | "done"
+  >("pending");
+  const enterPhaseRef = useRef(enterPhase);
+  enterPhaseRef.current = enterPhase;
   const plans = t.pricingPlans;
   const activePlan = plans[active];
   const midCopy = Math.floor(LOOP_COPIES / 2);
+  const circlesLive = enterPhase === "circles" || enterPhase === "done";
+
+  const revealCircles = useCallback(() => {
+    setEnterPhase((phase) => (phase === "await-scroll" ? "circles" : phase));
+  }, []);
 
   const loopItems = useMemo(
     () =>
@@ -210,6 +219,12 @@ export function Pricing({
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
+      const phase = enterPhaseRef.current;
+      if (phase === "pending" || phase === "title") return;
+      if (phase === "await-scroll") {
+        if (Math.abs(e.deltaY) > 2) revealCircles();
+        return;
+      }
       target += e.deltaY * WHEEL_GAIN;
       const setSpan = measureSetSpan();
       if (setSpan > 0) {
@@ -221,6 +236,7 @@ export function Pricing({
     };
 
     const onScroll = () => {
+      if (enterPhaseRef.current !== "circles" && enterPhaseRef.current !== "done") return;
       if (raf || touching) {
         // During lerp we own scrollTop; during touch, follow native momentum
         if (touching && !raf) {
@@ -235,6 +251,11 @@ export function Pricing({
     };
 
     const onTouchStart = () => {
+      if (enterPhaseRef.current === "await-scroll") {
+        revealCircles();
+        return;
+      }
+      if (enterPhaseRef.current !== "circles" && enterPhaseRef.current !== "done") return;
       touching = true;
       if (raf) {
         window.cancelAnimationFrame(raf);
@@ -245,6 +266,7 @@ export function Pricing({
     };
 
     const onTouchEnd = () => {
+      if (enterPhaseRef.current !== "circles" && enterPhaseRef.current !== "done") return;
       touching = false;
       current = track.scrollTop;
       wrapPair();
@@ -290,7 +312,7 @@ export function Pricing({
       if (raf) window.cancelAnimationFrame(raf);
       if (zoomAnimTimer.current != null) window.clearTimeout(zoomAnimTimer.current);
     };
-  }, [plans.length, midCopy]);
+  }, [plans.length, midCopy, revealCircles]);
 
   useEffect(() => {
     if (!ready) {
@@ -304,18 +326,51 @@ export function Pricing({
       setEnterPhase("done");
       return;
     }
-    let settleTimer = 0;
+    let titleTimer = 0;
     const raf = window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        setEnterPhase("in");
-        settleTimer = window.setTimeout(() => setEnterPhase("done"), 2100);
+        setEnterPhase("title");
+        titleTimer = window.setTimeout(() => setEnterPhase("await-scroll"), 1100);
       });
     });
     return () => {
       window.cancelAnimationFrame(raf);
-      if (settleTimer) window.clearTimeout(settleTimer);
+      if (titleTimer) window.clearTimeout(titleTimer);
     };
   }, [ready]);
+
+  useEffect(() => {
+    if (enterPhase !== "circles") return;
+    const timer = window.setTimeout(() => setEnterPhase("done"), 1000);
+    return () => window.clearTimeout(timer);
+  }, [enterPhase]);
+
+  useEffect(() => {
+    if (enterPhase !== "await-scroll") return;
+    const layer = trackRef.current?.closest(".pricing-layer") as HTMLElement | null;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      if (Math.abs(e.deltaY) > 2) revealCircles();
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (
+        e.key === "ArrowDown" ||
+        e.key === "ArrowUp" ||
+        e.key === "PageDown" ||
+        e.key === " " ||
+        e.key === "Enter"
+      ) {
+        e.preventDefault();
+        revealCircles();
+      }
+    };
+    layer?.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("keydown", onKey, true);
+    return () => {
+      layer?.removeEventListener("wheel", onWheel);
+      window.removeEventListener("keydown", onKey, true);
+    };
+  }, [enterPhase, revealCircles]);
 
   useEffect(() => {
     if (!zoomed) return;
@@ -330,6 +385,7 @@ export function Pricing({
   }, [zoomed, closeZoom]);
 
   const onDotClick = (index: number) => (e: MouseEvent) => {
+    if (!circlesLive) return;
     const target = e.target as HTMLElement;
     if (target.closest("button, a")) return;
     if (zoomed && index === active) {
@@ -339,13 +395,22 @@ export function Pricing({
     openZoom(index);
   };
 
+  const enterClass =
+    enterPhase === "pending"
+      ? " is-enter-pending"
+      : enterPhase === "title"
+        ? " is-enter-title"
+        : enterPhase === "await-scroll"
+          ? " is-await-scroll"
+          : enterPhase === "circles"
+            ? " is-circles-in"
+            : "";
+
   return (
     <div
-      className={`pricing-layer${exiting ? " is-exit" : ""}${
-        enterPhase === "pending" ? " is-enter-pending" : ""
-      }${enterPhase === "in" ? " is-enter" : ""}${zoomed ? " is-zoomed" : ""}${
-        zoomAnim ? " is-zoom-anim" : ""
-      }`}
+      className={`pricing-layer${exiting ? " is-exit" : ""}${enterClass}${
+        zoomed ? " is-zoomed" : ""
+      }${zoomAnim ? " is-zoom-anim" : ""}`}
       role="dialog"
       aria-modal="true"
       aria-label={t.pricingTitle}
@@ -400,6 +465,12 @@ export function Pricing({
               </>
             )}
           </div>
+          {enterPhase === "await-scroll" ? (
+            <p className="pricing-layer__scroll-cue" aria-hidden="true">
+              <span className="pricing-layer__scroll-cue-label">{t.pricingScrollCue}</span>
+              <span className="pricing-layer__scroll-cue-arrow" />
+            </p>
+          ) : null}
         </div>
       </aside>
 

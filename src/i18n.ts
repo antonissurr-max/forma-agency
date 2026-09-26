@@ -71,6 +71,7 @@ export type Copy = {
   pricingTitleSub: string;
   pricingLede: string;
   pricingNote: string;
+  pricingScrollCue: string;
   pricingCta: string;
   pricingSetup: string;
   mediaSoon: string;
@@ -275,6 +276,7 @@ export const copy: Record<Locale, Copy> = {
       "Clear monthly retainers and project fees. Ad spend is always separate. Scope is written down before we start.",
     pricingNote:
       "Prices in EUR, excl. VAT where applicable. Minimum 3 months on retainers. Creative production can be bundled or billed per asset.",
+    pricingScrollCue: "Scroll",
     pricingCta: "Start a brief",
     pricingSetup: "One-time setup",
     mediaSoon: "Media soon",
@@ -676,6 +678,7 @@ export const copy: Record<Locale, Copy> = {
       "Καθαρά μηνιαία πακέτα και τιμές έργου. Το ad spend μένει πάντα δικό σας. Το scope γράφεται πριν ξεκινήσουμε.",
     pricingNote:
       "Τιμές σε €, χωρίς ΦΠΑ όπου εφαρμόζεται. Minimum 3 μήνες στα retainers. Το creative μπορεί να μπει στο πακέτο ή ανά asset.",
+    pricingScrollCue: "Κύλησε",
     pricingCta: "Ξεκίνα brief",
     pricingSetup: "Setup μία φορά",
     mediaSoon: "Media σύντομα",

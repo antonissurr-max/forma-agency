@@ -2169,42 +2169,141 @@ a.work__proof-line:hover {
 .pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__title,
 .pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__note,
 .pricing-layer.is-enter-pending .pricing-layer__foot,
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title,
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
-.pricing-layer.is-enter .pricing-layer__foot {
+.pricing-layer.is-enter-title .pricing-layer__copy-panel.is-in .pricing-layer__title,
+.pricing-layer.is-enter-title .pricing-layer__copy-panel.is-in .pricing-layer__note,
+.pricing-layer.is-enter-title .pricing-layer__foot,
+.pricing-layer.is-await-scroll .pricing-layer__copy-panel.is-in .pricing-layer__title,
+.pricing-layer.is-await-scroll .pricing-layer__copy-panel.is-in .pricing-layer__note,
+.pricing-layer.is-await-scroll .pricing-layer__foot {
   transition:
     opacity 1.05s var(--ease),
     transform 1.05s var(--ease);
 }
 
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title {
+.pricing-layer.is-enter-title .pricing-layer__copy-panel.is-in .pricing-layer__title,
+.pricing-layer.is-await-scroll .pricing-layer__copy-panel.is-in .pricing-layer__title {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition-delay: 0.22s;
+  transition-delay: 0.12s;
 }
 
-.pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note {
+.pricing-layer.is-enter-title .pricing-layer__copy-panel.is-in .pricing-layer__note,
+.pricing-layer.is-await-scroll .pricing-layer__copy-panel.is-in .pricing-layer__note {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition-delay: 0.44s;
+  transition-delay: 0.38s;
 }
 
-.pricing-layer.is-enter .pricing-layer__foot {
+.pricing-layer.is-enter-title .pricing-layer__foot,
+.pricing-layer.is-await-scroll .pricing-layer__foot {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition-delay: 0.66s;
+  transition-delay: 0.58s;
+}
+
+/* Circles stay hidden until a light scroll after the title */
+.pricing-layer.is-enter-pending .pricing-dots,
+.pricing-layer.is-enter-pending .pricing-dots__pips,
+.pricing-layer.is-enter-title .pricing-dots,
+.pricing-layer.is-enter-title .pricing-dots__pips,
+.pricing-layer.is-await-scroll .pricing-dots,
+.pricing-layer.is-await-scroll .pricing-dots__pips {
+  opacity: 0;
+  transform: translate3d(0, 56px, 0);
+}
+
+.pricing-layer.is-enter-pending .pricing-dots,
+.pricing-layer.is-enter-pending .pricing-dots__pips,
+.pricing-layer.is-enter-title .pricing-dots,
+.pricing-layer.is-enter-title .pricing-dots__pips,
+.pricing-layer.is-await-scroll .pricing-dots,
+.pricing-layer.is-await-scroll .pricing-dots__pips,
+.pricing-layer.is-circles-in .pricing-dots,
+.pricing-layer.is-circles-in .pricing-dots__pips {
+  transition:
+    opacity 1.05s var(--ease),
+    transform 1.05s var(--ease);
+}
+
+.pricing-layer.is-circles-in .pricing-dots,
+.pricing-layer.is-circles-in .pricing-dots__pips {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.pricing-layer__scroll-cue {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 10px 0 0;
+  color: color-mix(in srgb, var(--navy) 45%, transparent);
+  animation: pricing-cue-in 0.7s var(--ease) both;
+}
+
+.pricing-layer__scroll-cue-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.pricing-layer__scroll-cue-arrow {
+  width: 1px;
+  height: 28px;
+  background: currentColor;
+  transform-origin: top center;
+  animation: pricing-cue-pulse 1.4s var(--ease) infinite;
+}
+
+@keyframes pricing-cue-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pricing-cue-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.55);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 0.9;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__title,
   .pricing-layer.is-enter-pending .pricing-layer__copy-panel.is-in .pricing-layer__note,
   .pricing-layer.is-enter-pending .pricing-layer__foot,
-  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__title,
-  .pricing-layer.is-enter .pricing-layer__copy-panel.is-in .pricing-layer__note,
-  .pricing-layer.is-enter .pricing-layer__foot {
+  .pricing-layer.is-enter-title .pricing-layer__copy-panel.is-in .pricing-layer__title,
+  .pricing-layer.is-enter-title .pricing-layer__copy-panel.is-in .pricing-layer__note,
+  .pricing-layer.is-enter-title .pricing-layer__foot,
+  .pricing-layer.is-await-scroll .pricing-layer__copy-panel.is-in .pricing-layer__title,
+  .pricing-layer.is-await-scroll .pricing-layer__copy-panel.is-in .pricing-layer__note,
+  .pricing-layer.is-await-scroll .pricing-layer__foot,
+  .pricing-layer.is-enter-pending .pricing-dots,
+  .pricing-layer.is-enter-pending .pricing-dots__pips,
+  .pricing-layer.is-enter-title .pricing-dots,
+  .pricing-layer.is-enter-title .pricing-dots__pips,
+  .pricing-layer.is-await-scroll .pricing-dots,
+  .pricing-layer.is-await-scroll .pricing-dots__pips,
+  .pricing-layer.is-circles-in .pricing-dots,
+  .pricing-layer.is-circles-in .pricing-dots__pips {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .pricing-layer__scroll-cue,
+  .pricing-layer__scroll-cue-arrow {
+    animation: none;
   }
 }
 
