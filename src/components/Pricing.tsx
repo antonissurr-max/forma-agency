@@ -5,7 +5,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
   type MouseEvent,
 } from "react";
 import { Link } from "react-router-dom";
@@ -72,7 +71,7 @@ export function Pricing({
     zoomAnimTimer.current = window.setTimeout(() => {
       setZoomAnim(false);
       zoomAnimTimer.current = null;
-    }, 700);
+    }, 780);
   }, []);
 
   const goTo = useCallback((index: number, smooth = true) => {
@@ -84,12 +83,17 @@ export function Pricing({
       if (index !== activeRef.current) goTo(index, true);
       zoomedRef.current = true;
       setZoomAnim(true);
-      setZoomed(true);
+      // Paint with transition armed, then apply zoom so scale eases in
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          setZoomed(true);
+        });
+      });
       if (zoomAnimTimer.current != null) window.clearTimeout(zoomAnimTimer.current);
       zoomAnimTimer.current = window.setTimeout(() => {
         setZoomAnim(false);
         zoomAnimTimer.current = null;
-      }, 700);
+      }, 780);
     },
     [goTo],
   );
@@ -314,22 +318,26 @@ export function Pricing({
     >
       <aside className="pricing-layer__aside">
         <div className="pricing-layer__aside-inner">
-          <h1 className="pricing-layer__title">
-            {zoomed && activePlan ? (
-              <>
-                <span className="pricing-layer__title-lead">{activePlan.name}</span>
-                <span className="pricing-layer__title-sub">{activePlan.price}</span>
-              </>
-            ) : (
-              <>
+          <div className="pricing-layer__copy">
+            <div className={`pricing-layer__copy-panel${zoomed ? " is-out" : " is-in"}`}>
+              <h1 className="pricing-layer__title">
                 <span className="pricing-layer__title-lead">{t.pricingTitleLead}</span>
                 <span className="pricing-layer__title-sub">{t.pricingTitleSub}</span>
-              </>
-            )}
-          </h1>
-          <p className="pricing-layer__note">
-            {zoomed && activePlan ? activePlan.blurb : t.pricingNote}
-          </p>
+              </h1>
+              <p className="pricing-layer__note">{t.pricingNote}</p>
+            </div>
+            <div className={`pricing-layer__copy-panel${zoomed ? " is-in" : " is-out"}`}>
+              <h1 className="pricing-layer__title">
+                <span className="pricing-layer__title-lead">
+                  {activePlan?.name ?? t.pricingTitleLead}
+                </span>
+                <span className="pricing-layer__title-sub">
+                  {activePlan?.price ?? t.pricingTitleSub}
+                </span>
+              </h1>
+              <p className="pricing-layer__note">{activePlan?.blurb ?? t.pricingNote}</p>
+            </div>
+          </div>
           <div className="pricing-layer__foot">
             {zoomed ? (
               <>
@@ -376,7 +384,6 @@ export function Pricing({
                   data-copy={item.copy}
                   data-slot={item.slot}
                   className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
-                  style={{ "--focus": isActive ? 1 : 0 } as CSSProperties}
                   aria-current={isActive ? "true" : undefined}
                   onClick={onDotClick(item.planIndex)}
                 >
