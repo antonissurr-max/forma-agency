@@ -16,8 +16,8 @@ import type { PageId } from "../types";
 const DOT_TONES = ["blue", "pink", "green", "sand"] as const;
 const LOOP_COPIES = 3;
 /** Lower = creamier / slower settle */
-const SCROLL_EASE = 0.13;
-const WHEEL_GAIN = 1.15;
+const SCROLL_EASE = 0.082;
+const WHEEL_GAIN = 0.92;
 
 function offsetInScroller(el: HTMLElement, scroller: HTMLElement) {
   return (
@@ -42,8 +42,10 @@ export function Pricing({
   const scrollApi = useRef<{
     goTo: (index: number, smooth?: boolean) => void;
   } | null>(null);
+  const zoomAnimTimer = useRef<number | null>(null);
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
+  const [zoomAnim, setZoomAnim] = useState(false);
   const plans = t.pricingPlans;
   const activePlan = plans[active];
   const midCopy = Math.floor(LOOP_COPIES / 2);
@@ -64,7 +66,13 @@ export function Pricing({
 
   const closeZoom = useCallback(() => {
     zoomedRef.current = false;
+    setZoomAnim(true);
     setZoomed(false);
+    if (zoomAnimTimer.current != null) window.clearTimeout(zoomAnimTimer.current);
+    zoomAnimTimer.current = window.setTimeout(() => {
+      setZoomAnim(false);
+      zoomAnimTimer.current = null;
+    }, 700);
   }, []);
 
   const goTo = useCallback((index: number, smooth = true) => {
@@ -75,7 +83,13 @@ export function Pricing({
     (index: number) => {
       if (index !== activeRef.current) goTo(index, true);
       zoomedRef.current = true;
+      setZoomAnim(true);
       setZoomed(true);
+      if (zoomAnimTimer.current != null) window.clearTimeout(zoomAnimTimer.current);
+      zoomAnimTimer.current = window.setTimeout(() => {
+        setZoomAnim(false);
+        zoomAnimTimer.current = null;
+      }, 700);
     },
     [goTo],
   );
@@ -120,8 +134,9 @@ export function Pricing({
         if (!Number.isFinite(index)) continue;
         const mid = offsetInScroller(node, track) + node.offsetHeight / 2;
         const dist = Math.abs(mid - center);
-        const norm = Math.min(1, dist / (node.offsetHeight * 0.82));
-        const focus = 1 - norm;
+        const norm = Math.min(1, dist / (node.offsetHeight * 0.9));
+        // Softer falloff so neighbors ease in/out instead of flipping
+        const focus = Math.pow(1 - norm, 1.35);
         node.style.setProperty("--focus", focus.toFixed(4));
         if (dist < bestDist) {
           bestDist = dist;
@@ -141,7 +156,7 @@ export function Pricing({
       track.scrollTop = current;
       applyFocus();
 
-      if (Math.abs(target - current) > 0.4) {
+      if (Math.abs(target - current) > 0.25) {
         raf = window.requestAnimationFrame(tick);
       } else {
         current = target;
@@ -221,10 +236,27 @@ export function Pricing({
     const onTouchEnd = () => {
       touching = false;
       current = track.scrollTop;
-      target = current;
       wrapPair();
-      track.scrollTop = current;
-      applyFocus();
+
+      const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
+      const center = current + track.clientHeight / 2;
+      let nearest: HTMLElement | null = null;
+      let bestDist = Number.POSITIVE_INFINITY;
+      for (const node of nodes) {
+        const mid = offsetInScroller(node, track) + node.offsetHeight / 2;
+        const dist = Math.abs(mid - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          nearest = node;
+        }
+      }
+      if (nearest) {
+        target = centerOf(nearest);
+        kick();
+      } else {
+        target = current;
+        applyFocus();
+      }
     };
 
     track.addEventListener("wheel", onWheel, { passive: false });
@@ -245,6 +277,7 @@ export function Pricing({
       track.removeEventListener("touchend", onTouchEnd);
       track.removeEventListener("touchcancel", onTouchEnd);
       if (raf) window.cancelAnimationFrame(raf);
+      if (zoomAnimTimer.current != null) window.clearTimeout(zoomAnimTimer.current);
     };
   }, [plans.length, midCopy]);
 
@@ -272,7 +305,9 @@ export function Pricing({
 
   return (
     <div
-      className={`pricing-layer${exiting ? " is-exit" : ""}${zoomed ? " is-zoomed" : ""}`}
+      className={`pricing-layer${exiting ? " is-exit" : ""}${zoomed ? " is-zoomed" : ""}${
+        zoomAnim ? " is-zoom-anim" : ""
+      }`}
       role="dialog"
       aria-modal="true"
       aria-label={t.pricingTitle}

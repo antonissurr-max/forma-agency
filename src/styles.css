@@ -2192,6 +2192,7 @@ a.work__proof-line:hover {
   margin-right: clamp(8px, 2vw, 28px);
   pointer-events: auto;
   text-align: left;
+  transition: opacity 0.35s ease;
 }
 
 .pricing-layer__title {
@@ -2322,9 +2323,22 @@ a.work__proof-line:hover {
   z-index: 0;
 }
 
+@property --focus {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --zoom-boost {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
 .pricing-dot {
   --dot-tone: var(--hydrangea);
   --focus: 0;
+  --zoom-boost: 0;
   flex: 0 0 auto;
   width: var(--dot-size);
   height: var(--dot-size);
@@ -2367,10 +2381,24 @@ a.work__proof-line:hover {
   place-items: center;
   overflow: hidden;
   transform-origin: center center;
-  /* Continuous focus from scroll — no blur filter (keeps scroll buttery) */
-  opacity: calc(0.22 + var(--focus) * 0.78);
-  transform: translateZ(0) scale(calc(0.86 + var(--focus) * 0.14));
+  opacity: calc(0.18 + var(--focus) * 0.82);
+  transform: translateZ(0) scale(calc(0.84 + var(--focus) * 0.16 + var(--zoom-boost)));
   will-change: transform, opacity;
+}
+
+.pricing-layer.is-zoom-anim .pricing-dot {
+  transition: --zoom-boost 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pricing-layer.is-zoom-anim .pricing-dot__ring {
+  transition:
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pricing-layer.is-zoom-anim .pricing-dot__content {
+  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pricing-dot.is-active {
@@ -2384,20 +2412,25 @@ a.work__proof-line:hover {
     0 32px 80px color-mix(in srgb, var(--navy) 14%, transparent);
 }
 
-/* Zoom keeps gallery scrollable — active circle scales up in place */
+/* Zoom — soft scale boost on the focused circle */
 .pricing-layer.is-zoomed .pricing-dot.is-active {
+  --zoom-boost: 0.18;
   z-index: 5;
 }
 
 .pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__ring {
-  transform: translateZ(0) scale(calc(1.06 + var(--focus) * 0.12));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--navy) 18%, var(--dot-tone)),
     0 40px 100px color-mix(in srgb, var(--navy) 18%, transparent);
 }
 
+.pricing-layer.is-zoomed .pricing-dot:not(.is-active) {
+  --zoom-boost: -0.04;
+}
+
 .pricing-layer.is-zoomed .pricing-dots__pips {
   opacity: 0.45;
+  transition: opacity 0.45s ease;
 }
 
 .pricing-dot__content {
@@ -2411,12 +2444,18 @@ a.work__proof-line:hover {
   justify-items: center;
   scrollbar-width: thin;
   padding: 4px 2px;
-  opacity: calc(0.2 + var(--focus) * 0.8);
+  opacity: calc(0.15 + var(--focus) * 0.85);
 }
 
 .pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__content {
   width: min(72%, 360px);
   max-height: 70%;
+}
+
+.pricing-layer.is-zoom-anim .pricing-layer__title-lead,
+.pricing-layer.is-zoom-anim .pricing-layer__title-sub,
+.pricing-layer.is-zoom-anim .pricing-layer__note {
+  transition: opacity 0.35s ease, color 0.35s ease;
 }
 
 .pricing-dot__kicker {
@@ -2574,8 +2613,8 @@ a.work__proof-line:hover {
     max-height: 82%;
   }
 
-  .pricing-layer.is-zoomed .pricing-dot.is-active .pricing-dot__ring {
-    transform: translateZ(0) scale(calc(1.02 + var(--focus) * 0.08));
+  .pricing-layer.is-zoomed .pricing-dot.is-active {
+    --zoom-boost: 0.1;
   }
 }
 
