@@ -2,6 +2,7 @@ import {
   Fragment,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -13,10 +14,19 @@ import { pathFromView } from "../routing";
 import type { PageId } from "../types";
 
 const DOT_TONES = ["blue", "pink", "green", "sand"] as const;
+const LOOP_COPIES = 3;
 
 function ringDistance(index: number, active: number, length: number) {
   const delta = Math.abs(index - active);
   return Math.min(delta, length - delta);
+}
+
+function offsetInScroller(el: HTMLElement, scroller: HTMLElement) {
+  return (
+    el.getBoundingClientRect().top -
+    scroller.getBoundingClientRect().top +
+    scroller.scrollTop
+  );
 }
 
 export function Pricing({
@@ -33,10 +43,26 @@ export function Pricing({
   const lockedRef = useRef(false);
   const zoomedRef = useRef(false);
   const unlockTimer = useRef<number | null>(null);
+  const wrappingRef = useRef(false);
   const [active, setActive] = useState(0);
   const [zoomed, setZoomed] = useState(false);
   const plans = t.pricingPlans;
   const activePlan = plans[active];
+  const midCopy = Math.floor(LOOP_COPIES / 2);
+
+  const loopItems = useMemo(
+    () =>
+      Array.from({ length: plans.length * LOOP_COPIES }, (_, slot) => {
+        const planIndex = slot % plans.length;
+        return {
+          slot,
+          planIndex,
+          copy: Math.floor(slot / plans.length),
+          plan: plans[planIndex],
+        };
+      }),
+    [plans],
+  );
 
   const closeZoom = useCallback(() => {
     zoomedRef.current = false;
@@ -49,7 +75,11 @@ export function Pricing({
       if (!track || plans.length === 0) return;
       const next = ((index % plans.length) + plans.length) % plans.length;
 
-      const node = track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
+      // Prefer the middle copy so infinite wrap stays in the safe zone
+      const node =
+        track.querySelector<HTMLElement>(
+          `[data-copy="${midCopy}"][data-dot="${next}"]`,
+        ) ?? track.querySelector<HTMLElement>(`[data-dot="${next}"]`);
       if (!node) return;
 
       activeRef.current = next;
@@ -66,7 +96,7 @@ export function Pricing({
         lockedRef.current = false;
       }
     },
-    [plans.length],
+    [plans.length, midCopy],
   );
 
   const openZoom = useCallback(
@@ -80,19 +110,24 @@ export function Pricing({
 
   useEffect(() => {
     const track = trackRef.current;
-    if (!track) return;
+    if (!track || plans.length === 0) return;
 
-    const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
-    if (!nodes.length) return;
+    const measureSetSpan = () => {
+      const a = track.querySelector<HTMLElement>(`[data-copy="0"][data-dot="0"]`);
+      const b = track.querySelector<HTMLElement>(`[data-copy="1"][data-dot="0"]`);
+      if (!a || !b) return 0;
+      return offsetInScroller(b, track) - offsetInScroller(a, track);
+    };
 
     const syncActiveFromScroll = () => {
+      const nodes = Array.from(track.querySelectorAll<HTMLElement>("[data-dot]"));
       const center = track.scrollTop + track.clientHeight / 2;
       let best = activeRef.current;
       let bestDist = Number.POSITIVE_INFINITY;
       for (const node of nodes) {
         const index = Number(node.dataset.dot);
         if (!Number.isFinite(index)) continue;
-        const mid = node.offsetTop + node.offsetHeight / 2;
+        const mid = offsetInScroller(node, track) + node.offsetHeight / 2;
         const dist = Math.abs(mid - center);
         if (dist < bestDist) {
           bestDist = dist;
@@ -105,40 +140,44 @@ export function Pricing({
       }
     };
 
+    const keepInMiddleCopy = () => {
+      if (wrappingRef.current || lockedRef.current) return;
+      const setSpan = measureSetSpan();
+      if (setSpan <= 0) return;
+
+      // Stay inside the middle copy range for seamless 04→01 / 01→04
+      if (track.scrollTop < setSpan * 0.5) {
+        wrappingRef.current = true;
+        track.scrollTop += setSpan;
+        wrappingRef.current = false;
+      } else if (track.scrollTop > setSpan * 1.5) {
+        wrappingRef.current = true;
+        track.scrollTop -= setSpan;
+        wrappingRef.current = false;
+      }
+    };
+
     let scrollRaf = 0;
     const onScroll = () => {
       if (scrollRaf) return;
       scrollRaf = window.requestAnimationFrame(() => {
         scrollRaf = 0;
+        if (wrappingRef.current) return;
+        keepInMiddleCopy();
         if (!lockedRef.current) syncActiveFromScroll();
       });
     };
 
-    const onWheel = (e: WheelEvent) => {
-      // Free continuous scroll always, including zoom mode.
-      // Soft loop only at the edges.
-      const maxScroll = Math.max(0, track.scrollHeight - track.clientHeight);
-      const atEnd = track.scrollTop >= maxScroll - 1;
-      const atStart = track.scrollTop <= 1;
-
-      if (e.deltaY > 0 && atEnd) {
-        e.preventDefault();
-        if (!lockedRef.current) goTo(0);
-        return;
-      }
-      if (e.deltaY < 0 && atStart) {
-        e.preventDefault();
-        if (!lockedRef.current) goTo(plans.length - 1);
-      }
-    };
-
     track.addEventListener("scroll", onScroll, { passive: true });
-    track.addEventListener("wheel", onWheel, { passive: false });
-    syncActiveFromScroll();
+
+    // Land on middle-copy first package without a visible jump
+    requestAnimationFrame(() => {
+      goTo(0, "auto");
+      syncActiveFromScroll();
+    });
 
     return () => {
       track.removeEventListener("scroll", onScroll);
-      track.removeEventListener("wheel", onWheel);
       if (scrollRaf) window.cancelAnimationFrame(scrollRaf);
       if (unlockTimer.current != null) window.clearTimeout(unlockTimer.current);
     };
@@ -214,33 +253,35 @@ export function Pricing({
 
       <div className="pricing-dots" ref={trackRef}>
         <div className="pricing-dots__track">
-          {plans.map((plan, index) => {
-            const isActive = index === active;
-            const distance = ringDistance(index, active, plans.length);
-            const tone = DOT_TONES[index % DOT_TONES.length];
+          {loopItems.map((item, i) => {
+            const isActive = item.planIndex === active;
+            const distance = ringDistance(item.planIndex, active, plans.length);
+            const tone = DOT_TONES[item.planIndex % DOT_TONES.length];
             return (
-              <Fragment key={plan.id}>
-                {index > 0 ? (
+              <Fragment key={`${item.copy}-${item.plan.id}`}>
+                {i > 0 ? (
                   <span className="pricing-dots__link" aria-hidden="true" />
                 ) : null}
                 <article
-                  data-dot={index}
+                  data-dot={item.planIndex}
+                  data-copy={item.copy}
+                  data-slot={item.slot}
                   className={`pricing-dot pricing-dot--${tone}${isActive ? " is-active" : ""}`}
                   style={{ "--dot-distance": String(distance) } as CSSProperties}
                   aria-current={isActive ? "true" : undefined}
-                  onClick={onDotClick(index)}
+                  onClick={onDotClick(item.planIndex)}
                 >
                   <div className="pricing-dot__ring">
                     <div className="pricing-dot__content">
                       <p className="pricing-dot__kicker">
-                        {String(index + 1).padStart(2, "0")}
+                        {String(item.planIndex + 1).padStart(2, "0")}
                       </p>
-                      <h2 className="pricing-dot__name">{plan.name}</h2>
-                      <p className="pricing-dot__price">{plan.price}</p>
-                      <p className="pricing-dot__blurb">{plan.blurb}</p>
+                      <h2 className="pricing-dot__name">{item.plan.name}</h2>
+                      <p className="pricing-dot__price">{item.plan.price}</p>
+                      <p className="pricing-dot__blurb">{item.plan.blurb}</p>
                       <ul className="pricing-dot__list">
-                        {plan.items.map((item) => (
-                          <li key={item}>{item}</li>
+                        {item.plan.items.map((line) => (
+                          <li key={line}>{line}</li>
                         ))}
                       </ul>
                       <button
@@ -249,7 +290,7 @@ export function Pricing({
                         tabIndex={isActive ? 0 : -1}
                         onClick={(e) => {
                           e.stopPropagation();
-                          onBrief(plan.id as PageId);
+                          onBrief(item.plan.id as PageId);
                         }}
                       >
                         {t.pricingCta} ↗
